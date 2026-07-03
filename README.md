@@ -1,64 +1,83 @@
-# FHL-shared-UI Sandbox
+# FHL Shared UI
 
-Repository:
+A private React component library used to share UI components across FHL projects.
 
-- `https://github.com/franxis12/FHL-shared-UI`
+Built with:
 
-Small React component library sandbox built with:
-
-- React
-- Vite library mode
-- Tailwind CSS
+- React 19
+- Vite (Library Mode)
+- Tailwind CSS v4
 - vite-plugin-svgr
 - Storybook
 
-Available components:
+---
+
+## Features
+
+- Shared React components
+- Shared styles
+- SVG support through `vite-plugin-svgr`
+- Storybook for component development
+- Distributed directly from GitHub
+
+---
+
+## Current Components
 
 - `Button`
 - `Card`
 
-## Dependencies Required in the Consumer Project
+More shared components will be added over time.
 
-This library expects these dependencies in the project that will use it:
+---
+
+# Requirements
+
+The consuming project must already include:
 
 ```bash
 npm install react react-dom
 ```
 
-These are peer dependencies of `FHL-shared-UI`.
+These packages are defined as **peerDependencies** and are intentionally not bundled with the library.
 
-You do not need to install these just to consume the library:
+The consumer project does **not** need to install:
 
 - Tailwind CSS
-- Vite
 - Storybook
 - vite-plugin-svgr
+- Vite
 
-The library already ships its built CSS file, so importing the stylesheet is enough.
+The compiled CSS is already included in the package.
 
-## Install from GitHub
+---
 
-If your project already has `react` and `react-dom`, install the library directly from GitHub:
+# Installation
+
+Install directly from GitHub:
 
 ```bash
 npm install github:franxis12/FHL-shared-UI#main
 ```
 
-You can also install from a specific branch:
+Or install from another branch:
 
 ```bash
-npm install github:franxis12/FHL-shared-UI#your-branch-name
+npm install github:franxis12/FHL-shared-UI#branch-name
 ```
 
-If you want to install everything in one step in a new React project:
+For a brand-new React project:
 
 ```bash
-npm install react react-dom github:franxis12/FHL-shared-UI#main
+npm install react react-dom
+npm install github:franxis12/FHL-shared-UI#main
 ```
 
-The project uses `prepare`, so the library is built during installation from GitHub.
+The package includes a `prepare` script, so it is automatically built when installed directly from GitHub.
 
-## Use in Another React Project
+---
+
+# Usage
 
 Import the components:
 
@@ -73,26 +92,89 @@ Example:
 import { Button, Card } from "FHL-shared-UI";
 import "FHL-shared-UI/FHL-shared-UI.css";
 
-function App() {
+export default function App() {
   return (
-    <div>
+    <Card title="Shared UI">
       <Button variant="primary">Save</Button>
-
-      <Card title="Shared UI example">
-        This card is coming from the FHL-shared-UI library.
-      </Card>
-    </div>
+    </Card>
   );
 }
-
-export default App;
 ```
 
-## Local Development
+---
 
-Commands:
+# Development
 
-- `npm run dev` starts the small local Vite playground
-- `npm run storybook` starts Storybook
-- `npm run build` builds the library into `dist/`
-- `npm run build-storybook` builds the Storybook site
+Start the local development playground:
+
+```bash
+npm run dev
+```
+
+Run Storybook:
+
+```bash
+npm run storybook
+```
+
+Build the library:
+
+```bash
+npm run build
+```
+
+Build the Storybook static site:
+
+```bash
+npm run build-storybook
+```
+
+---
+
+# Project Structure
+
+```
+src/
+ ├── components/
+ ├── assets/
+ ├── index.js
+ └── styles/
+
+dist/
+```
+
+The `dist/` folder is generated automatically during the build process and is the only part consumed by external projects.
+
+---
+
+# Versioning
+
+This library is intended to be versioned using Git tags.
+
+Example:
+
+```
+v1.0.0
+v1.1.0
+v1.2.0
+```
+
+Consumer projects can install a specific version:
+
+```bash
+npm install github:franxis12/FHL-shared-UI#v1.0.0
+```
+
+or follow the latest changes from the main branch:
+
+```bash
+npm install github:franxis12/FHL-shared-UI#main
+```
+
+---
+
+# License
+
+Private repository.
+
+This library is intended exclusively for FHL projects and is not published to npm.
