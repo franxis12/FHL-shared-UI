@@ -1,3 +1,5 @@
+import { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from "../Text";
+
 const PADDING_CLASSES = {
   none: "",
   sm: "p-4",
@@ -68,25 +70,25 @@ function ContainerHeader({
     >
       <div className="min-w-0 space-y-1">
         {title ? (
-          <h3
-            className={joinClassNames(
-              "text-xl font-semibold text-[var(--fhl-container-text)]",
-              titleClassName,
-            )}
+          <Text
+            as="h3"
+            size={TEXT_SIZE.XL}
+            weight={TEXT_WEIGHT.SEMIBOLD}
+            className={titleClassName}
           >
             {title}
-          </h3>
+          </Text>
         ) : null}
 
         {description ? (
-          <p
-            className={joinClassNames(
-              "text-sm leading-6 text-[var(--fhl-container-text-muted)]",
-              descriptionClassName,
-            )}
+          <Text
+            as="p"
+            size={TEXT_SIZE.SM}
+            tone={TEXT_TONE.MUTED}
+            className={joinClassNames("leading-6", descriptionClassName)}
           >
             {description}
-          </p>
+          </Text>
         ) : null}
       </div>
 

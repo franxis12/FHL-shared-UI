@@ -132,6 +132,44 @@
     --color-button-secondary-ring,
     var(--fhl-color-selected-soft)
   );
+  --fhl-text-size-xs: var(--font-size-xs, 0.75rem);
+  --fhl-text-size-sm: var(--font-size-sm, 0.875rem);
+  --fhl-text-size-md: var(--font-size-md, 1rem);
+  --fhl-text-size-lg: var(--font-size-lg, 1.125rem);
+  --fhl-text-size-xl: var(--font-size-xl, 1.25rem);
+  --fhl-text-size-2xl: var(--font-size-2xl, 1.5rem);
+  --fhl-text-size-3xl: var(--font-size-3xl, 1.875rem);
+  --fhl-text-size-4xl: var(--font-size-4xl, 2.25rem);
+  --fhl-text-leading-xs: var(--line-height-xs, 1rem);
+  --fhl-text-leading-sm: var(--line-height-sm, 1.25rem);
+  --fhl-text-leading-md: var(--line-height-md, 1.5rem);
+  --fhl-text-leading-lg: var(--line-height-lg, 1.75rem);
+  --fhl-text-leading-xl: var(--line-height-xl, 1.875rem);
+  --fhl-text-leading-2xl: var(--line-height-2xl, 2rem);
+  --fhl-text-leading-3xl: var(--line-height-3xl, 2.25rem);
+  --fhl-text-leading-4xl: var(--line-height-4xl, 2.5rem);
+  --fhl-text-tone-default: var(--color-text-default, var(--fhl-color-text));
+  --fhl-text-tone-muted: var(
+    --color-text-muted-tone,
+    var(--fhl-color-text-muted)
+  );
+  --fhl-text-tone-primary: var(
+    --color-text-primary-tone,
+    var(--fhl-color-primary-strong)
+  );
+  --fhl-text-tone-accent: var(--color-text-accent-tone, var(--fhl-color-accent));
+  --fhl-text-tone-success: var(
+    --color-text-success-tone,
+    var(--fhl-color-success)
+  );
+  --fhl-text-tone-warning: var(
+    --color-text-warning-tone,
+    var(--fhl-color-warning)
+  );
+  --fhl-text-tone-danger: var(
+    --color-text-danger-tone,
+    var(--fhl-color-alert)
+  );
   --fhl-input-bg: var(--color-input-surface, var(--fhl-color-surface));
   --fhl-input-border: var(--color-input-border, var(--fhl-color-border));
   --fhl-input-text: var(--color-input-text, var(--fhl-color-text));

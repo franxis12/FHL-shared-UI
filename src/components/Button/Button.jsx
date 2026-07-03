@@ -1,5 +1,7 @@
+import { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from "../Text";
+
 const baseClasses =
-  "inline-flex items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-4 disabled:cursor-not-allowed disabled:opacity-60";
+  "inline-flex items-center justify-center gap-2 rounded-xl border px-4 py-2.5 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-4 disabled:cursor-not-allowed disabled:opacity-60";
 
 const variantClasses = {
   primary:
@@ -32,7 +34,14 @@ export function Button({
       {Icon ? (
         <Icon className="h-4 w-4 shrink-0" aria-hidden="true" focusable="false" />
       ) : null}
-      <span>{children}</span>
+      <Text
+        as="span"
+        size={TEXT_SIZE.SM}
+        weight={TEXT_WEIGHT.SEMIBOLD}
+        tone={TEXT_TONE.INHERIT}
+      >
+        {children}
+      </Text>
     </button>
   );
 }
