@@ -5,6 +5,9 @@ const defaultActionButton = {
   variant: "primary",
 };
 
+const defaultClassName =
+  "flex flex-col border-b p-3 lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden lg:border-b-0 lg:border-r";
+
 function getItemKey(item, index) {
   return item.key ?? item.href ?? item.label ?? index;
 }
@@ -88,6 +91,13 @@ export function DashboardNavbar({
   navItems = [],
   footerItems = [],
   actionButton = defaultActionButton,
+  className = defaultClassName,
+  style,
+  headerContent,
+  bodyContent,
+  navClassName = "space-y-1",
+  footerClassName = "mt-auto space-y-2 border-t pt-3",
+  footerStyle,
   isSigningOut = false,
   onSignOut,
   signOutIcon: SignOutIcon,
@@ -96,13 +106,16 @@ export function DashboardNavbar({
 }) {
   return (
     <aside
-      className="flex flex-col border-b p-3 lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden lg:border-b-0 lg:border-r"
+      className={className}
       style={{
         borderColor: "var(--color-border)",
         backgroundColor: "var(--color-surface)",
-      }} //
+        ...style,
+      }}
     >
-      {brand?.content ? (
+      {headerContent ? (
+        headerContent
+      ) : brand?.content ? (
         <a
           href={brand.href ?? "/"}
           onClick={brand.onClick}
@@ -113,50 +126,59 @@ export function DashboardNavbar({
         </a>
       ) : null}
 
-      <nav className="space-y-1">
-        {navItems.map((item, index) => (
-          <DashboardNavItem key={getItemKey(item, index)} item={item} />
-        ))}
-      </nav>
+      {bodyContent ? (
+        bodyContent
+      ) : (
+        <>
+          <nav className={navClassName}>
+            {navItems.map((item, index) => (
+              <DashboardNavItem key={getItemKey(item, index)} item={item} />
+            ))}
+          </nav>
 
-      <div
-        className="mt-auto space-y-2 border-t pt-3"
-        style={{ borderColor: "var(--color-border)" }}
-      >
-        {footerItems.map((item, index) => (
-          <DashboardFooterItem key={getItemKey(item, index)} item={item} />
-        ))}
-
-        {actionButton ? (
-          <Button
-            variant={actionButton.variant}
-            disabled={actionButton.disabled}
-            onClick={actionButton.onClick}
-            icon={actionButton.icon}
+          <div
+            className={footerClassName}
+            style={{
+              borderColor: "var(--color-border)",
+              ...footerStyle,
+            }}
           >
-            {actionButton.label}
-          </Button>
-        ) : null}
+            {footerItems.map((item, index) => (
+              <DashboardFooterItem key={getItemKey(item, index)} item={item} />
+            ))}
 
-        {onSignOut ? (
-          <button
-            type="button"
-            onClick={onSignOut}
-            disabled={isSigningOut}
-            className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-(--color-surface-soft) disabled:opacity-60"
-            style={{ color: "var(--color-text-muted)" }}
-          >
-            {SignOutIcon ? (
-              <SignOutIcon
-                className="h-5 w-5"
-                aria-hidden="true"
-                focusable="false"
-              />
+            {actionButton ? (
+              <Button
+                variant={actionButton.variant}
+                disabled={actionButton.disabled}
+                onClick={actionButton.onClick}
+                icon={actionButton.icon}
+              >
+                {actionButton.label}
+              </Button>
             ) : null}
-            <span>{isSigningOut ? signingOutLabel : signOutLabel}</span>
-          </button>
-        ) : null}
-      </div>
+
+            {onSignOut ? (
+              <button
+                type="button"
+                onClick={onSignOut}
+                disabled={isSigningOut}
+                className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-(--color-surface-soft) disabled:opacity-60"
+                style={{ color: "var(--color-text-muted)" }}
+              >
+                {SignOutIcon ? (
+                  <SignOutIcon
+                    className="h-5 w-5"
+                    aria-hidden="true"
+                    focusable="false"
+                  />
+                ) : null}
+                <span>{isSigningOut ? signingOutLabel : signOutLabel}</span>
+              </button>
+            ) : null}
+          </div>
+        </>
+      )}
     </aside>
   );
 }
