@@ -1,6 +1,7 @@
 import './index.css'
 
 export { Button } from './components/Button'
+export { AuthRedirectCard } from './components/AuthRedirectCard'
 export { DashboardBreadcrumb } from './components/DashboardBreadcrumb'
 export { Card } from './components/Card'
 export { Container, CONTAINER_PADDING, CONTAINER_SURFACE } from './components/Container'
@@ -11,3 +12,4 @@ export { Input, INPUT_STATUS } from './components/Input'
 export { Logo, LOGO_MODES } from './components/Logo'
 export { Notice, NOTICE_TONE } from './components/Notice'
 export { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from './components/Text'
+export { ThemeToggle, THEME_TOGGLE_MODE } from './components/ThemeToggle'
