@@ -63,15 +63,15 @@ The project uses `prepare`, so the library is built during installation from Git
 Import the components:
 
 ```jsx
-import { Button, Card } from "FHL-shared-UI"
-import "FHL-shared-UI/FHL-shared-UI.css"
+import { Button, Card } from "FHL-shared-UI";
+import "FHL-shared-UI/FHL-shared-UI.css";
 ```
 
 Example:
 
 ```jsx
-import { Button, Card } from "FHL-shared-UI"
-import "FHL-shared-UI/FHL-shared-UI.css"
+import { Button, Card } from "FHL-shared-UI";
+import "FHL-shared-UI/FHL-shared-UI.css";
 
 function App() {
   return (
@@ -82,10 +82,10 @@ function App() {
         This card is coming from the FHL-shared-UI library.
       </Card>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
 ```
 
 ## Local Development
