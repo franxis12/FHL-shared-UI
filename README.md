@@ -171,7 +171,7 @@ or follow the latest changes from the main branch:
 npm install github:franxis12/FHL-shared-UI#main
 ```
 
-## .
+## ...
 
 # License
 
