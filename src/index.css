@@ -78,6 +78,60 @@
     var(--fhl-color-surface)
   );
   --fhl-navbar-shadow: var(--fhl-color-shadow);
+  --fhl-container-bg: var(
+    --color-container-surface,
+    var(--fhl-color-surface)
+  );
+  --fhl-container-bg-soft: var(
+    --color-container-surface-soft,
+    var(--fhl-color-surface-soft)
+  );
+  --fhl-container-border: var(
+    --color-container-border,
+    var(--fhl-color-border)
+  );
+  --fhl-container-text: var(--color-container-text, var(--fhl-color-text));
+  --fhl-container-text-muted: var(
+    --color-container-text-muted,
+    var(--fhl-color-text-muted)
+  );
+  --fhl-container-shadow: var(
+    --color-container-shadow,
+    var(--fhl-color-shadow)
+  );
+  --fhl-button-primary-bg: var(
+    --color-button-primary-bg,
+    var(--fhl-color-primary-strong)
+  );
+  --fhl-button-primary-hover: var(
+    --color-button-primary-hover,
+    var(--fhl-charcoal-blue)
+  );
+  --fhl-button-primary-text: var(--color-button-primary-text, var(--fhl-white));
+  --fhl-button-primary-ring: var(
+    --color-button-primary-ring,
+    var(--fhl-color-selected-soft)
+  );
+  --fhl-button-secondary-bg: var(
+    --color-button-secondary-bg,
+    var(--fhl-color-surface)
+  );
+  --fhl-button-secondary-hover: var(
+    --color-button-secondary-hover,
+    var(--fhl-color-surface-soft)
+  );
+  --fhl-button-secondary-text: var(
+    --color-button-secondary-text,
+    var(--fhl-color-text)
+  );
+  --fhl-button-secondary-border: var(
+    --color-button-secondary-border,
+    var(--fhl-color-border)
+  );
+  --fhl-button-secondary-ring: var(
+    --color-button-secondary-ring,
+    var(--fhl-color-selected-soft)
+  );
   --fhl-input-bg: var(--color-input-surface, var(--fhl-color-surface));
   --fhl-input-border: var(--color-input-border, var(--fhl-color-border));
   --fhl-input-text: var(--color-input-text, var(--fhl-color-text));
@@ -149,6 +203,18 @@
     --color-warning-border,
     rgba(252, 211, 77, 0.42)
   );
+  --fhl-button-primary-bg: var(
+    --color-button-primary-bg,
+    var(--fhl-color-primary-strong)
+  );
+  --fhl-button-primary-hover: var(
+    --color-button-primary-hover,
+    var(--fhl-color-accent)
+  );
+  --fhl-button-primary-text: var(
+    --color-button-primary-text,
+    var(--fhl-color-accent-contrast)
+  );
   --fhl-navbar-bg: var(
     --color-dashboard-navbar-surface,
     var(--fhl-color-surface)
@@ -214,6 +280,18 @@
     --fhl-color-warning-border: var(
       --color-warning-border,
       rgba(252, 211, 77, 0.42)
+    );
+    --fhl-button-primary-bg: var(
+      --color-button-primary-bg,
+      var(--fhl-color-primary-strong)
+    );
+    --fhl-button-primary-hover: var(
+      --color-button-primary-hover,
+      var(--fhl-color-accent)
+    );
+    --fhl-button-primary-text: var(
+      --color-button-primary-text,
+      var(--fhl-color-accent-contrast)
     );
     --fhl-navbar-bg: var(
       --color-dashboard-navbar-surface,
