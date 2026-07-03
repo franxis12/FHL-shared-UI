@@ -1,1 +1,229 @@
 @import "tailwindcss";
+
+/* Shared FHL tokens used by packaged components. */
+:root {
+  --fhl-primary-navy: #062b49;
+  --fhl-charcoal-blue: #2f3a44;
+  --fhl-gold-accent: #b98524;
+  --fhl-soft-gold: #d6a64a;
+  --fhl-white: #ffffff;
+  --fhl-light-warm-gray: #f5f3ef;
+  --fhl-border-gray: #e3e0d8;
+  --fhl-text-dark: #1f2933;
+  --fhl-muted-text: #6b7280;
+
+  color-scheme: light;
+
+  --fhl-color-bg: var(--color-bg, var(--fhl-light-warm-gray));
+  --fhl-color-surface: var(--color-surface, var(--fhl-white));
+  --fhl-color-surface-soft: var(--color-surface-soft, var(--fhl-light-warm-gray));
+  --fhl-color-text: var(--color-text, var(--fhl-text-dark));
+  --fhl-color-text-muted: var(--color-text-muted, var(--fhl-muted-text));
+  --fhl-color-border: var(--color-border, var(--fhl-border-gray));
+  --fhl-color-primary: var(--color-primary, var(--fhl-gold-accent));
+  --fhl-color-primary-strong: var(--color-primary-strong, var(--fhl-primary-navy));
+  --fhl-color-secondary: var(--color-secondary, var(--fhl-charcoal-blue));
+  --fhl-color-accent: var(--color-accent, var(--fhl-gold-accent));
+  --fhl-color-accent-hover: var(--color-accent-hover, var(--fhl-soft-gold));
+  --fhl-color-accent-contrast: var(
+    --color-accent-contrast,
+    var(--fhl-primary-navy)
+  );
+  --fhl-color-selected-soft: var(
+    --color-selected-soft,
+    rgba(214, 166, 74, 0.18)
+  );
+  --fhl-color-hover-soft: var(--color-hover-soft, rgba(214, 166, 74, 0.14));
+  --fhl-color-shadow: var(--color-shadow, rgba(6, 43, 73, 0.14));
+  --fhl-color-alert: var(--color-alert, #dc2626);
+  --fhl-color-alert-soft: var(--color-alert-soft, rgba(220, 38, 38, 0.1));
+  --fhl-color-alert-border: var(
+    --color-alert-border,
+    rgba(220, 38, 38, 0.28)
+  );
+  --fhl-color-success: var(--color-success, #15803d);
+  --fhl-color-success-soft: var(
+    --color-success-soft,
+    rgba(21, 128, 61, 0.1)
+  );
+  --fhl-color-success-border: var(
+    --color-success-border,
+    rgba(21, 128, 61, 0.28)
+  );
+  --fhl-color-warning: var(--color-warning, #b45309);
+  --fhl-color-warning-soft: var(
+    --color-warning-soft,
+    rgba(180, 83, 9, 0.12)
+  );
+  --fhl-color-warning-border: var(
+    --color-warning-border,
+    rgba(180, 83, 9, 0.3)
+  );
+
+  /* Component-level aliases keep shared components consistent. */
+  --fhl-navbar-bg: var(
+    --color-dashboard-navbar-surface,
+    var(--fhl-color-surface)
+  );
+  --fhl-navbar-surface: var(--fhl-color-surface);
+  --fhl-navbar-surface-soft: var(--fhl-color-surface-soft);
+  --fhl-navbar-text: var(--fhl-color-text);
+  --fhl-navbar-text-muted: var(--fhl-color-text-muted);
+  --fhl-navbar-border: var(--fhl-color-border);
+  --fhl-navbar-hover-bg: var(--fhl-color-hover-soft);
+  --fhl-navbar-active-bg: var(--fhl-color-primary-strong);
+  --fhl-navbar-active-text: var(--fhl-white);
+  --fhl-navbar-menu-bg: var(
+    --color-dashboard-navbar-menu-surface,
+    var(--fhl-color-surface)
+  );
+  --fhl-navbar-shadow: var(--fhl-color-shadow);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --fhl-color-bg: var(--color-bg, #091218);
+  --fhl-color-surface: var(--color-surface, #18191b);
+  --fhl-color-surface-soft: var(--color-surface-soft, #13191d);
+  --fhl-color-text: var(--color-text, #f5f3ef);
+  --fhl-color-text-muted: var(--color-text-muted, #b8c3cc);
+  --fhl-color-border: var(--color-border, rgba(227, 224, 216, 0.18));
+  --fhl-color-primary: var(--color-primary, var(--fhl-gold-accent));
+  --fhl-color-primary-strong: var(--color-primary-strong, var(--fhl-soft-gold));
+  --fhl-color-secondary: var(--color-secondary, #d9e1e8);
+  --fhl-color-accent: var(--color-accent, var(--fhl-gold-accent));
+  --fhl-color-accent-hover: var(--color-accent-hover, var(--fhl-soft-gold));
+  --fhl-color-accent-contrast: var(
+    --color-accent-contrast,
+    var(--fhl-primary-navy)
+  );
+  --fhl-color-selected-soft: var(
+    --color-selected-soft,
+    rgba(214, 166, 74, 0.2)
+  );
+  --fhl-color-hover-soft: var(--color-hover-soft, rgba(214, 166, 74, 0.16));
+  --fhl-color-shadow: var(--color-shadow, rgba(0, 0, 0, 0.34));
+  --fhl-color-alert: var(--color-alert, #fca5a5);
+  --fhl-color-alert-soft: var(--color-alert-soft, rgba(127, 29, 29, 0.3));
+  --fhl-color-alert-border: var(
+    --color-alert-border,
+    rgba(252, 165, 165, 0.42)
+  );
+  --fhl-color-success: var(--color-success, #86efac);
+  --fhl-color-success-soft: var(
+    --color-success-soft,
+    rgba(20, 83, 45, 0.28)
+  );
+  --fhl-color-success-border: var(
+    --color-success-border,
+    rgba(134, 239, 172, 0.36)
+  );
+  --fhl-color-warning: var(--color-warning, #fde68a);
+  --fhl-color-warning-soft: var(
+    --color-warning-soft,
+    rgba(120, 53, 15, 0.28)
+  );
+  --fhl-color-warning-border: var(
+    --color-warning-border,
+    rgba(252, 211, 77, 0.42)
+  );
+  --fhl-navbar-bg: var(
+    --color-dashboard-navbar-surface,
+    var(--fhl-color-surface)
+  );
+  --fhl-navbar-active-bg: var(--fhl-color-primary-strong);
+  --fhl-navbar-active-text: var(--fhl-color-accent-contrast);
+  --fhl-navbar-menu-bg: var(
+    --color-dashboard-navbar-menu-surface,
+    var(--fhl-color-surface)
+  );
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --fhl-color-bg: var(--color-bg, #091218);
+    --fhl-color-surface: var(--color-surface, #18191b);
+    --fhl-color-surface-soft: var(--color-surface-soft, #13191d);
+    --fhl-color-text: var(--color-text, #f5f3ef);
+    --fhl-color-text-muted: var(--color-text-muted, #b8c3cc);
+    --fhl-color-border: var(--color-border, rgba(227, 224, 216, 0.18));
+    --fhl-color-primary: var(--color-primary, var(--fhl-gold-accent));
+    --fhl-color-primary-strong: var(
+      --color-primary-strong,
+      var(--fhl-soft-gold)
+    );
+    --fhl-color-secondary: var(--color-secondary, #d9e1e8);
+    --fhl-color-accent: var(--color-accent, var(--fhl-gold-accent));
+    --fhl-color-accent-hover: var(
+      --color-accent-hover,
+      var(--fhl-soft-gold)
+    );
+    --fhl-color-accent-contrast: var(
+      --color-accent-contrast,
+      var(--fhl-primary-navy)
+    );
+    --fhl-color-selected-soft: var(
+      --color-selected-soft,
+      rgba(214, 166, 74, 0.2)
+    );
+    --fhl-color-hover-soft: var(--color-hover-soft, rgba(214, 166, 74, 0.16));
+    --fhl-color-shadow: var(--color-shadow, rgba(0, 0, 0, 0.34));
+    --fhl-color-alert: var(--color-alert, #fca5a5);
+    --fhl-color-alert-soft: var(--color-alert-soft, rgba(127, 29, 29, 0.3));
+    --fhl-color-alert-border: var(
+      --color-alert-border,
+      rgba(252, 165, 165, 0.42)
+    );
+    --fhl-color-success: var(--color-success, #86efac);
+    --fhl-color-success-soft: var(
+      --color-success-soft,
+      rgba(20, 83, 45, 0.28)
+    );
+    --fhl-color-success-border: var(
+      --color-success-border,
+      rgba(134, 239, 172, 0.36)
+    );
+    --fhl-color-warning: var(--color-warning, #fde68a);
+    --fhl-color-warning-soft: var(
+      --color-warning-soft,
+      rgba(120, 53, 15, 0.28)
+    );
+    --fhl-color-warning-border: var(
+      --color-warning-border,
+      rgba(252, 211, 77, 0.42)
+    );
+    --fhl-navbar-bg: var(
+      --color-dashboard-navbar-surface,
+      var(--fhl-color-surface)
+    );
+    --fhl-navbar-active-bg: var(--fhl-color-primary-strong);
+    --fhl-navbar-active-text: var(--fhl-color-accent-contrast);
+    --fhl-navbar-menu-bg: var(
+      --color-dashboard-navbar-menu-surface,
+      var(--fhl-color-surface)
+    );
+  }
+}
+
+.theme-logo-dark {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-logo-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-logo-dark {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .theme-logo-light {
+    display: none;
+  }
+
+  :root:not([data-theme]) .theme-logo-dark {
+    display: block;
+  }
+}

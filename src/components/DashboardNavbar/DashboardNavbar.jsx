@@ -1,9 +1,4 @@
-import { Button } from "../Button";
-
-const defaultActionButton = {
-  label: "Save",
-  variant: "primary",
-};
+import { LOGO_MODES, Logo } from "../Logo";
 
 const baseClassName =
   "flex flex-col border-b lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden lg:border-b-0 lg:border-r";
@@ -12,11 +7,38 @@ function getItemKey(item, index) {
   return item.key ?? item.href ?? item.label ?? index;
 }
 
+function getCollapsibleLabelClassName(collapsed) {
+  return collapsed
+    ? "max-w-0 -translate-x-1 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-300"
+    : "max-w-[160px] translate-x-0 overflow-hidden whitespace-nowrap opacity-100 transition-all duration-300";
+}
+
+function renderBrandContent(brand) {
+  if (!brand) {
+    return null;
+  }
+
+  if (brand.content) {
+    return brand.content;
+  }
+
+  return (
+    <Logo
+      mode={brand.logoMode ?? LOGO_MODES.HORIZONTAL}
+      darkMode={brand.darkLogoMode ?? LOGO_MODES.DARK}
+      themeAware={brand.logoThemeAware ?? true}
+      className={brand.logoClassName}
+      lightClassName={brand.lightLogoClassName}
+      darkClassName={brand.darkLogoClassName}
+    />
+  );
+}
+
 function DashboardSubItem({ item }) {
   const style = item.isActive
     ? {
-        backgroundColor: "var(--color-surface-soft)",
-        color: "var(--color-text)",
+        backgroundColor: "var(--fhl-navbar-surface-soft)",
+        color: "var(--fhl-navbar-text)",
       }
     : undefined;
 
@@ -28,7 +50,7 @@ function DashboardSubItem({ item }) {
         className={`flex items-center rounded-lg px-2.5 py-1.5 text-xs font-semibold transition ${
           item.isActive
             ? ""
-            : "text-[var(--color-text-muted)] hover:bg-[var(--color-surface-soft)] hover:text-[var(--color-text)]"
+            : "text-[var(--fhl-navbar-text-muted)] hover:bg-[var(--fhl-navbar-surface-soft)] hover:text-[var(--fhl-navbar-text)]"
         }`}
         style={style}
         aria-current={item.isActive ? "page" : undefined}
@@ -45,7 +67,7 @@ function DashboardSubItem({ item }) {
       className={`flex w-full items-center rounded-lg px-2.5 py-1.5 text-left text-xs font-semibold transition ${
         item.isActive
           ? ""
-          : "text-[var(--color-text-muted)] hover:bg-[var(--color-surface-soft)] hover:text-[var(--color-text)]"
+          : "text-[var(--fhl-navbar-text-muted)] hover:bg-[var(--fhl-navbar-surface-soft)] hover:text-[var(--fhl-navbar-text)]"
       }`}
       style={style}
       aria-current={item.isActive ? "page" : undefined}
@@ -58,16 +80,21 @@ function DashboardSubItem({ item }) {
 function DashboardNavItem({ item, collapsed = false }) {
   const Icon = item.icon;
   const itemClassName = item.isActive
-    ? `flex items-center gap-2 rounded-xl bg-(--color-primary-strong) px-3 py-2 text-sm font-semibold text-white ${
+    ? `flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold ${
         collapsed ? "justify-center px-2.5" : ""
       }`
-    : `flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-(--color-text-muted) transition hover:bg-(--color-surface-soft) hover:text-(--color-text) ${
+    : `flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] hover:text-[var(--fhl-navbar-text)] ${
         collapsed ? "justify-center px-2.5" : ""
       }`;
-  const itemStyle = item.isActive ? { color: "#ffffff" } : undefined;
-  const labelClassName = collapsed
-    ? "max-w-0 -translate-x-1 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-300"
-    : "max-w-[160px] translate-x-0 overflow-hidden whitespace-nowrap opacity-100 transition-all duration-300";
+  const itemStyle = item.isActive
+    ? {
+        backgroundColor: "var(--fhl-navbar-active-bg)",
+        color: "var(--fhl-navbar-active-text)",
+      }
+    : {
+        color: "var(--fhl-navbar-text-muted)",
+      };
+  const labelClassName = getCollapsibleLabelClassName(collapsed);
   const shouldShowChildren =
     Array.isArray(item.children) &&
     item.children.length > 0 &&
@@ -120,21 +147,30 @@ function DashboardNavItem({ item, collapsed = false }) {
   );
 }
 
-function DashboardFooterItem({ item }) {
+function DashboardFooterItem({ item, collapsed = false }) {
   const Icon = item.icon;
+  const labelClassName = getCollapsibleLabelClassName(collapsed);
+  const content = (
+    <>
+      {Icon ? (
+        <Icon className="h-5 w-5 shrink-0" aria-hidden="true" focusable="false" />
+      ) : null}
+      <span className={labelClassName}>{item.label}</span>
+    </>
+  );
 
   if (item.href) {
     return (
       <a
         href={item.href}
         onClick={item.onClick}
-        className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition hover:bg-(--color-surface-soft)"
-        style={{ color: "var(--color-text-muted)" }}
+        className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] ${
+          collapsed ? "justify-center px-2.5" : ""
+        }`}
+        style={{ color: "var(--fhl-navbar-text-muted)" }}
+        title={collapsed ? item.label : undefined}
       >
-        {Icon ? (
-          <Icon className="h-5 w-5" aria-hidden="true" focusable="false" />
-        ) : null}
-        <span>{item.label}</span>
+        {content}
       </a>
     );
   }
@@ -143,13 +179,13 @@ function DashboardFooterItem({ item }) {
     <button
       type="button"
       onClick={item.onClick}
-      className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-(--color-surface-soft)"
-      style={{ color: "var(--color-text-muted)" }}
+      className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] ${
+        collapsed ? "justify-center px-2.5" : ""
+      }`}
+      style={{ color: "var(--fhl-navbar-text-muted)" }}
+      title={collapsed ? item.label : undefined}
     >
-      {Icon ? (
-        <Icon className="h-5 w-5" aria-hidden="true" focusable="false" />
-      ) : null}
-      <span>{item.label}</span>
+      {content}
     </button>
   );
 }
@@ -164,35 +200,44 @@ function DashboardProfileMenu({ profileMenu, collapsed = false }) {
   return (
     <div
       ref={profileMenu.ref}
-      className="relative border-t border-[var(--color-border)] p-2"
+      className="relative border-t p-2"
+      style={{ borderColor: "var(--fhl-navbar-border)" }}
     >
       <button
         type="button"
         onClick={profileMenu.onToggle}
-        className={`flex w-full items-center gap-2 rounded-xl bg-[var(--color-surface-soft)] px-3 py-2 text-left text-sm font-semibold transition hover:bg-[var(--color-hover-soft)] ${
+        className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] ${
           collapsed ? "justify-center px-2.5" : ""
         }`}
+        style={{
+          backgroundColor: "var(--fhl-navbar-surface-soft)",
+          color: "var(--fhl-navbar-text)",
+        }}
         title={collapsed ? displayName : undefined}
       >
-        <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--color-surface)] text-xs font-bold">
+        <span
+          className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+          style={{
+            backgroundColor: "var(--fhl-navbar-surface)",
+            color: "var(--fhl-navbar-text)",
+          }}
+        >
           {avatarContent}
         </span>
-        <span
-          className={
-            collapsed
-              ? "max-w-0 -translate-x-1 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-300"
-              : "max-w-[160px] translate-x-0 overflow-hidden whitespace-nowrap opacity-100 transition-all duration-300"
-          }
-        >
+        <span className={getCollapsibleLabelClassName(collapsed)}>
           {displayName}
         </span>
       </button>
 
       {profileMenu.isOpen ? (
         <div
-          className={`absolute z-20 rounded-xl bg-[var(--color-surface)] p-1 shadow-[0_12px_25px_var(--color-shadow)] ${
+          className={`absolute z-20 rounded-xl p-1 shadow-[0_12px_25px_var(--fhl-navbar-shadow)] ${
             collapsed ? "bottom-2 left-full ml-2 w-40" : "bottom-14 left-2 right-2"
           }`}
+          style={{
+            backgroundColor: "var(--fhl-navbar-menu-bg)",
+            color: "var(--fhl-navbar-text)",
+          }}
         >
           {menuItems.map((item, index) =>
             item.href ? (
@@ -200,7 +245,7 @@ function DashboardProfileMenu({ profileMenu, collapsed = false }) {
                 key={getItemKey(item, index)}
                 href={item.href}
                 onClick={item.onClick}
-                className="flex w-full items-center justify-start rounded-lg px-2.5 py-2 text-sm font-semibold transition hover:bg-[var(--color-hover-soft)]"
+                className="flex w-full items-center justify-start rounded-lg px-2.5 py-2 text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)]"
               >
                 {item.label}
               </a>
@@ -210,7 +255,7 @@ function DashboardProfileMenu({ profileMenu, collapsed = false }) {
                 type="button"
                 onClick={item.onClick}
                 disabled={item.disabled}
-                className="flex w-full items-center justify-start rounded-lg px-2.5 py-2 text-sm font-semibold transition hover:bg-[var(--color-hover-soft)] disabled:opacity-60"
+                className="flex w-full items-center justify-start rounded-lg px-2.5 py-2 text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] disabled:opacity-60"
               >
                 {item.label}
               </button>
@@ -226,7 +271,6 @@ export function DashboardNavbar({
   brand,
   navItems = [],
   footerItems = [],
-  actionButton = defaultActionButton,
   className = "",
   style,
   collapsed = false,
@@ -239,15 +283,16 @@ export function DashboardNavbar({
   signingOutLabel = "Signing out...",
 }) {
   const resolvedClassName = `${baseClassName} ${className}`.trim();
-  const hasSimpleFooter =
-    footerItems.length > 0 || actionButton || onSignOut;
+  const hasSimpleFooter = footerItems.length > 0 || onSignOut;
+  const brandContent = renderBrandContent(brand);
 
   return (
     <aside
       className={resolvedClassName}
       style={{
-        borderColor: "var(--color-border)",
-        backgroundColor: "var(--color-surface)",
+        borderColor: "var(--fhl-navbar-border)",
+        backgroundColor: "var(--fhl-navbar-bg)",
+        color: "var(--fhl-navbar-text)",
         ...style,
       }}
     >
@@ -256,9 +301,9 @@ export function DashboardNavbar({
           className={`flex h-20 border-b px-2 py-2 transition-all duration-300 ${
             collapsed ? "justify-center" : "items-center justify-between"
           }`}
-          style={{ borderColor: "var(--color-border)" }}
+          style={{ borderColor: "var(--fhl-navbar-border)" }}
         >
-          {brand?.content ? (
+          {brandContent ? (
             <a
               href={brand.href ?? "/"}
               onClick={brand.onClick}
@@ -269,14 +314,23 @@ export function DashboardNavbar({
                   : "w-44 translate-x-0 opacity-100"
               }`}
             >
-              {brand.content}
+              {brandContent}
             </a>
           ) : null}
 
           <button
             type="button"
             onClick={collapseToggle.onToggle}
-            className="rounded-md bg-[var(--color-surface-soft)] p-1.5 transition hover:bg-[var(--color-hover-soft)]"
+            className="rounded-md p-1.5 transition hover:bg-[var(--fhl-navbar-hover-bg)]"
+            style={{
+              backgroundColor: "var(--fhl-navbar-surface-soft)",
+              color: "var(--fhl-navbar-text)",
+            }}
+            aria-label={
+              collapsed
+                ? collapseToggle.collapsedLabel ?? "Expand menu"
+                : collapseToggle.expandedLabel ?? "Collapse menu"
+            }
             title={
               collapsed
                 ? collapseToggle.collapsedLabel ?? "Expand menu"
@@ -286,7 +340,7 @@ export function DashboardNavbar({
             {collapsed ? collapseToggle.collapsedIcon : collapseToggle.expandedIcon}
           </button>
         </div>
-      ) : brand?.content ? (
+      ) : brandContent ? (
         <div className="px-3 pb-1 pt-3">
           <a
             href={brand.href ?? "/"}
@@ -294,7 +348,7 @@ export function DashboardNavbar({
             aria-label={brand.ariaLabel ?? "Dashboard home"}
             className="inline-flex items-center px-1 transition hover:opacity-85"
           >
-            {brand.content}
+            {brandContent}
           </a>
         </div>
       ) : null}
@@ -316,39 +370,38 @@ export function DashboardNavbar({
       {hasSimpleFooter ? (
         <div
           className="mt-auto space-y-2 border-t p-3"
-          style={{ borderColor: "var(--color-border)" }}
+          style={{ borderColor: "var(--fhl-navbar-border)" }}
         >
           {footerItems.map((item, index) => (
-            <DashboardFooterItem key={getItemKey(item, index)} item={item} />
+            <DashboardFooterItem
+              key={getItemKey(item, index)}
+              item={item}
+              collapsed={collapsed}
+            />
           ))}
-
-          {actionButton ? (
-            <Button
-              variant={actionButton.variant}
-              disabled={actionButton.disabled}
-              onClick={actionButton.onClick}
-              icon={actionButton.icon}
-            >
-              {actionButton.label}
-            </Button>
-          ) : null}
 
           {onSignOut ? (
             <button
               type="button"
               onClick={onSignOut}
               disabled={isSigningOut}
-              className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-(--color-surface-soft) disabled:opacity-60"
-              style={{ color: "var(--color-text-muted)" }}
+              className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] disabled:opacity-60 ${
+                collapsed ? "justify-center px-2.5" : ""
+              }`}
+              style={{ color: "var(--fhl-navbar-text-muted)" }}
+              aria-label={isSigningOut ? signingOutLabel : signOutLabel}
+              title={collapsed ? signOutLabel : undefined}
             >
               {SignOutIcon ? (
                 <SignOutIcon
-                  className="h-5 w-5"
+                  className="h-5 w-5 shrink-0"
                   aria-hidden="true"
                   focusable="false"
                 />
               ) : null}
-              <span>{isSigningOut ? signingOutLabel : signOutLabel}</span>
+              <span className={getCollapsibleLabelClassName(collapsed)}>
+                {isSigningOut ? signingOutLabel : signOutLabel}
+              </span>
             </button>
           ) : null}
         </div>
