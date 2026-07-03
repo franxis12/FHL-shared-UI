@@ -78,6 +78,28 @@
     var(--fhl-color-surface)
   );
   --fhl-navbar-shadow: var(--fhl-color-shadow);
+  --fhl-input-bg: var(--color-input-surface, var(--fhl-color-surface));
+  --fhl-input-border: var(--color-input-border, var(--fhl-color-border));
+  --fhl-input-text: var(--color-input-text, var(--fhl-color-text));
+  --fhl-input-label: var(--color-input-label, var(--fhl-color-text));
+  --fhl-input-helper: var(
+    --color-input-helper,
+    var(--fhl-color-text-muted)
+  );
+  --fhl-input-placeholder: var(
+    --color-input-placeholder,
+    var(--fhl-color-text-muted)
+  );
+  --fhl-input-icon: var(--color-input-icon, var(--fhl-color-text-muted));
+  --fhl-input-disabled-bg: var(
+    --color-input-disabled-bg,
+    var(--fhl-color-surface-soft)
+  );
+  --fhl-input-disabled-text: var(
+    --color-input-disabled-text,
+    var(--fhl-color-text-muted)
+  );
+  --fhl-input-shadow: var(--color-input-shadow, var(--fhl-color-shadow));
 }
 
 :root[data-theme="dark"] {
