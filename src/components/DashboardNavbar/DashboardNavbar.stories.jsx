@@ -256,3 +256,42 @@ export const Owner = {
 export const OwnerDark = {
   render: (args) => <OwnerNavbarStory {...args} storyTheme="dark" />,
 };
+
+export const Admin = {
+  render: (args) => (
+    <StoryShell width="280px">
+      <DashboardNavbar
+        {...args}
+        brand={{
+          href: "#admin",
+          ariaLabel: "Admin dashboard home",
+          logoMode: "horizontal",
+          darkLogoMode: "dark",
+          logoThemeAware: true,
+          logoClassName: "h-auto w-full object-contain",
+        }}
+        navSections={[
+          {
+            title: "Overview",
+            items: [
+              { href: "#dashboard", label: "Dashboard", icon: OverviewIcon, isActive: true },
+              { href: "#storage", label: "Storage" },
+              { href: "#settings", label: "Settings", icon: SettingsIcon },
+            ],
+          },
+          {
+            title: "Users",
+            items: [
+              { href: "#users", label: "Users" },
+              { href: "#owners", label: "Owners" },
+              { href: "#handymen", label: "Handymen" },
+            ],
+          },
+        ]}
+        footerItems={[{ href: "#home", label: "Home", icon: HomeIcon }]}
+        signOutIcon={ArrowExitIcon}
+        signOutLabel="Sign out"
+      />
+    </StoryShell>
+  ),
+};

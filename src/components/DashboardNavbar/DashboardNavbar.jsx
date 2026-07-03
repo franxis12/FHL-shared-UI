@@ -7,6 +7,10 @@ function getItemKey(item, index) {
   return item.key ?? item.href ?? item.label ?? index;
 }
 
+function getSectionKey(section, index) {
+  return section.key ?? section.title ?? index;
+}
+
 function getCollapsibleLabelClassName(collapsed) {
   return collapsed
     ? "max-w-0 -translate-x-1 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-300"
@@ -104,7 +108,11 @@ function DashboardNavItem({ item, collapsed = false }) {
   const content = (
     <>
       {Icon ? (
-        <Icon className="h-5 w-5 shrink-0" aria-hidden="true" focusable="false" />
+        <Icon
+          className="h-5 w-5 shrink-0"
+          aria-hidden="true"
+          focusable="false"
+        />
       ) : null}
       <span className={labelClassName}>{item.label}</span>
     </>
@@ -153,7 +161,11 @@ function DashboardFooterItem({ item, collapsed = false }) {
   const content = (
     <>
       {Icon ? (
-        <Icon className="h-5 w-5 shrink-0" aria-hidden="true" focusable="false" />
+        <Icon
+          className="h-5 w-5 shrink-0"
+          aria-hidden="true"
+          focusable="false"
+        />
       ) : null}
       <span className={labelClassName}>{item.label}</span>
     </>
@@ -191,8 +203,10 @@ function DashboardFooterItem({ item, collapsed = false }) {
 }
 
 function DashboardProfileMenu({ profileMenu, collapsed = false }) {
-  const displayName = String(profileMenu.displayName || "User").trim() || "User";
-  const avatarContent = profileMenu.avatarContent ?? displayName.charAt(0).toUpperCase();
+  const displayName =
+    String(profileMenu.displayName || "User").trim() || "User";
+  const avatarContent =
+    profileMenu.avatarContent ?? displayName.charAt(0).toUpperCase();
   const menuItems = Array.isArray(profileMenu.menuItems)
     ? profileMenu.menuItems
     : [];
@@ -206,7 +220,7 @@ function DashboardProfileMenu({ profileMenu, collapsed = false }) {
       <button
         type="button"
         onClick={profileMenu.onToggle}
-        className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] ${
+        className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-(--fhl-navbar-hover-bg) ${
           collapsed ? "justify-center px-2.5" : ""
         }`}
         style={{
@@ -232,7 +246,9 @@ function DashboardProfileMenu({ profileMenu, collapsed = false }) {
       {profileMenu.isOpen ? (
         <div
           className={`absolute z-20 rounded-xl p-1 shadow-[0_12px_25px_var(--fhl-navbar-shadow)] ${
-            collapsed ? "bottom-2 left-full ml-2 w-40" : "bottom-14 left-2 right-2"
+            collapsed
+              ? "bottom-2 left-full ml-2 w-40"
+              : "bottom-14 left-2 right-2"
           }`}
           style={{
             backgroundColor: "var(--fhl-navbar-menu-bg)",
@@ -270,6 +286,7 @@ function DashboardProfileMenu({ profileMenu, collapsed = false }) {
 export function DashboardNavbar({
   brand,
   navItems = [],
+  navSections = [],
   footerItems = [],
   className = "",
   style,
@@ -285,6 +302,10 @@ export function DashboardNavbar({
   const resolvedClassName = `${baseClassName} ${className}`.trim();
   const hasSimpleFooter = footerItems.length > 0 || onSignOut;
   const brandContent = renderBrandContent(brand);
+  const resolvedNavSections =
+    Array.isArray(navSections) && navSections.length > 0
+      ? navSections
+      : [{ items: navItems }];
 
   return (
     <aside
@@ -328,16 +349,18 @@ export function DashboardNavbar({
             }}
             aria-label={
               collapsed
-                ? collapseToggle.collapsedLabel ?? "Expand menu"
-                : collapseToggle.expandedLabel ?? "Collapse menu"
+                ? (collapseToggle.collapsedLabel ?? "Expand menu")
+                : (collapseToggle.expandedLabel ?? "Collapse menu")
             }
             title={
               collapsed
-                ? collapseToggle.collapsedLabel ?? "Expand menu"
-                : collapseToggle.expandedLabel ?? "Collapse menu"
+                ? (collapseToggle.collapsedLabel ?? "Expand menu")
+                : (collapseToggle.expandedLabel ?? "Collapse menu")
             }
           >
-            {collapsed ? collapseToggle.collapsedIcon : collapseToggle.expandedIcon}
+            {collapsed
+              ? collapseToggle.collapsedIcon
+              : collapseToggle.expandedIcon}
           </button>
         </div>
       ) : brandContent ? (
@@ -354,18 +377,38 @@ export function DashboardNavbar({
       ) : null}
 
       <div className="flex-1 overflow-y-auto p-2">
-        <nav className="space-y-1.5">
-          {navItems.map((item, index) => (
-            <DashboardNavItem
-              key={getItemKey(item, index)}
-              item={item}
-              collapsed={collapsed}
-            />
-          ))}
+        <nav className="space-y-3">
+          {resolvedNavSections.map((section, sectionIndex) => {
+            const sectionItems = Array.isArray(section.items) ? section.items : [];
+
+            if (sectionItems.length === 0) {
+              return null;
+            }
+
+            return (
+              <div key={getSectionKey(section, sectionIndex)} className="space-y-1.5">
+                {section.title && !collapsed ? (
+                  <p className="px-3 pt-2 text-[10px] font-bold tracking-[0.14em] text-[var(--fhl-navbar-text-muted)] uppercase">
+                    {section.title}
+                  </p>
+                ) : null}
+
+                {sectionItems.map((item, itemIndex) => (
+                  <DashboardNavItem
+                    key={getItemKey(item, itemIndex)}
+                    item={item}
+                    collapsed={collapsed}
+                  />
+                ))}
+              </div>
+            );
+          })}
         </nav>
       </div>
 
-      {profileMenu ? <DashboardProfileMenu profileMenu={profileMenu} collapsed={collapsed} /> : null}
+      {profileMenu ? (
+        <DashboardProfileMenu profileMenu={profileMenu} collapsed={collapsed} />
+      ) : null}
 
       {hasSimpleFooter ? (
         <div

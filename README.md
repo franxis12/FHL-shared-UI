@@ -131,6 +131,12 @@ npm run build-storybook
 
 ---
 
+Consume projects
+rm -rf node_modules/@franxis12/fhl-shared-ui
+rm -rf package-lock.json node_modules
+npm install
+npm run dev
+
 # Project Structure
 
 ```
