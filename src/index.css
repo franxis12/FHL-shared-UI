@@ -78,6 +78,18 @@
     var(--fhl-color-surface)
   );
   --fhl-navbar-shadow: var(--fhl-color-shadow);
+  --fhl-navy-surface: var(--color-navy-surface, var(--fhl-primary-navy));
+  --fhl-navy-text: var(--color-navy-text, var(--fhl-white));
+  --fhl-navy-muted: var(--color-navy-muted, rgba(255, 255, 255, 0.72));
+  --fhl-navy-border: var(--color-navy-border, rgba(255, 255, 255, 0.16));
+  --fhl-public-navbar-bg: var(
+    --color-navbar-bg,
+    color-mix(in oklab, var(--fhl-navy-surface) 30%, transparent)
+  );
+  --fhl-public-navbar-menu-bg: var(
+    --color-navbar-menu-bg,
+    color-mix(in oklab, var(--fhl-navy-surface) 72%, transparent)
+  );
   --fhl-container-bg: var(
     --color-container-surface,
     var(--fhl-color-surface)
@@ -359,6 +371,35 @@
       --color-dashboard-navbar-menu-surface,
       var(--fhl-color-surface)
     );
+  }
+}
+
+.home-filters-more-panel-shell {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(-0.25rem);
+  transition:
+    grid-template-rows 220ms ease,
+    opacity 160ms ease,
+    transform 220ms ease;
+}
+
+.home-filters-more-panel-shell.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.home-filters-more-panel {
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-filters-more-panel-shell {
+    transform: none;
+    transition: none;
   }
 }
 
