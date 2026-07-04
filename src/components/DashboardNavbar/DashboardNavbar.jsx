@@ -70,7 +70,7 @@ function DashboardSubItem({ item }) {
       className={`flex w-full items-center rounded-lg px-2.5 py-1.5 text-left text-xs font-semibold transition ${
         item.isActive
           ? ""
-          : "text-(--fhl-navbar-text-muted) hover:bg-[var(--fhl-navbar-surface-soft)] hover:text-[var(--fhl-navbar-text)]"
+          : "text-[var(--fhl-navbar-text-muted)] hover:bg-[var(--fhl-navbar-surface-soft)] hover:text-[var(--fhl-navbar-text)]"
       }`}
       style={style}
       aria-current={item.isActive ? "page" : undefined}
@@ -201,87 +201,6 @@ function DashboardFooterItem({ item, collapsed = false }) {
   );
 }
 
-function DashboardProfileMenu({ profileMenu, collapsed = false }) {
-  const displayName =
-    String(profileMenu.displayName || "User").trim() || "User";
-  const avatarContent =
-    profileMenu.avatarContent ?? displayName.charAt(0).toUpperCase();
-  const menuItems = Array.isArray(profileMenu.menuItems)
-    ? profileMenu.menuItems
-    : [];
-
-  return (
-    <div
-      ref={profileMenu.ref}
-      className="relative border-t p-2"
-      //style={{ borderColor: "var(--fhl-navbar-border)" }}
-    >
-      <button
-        type="button"
-        onClick={profileMenu.onToggle}
-        className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-(--fhl-navbar-hover-bg) ${
-          collapsed ? "justify-center px-2.5" : ""
-        }`}
-        style={{
-          backgroundColor: "var(--fhl-navbar-surface-soft)",
-          color: "var(--fhl-navbar-text)",
-        }}
-        title={collapsed ? displayName : undefined}
-      >
-        <span
-          className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold"
-          style={{
-            backgroundColor: "var(--fhl-navbar-surface)",
-            color: "var(--fhl-navbar-text)",
-          }}
-        >
-          {avatarContent}
-        </span>
-        <span className={getCollapsibleLabelClassName(collapsed)}>
-          {displayName}
-        </span>
-      </button>
-
-      {profileMenu.isOpen ? (
-        <div
-          className={`absolute z-20 rounded-xl p-1 shadow-[0_12px_25px_var(--fhl-navbar-shadow)] ${
-            collapsed
-              ? "bottom-2 left-full ml-2 w-40"
-              : "bottom-14 left-2 right-2"
-          }`}
-          style={{
-            backgroundColor: "var(--fhl-navbar-menu-bg)",
-            color: "var(--fhl-navbar-text)",
-          }}
-        >
-          {menuItems.map((item, index) =>
-            item.href ? (
-              <a
-                key={getItemKey(item, index)}
-                href={item.href}
-                onClick={item.onClick}
-                className="flex w-full items-center justify-start rounded-lg px-2.5 py-2 text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)]"
-              >
-                {item.label}
-              </a>
-            ) : (
-              <button
-                key={getItemKey(item, index)}
-                type="button"
-                onClick={item.onClick}
-                disabled={item.disabled}
-                className="flex w-full items-center justify-start rounded-lg px-2.5 py-2 text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] disabled:opacity-60"
-              >
-                {item.label}
-              </button>
-            ),
-          )}
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
 export function DashboardNavbar({
   brand,
   navItems = [],
@@ -291,7 +210,6 @@ export function DashboardNavbar({
   style,
   collapsed = false,
   collapseToggle,
-  profileMenu,
   isSigningOut = false,
   onSignOut,
   signOutIcon: SignOutIcon,
@@ -409,10 +327,6 @@ export function DashboardNavbar({
           })}
         </nav>
       </div>
-
-      {profileMenu ? (
-        <DashboardProfileMenu profileMenu={profileMenu} collapsed={collapsed} />
-      ) : null}
 
       {hasSimpleFooter ? (
         <div

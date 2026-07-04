@@ -212,6 +212,53 @@ import { Checkbox, CHECKBOX_STATUS } from "@franxis12/fhl-shared-ui";
 />;
 ```
 
+## PropertyDashboardCard
+
+Use `PropertyDashboardCard` for owner/admin dashboard property grids where each card needs occupancy context, rating, and a direct edit action.
+
+Exports:
+- `PropertyDashboardCard`
+- `PROPERTY_DASHBOARD_CARD_FEEDBACK_TONE`
+
+Common props:
+- `title`
+- `propertyType`
+- `address`
+- `coverImageUrl`
+- `onOpen`
+- `onEdit`
+- `editIcon`
+- `availableUnitsLabel`
+- `occupancyLabel`
+- `occupancyTone`
+- `ratingValue`
+- `ratingCount`
+
+Example:
+
+```jsx
+import {
+  PropertyDashboardCard,
+  PROPERTY_DASHBOARD_CARD_FEEDBACK_TONE,
+} from "@franxis12/fhl-shared-ui";
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
+
+<PropertyDashboardCard
+  title="Oak Street Apartments"
+  propertyType="Apartment building"
+  address="123 Main Street, Miami, FL 33101"
+  coverImageUrl={coverUrl}
+  availableUnitsLabel="2/10 units available"
+  occupancyLabel="High vacancy"
+  occupancyTone={PROPERTY_DASHBOARD_CARD_FEEDBACK_TONE.WARNING}
+  ratingValue={4.6}
+  ratingCount={18}
+  editIcon={PencilSquareIcon}
+  onOpen={() => navigate(`/owner/dashboard/properties/${property.id}`)}
+  onEdit={() => navigate(`/owner/dashboard/properties/${property.id}/edit`)}
+/>;
+```
+
 ## Text
 
 Use `Text` as the shared typography layer. If the text system changes later, components that use this API can update together.

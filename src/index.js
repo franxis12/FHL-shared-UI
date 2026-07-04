@@ -14,5 +14,9 @@ export { Input, INPUT_STATUS } from './components/Input'
 export { Logo, LOGO_MODES } from './components/Logo'
 export { MetricCard } from './components/MetricCard'
 export { Notice, NOTICE_TONE } from './components/Notice'
+export {
+  PropertyDashboardCard,
+  PROPERTY_DASHBOARD_CARD_FEEDBACK_TONE,
+} from './components/PropertyDashboardCard'
 export { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from './components/Text'
 export { ThemeToggle, THEME_TOGGLE_MODE } from './components/ThemeToggle'

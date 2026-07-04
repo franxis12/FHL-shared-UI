@@ -29,6 +29,90 @@ function buildPreviewKey(file, fileIndex) {
   return [file?.name, file?.size, file?.lastModified, fileIndex].join("-");
 }
 
+function isBlobLike(value) {
+  return typeof Blob !== "undefined" && value instanceof Blob;
+}
+
+function resolvePreviewLabel(value, fileIndex) {
+  if (typeof value?.name === "string" && value.name.trim()) {
+    return value.name.trim();
+  }
+
+  if (typeof value === "string" && value.trim()) {
+    const sanitizedValue = value.split("?")[0].split("#")[0];
+    const lastSegment = sanitizedValue.split("/").filter(Boolean).pop();
+    return lastSegment || `Photo ${fileIndex + 1}`;
+  }
+
+  const possibleStringFields = [
+    value?.label,
+    value?.title,
+    value?.alt,
+    value?.fileName,
+    value?.filename,
+    value?.path,
+    value?.storage_path,
+    value?.file_url,
+    value?.url,
+    value?.src,
+  ];
+  const firstLabel = possibleStringFields.find(
+    (entry) => typeof entry === "string" && entry.trim(),
+  );
+
+  if (firstLabel) {
+    const sanitizedValue = firstLabel.split("?")[0].split("#")[0];
+    const lastSegment = sanitizedValue.split("/").filter(Boolean).pop();
+    return lastSegment || `Photo ${fileIndex + 1}`;
+  }
+
+  return `Photo ${fileIndex + 1}`;
+}
+
+function buildPreviewValue(value, fileIndex) {
+  if (!value) return null;
+
+  if (isBlobLike(value)) {
+    if (
+      typeof URL === "undefined" ||
+      typeof URL.createObjectURL !== "function"
+    ) {
+      return null;
+    }
+
+    return {
+      key: buildPreviewKey(value, fileIndex),
+      label: resolvePreviewLabel(value, fileIndex),
+      url: URL.createObjectURL(value),
+      shouldRevoke: true,
+    };
+  }
+
+  const possibleUrl =
+    typeof value === "string"
+      ? value
+      : [
+          value?.url,
+          value?.src,
+          value?.previewUrl,
+          value?.preview_url,
+          value?.file_url,
+          value?.storage_path,
+          value?.path,
+        ].find((entry) => typeof entry === "string" && entry.trim());
+
+  if (!possibleUrl) {
+    return null;
+  }
+
+  return {
+    key: buildPreviewKey(value, fileIndex),
+    label: resolvePreviewLabel(value, fileIndex),
+    url: possibleUrl,
+    shouldRevoke: false,
+  };
+}
+
 function AddTile({ disabled, multiple, onClick }) {
   return (
     <button
@@ -139,15 +223,21 @@ export function ImageUploader({
         ? [value]
         : [];
 
-    const nextPreviewUrls = currentFiles.map((file, fileIndex) => ({
-      key: buildPreviewKey(file, fileIndex),
-      url: URL.createObjectURL(file),
-    }));
+    const nextPreviewUrls = currentFiles
+      .map((file, fileIndex) => buildPreviewValue(file, fileIndex))
+      .filter(Boolean);
 
     setPreviewUrls(nextPreviewUrls);
 
     return () => {
       nextPreviewUrls.forEach((preview) => {
+        if (
+          !preview.shouldRevoke ||
+          typeof URL === "undefined" ||
+          typeof URL.revokeObjectURL !== "function"
+        ) {
+          return;
+        }
         URL.revokeObjectURL(preview.url);
       });
     };
@@ -229,7 +319,7 @@ export function ImageUploader({
             <PreviewTile
               key={buildPreviewKey(file, fileIndex)}
               preview={preview}
-              label={file.name}
+              label={preview.label}
               removable
               onOpenPicker={multiple ? undefined : openFilePicker}
               onRemove={() => handleRemove(fileIndex)}
