@@ -1,7 +1,7 @@
 import { LOGO_MODES, Logo } from "../Logo";
 
 const baseClassName =
-  "flex flex-col border-b lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden lg:border-b-0 lg:border-r";
+  "flex flex-col border-b lg:self-start lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden lg:border-b-0 lg:border-r";
 
 function getItemKey(item, index) {
   return item.key ?? item.href ?? item.label ?? index;

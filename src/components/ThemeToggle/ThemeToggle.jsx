@@ -68,18 +68,18 @@ export function ThemeToggle({
             disabled={disabled}
             onClick={() => onChange?.(option.mode)}
             className={joinClassNames(
-              "inline-flex items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-color-bg)] disabled:cursor-not-allowed disabled:opacity-60",
+              "inline-flex items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--fhl-color-accent-hover) focus-visible:ring-offset-2 focus-visible:ring-offset-(--fhl-color-bg) disabled:cursor-not-allowed disabled:opacity-60",
               compact ? "h-5 w-5" : "gap-1.5 px-2.5 py-1.5",
               isSelected
-                ? "bg-[var(--fhl-color-accent)] text-[var(--fhl-color-accent-contrast)]"
-                : "text-[var(--fhl-color-text-muted)] hover:bg-[var(--fhl-color-hover-soft)] hover:text-[var(--fhl-color-text)]",
+                ? "bg-(--fhl-color-accent) text-(--fhl-color-accent-contrast)"
+                : "text-(--fhl-color-text-muted) hover:bg-(--fhl-color-hover-soft) hover:text-(--fhl-color-text)",
             )}
           >
             <span
               className={joinClassNames(
                 "h-2 w-2 rounded-full",
                 isSelected
-                  ? "bg-[var(--fhl-color-accent-contrast)]"
+                  ? "bg-(--fhl-color-accent-contrast)"
                   : "bg-current opacity-70",
               )}
             />
