@@ -32,6 +32,18 @@ export const CONTAINER_SURFACE = Object.freeze({
   TRANSPARENT: "transparent",
 });
 
+export const CONTAINER_RADIUS = Object.freeze({
+  MD: "md",
+  LG: "lg",
+  XL: "xl",
+});
+
+const RADIUS_CLASSES = {
+  [CONTAINER_RADIUS.MD]: "rounded-2xl",
+  [CONTAINER_RADIUS.LG]: "rounded-3xl",
+  [CONTAINER_RADIUS.XL]: "rounded-[28px]",
+};
+
 function joinClassNames(...values) {
   return values.filter(Boolean).join(" ");
 }
@@ -115,6 +127,7 @@ export function Container({
   descriptionClassName = "",
   padding = CONTAINER_PADDING.MD,
   surface = CONTAINER_SURFACE.DEFAULT,
+  radius = CONTAINER_RADIUS.XL,
   fitContent = false,
   divided = false,
   bordered = true,
@@ -132,7 +145,8 @@ export function Container({
       {...props}
       className={joinClassNames(
         fitContent ? "inline-flex max-w-full" : "flex",
-        "flex-col overflow-hidden rounded-[28px]",
+        "flex-col overflow-hidden",
+        RADIUS_CLASSES[radius] ?? RADIUS_CLASSES[CONTAINER_RADIUS.XL],
         bordered ? "border" : "",
         shadow
           ? "shadow-[0_24px_60px_-30px_var(--fhl-container-shadow)]"
