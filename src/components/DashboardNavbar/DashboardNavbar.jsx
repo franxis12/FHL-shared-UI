@@ -1,7 +1,6 @@
 import { LOGO_MODES, Logo } from "../Logo";
 
-const baseClassName =
-  "flex flex-col border-b lg:self-start lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden lg:border-b-0 lg:border-r";
+const baseClassName = "flex min-h-0 flex-col  lg:h-full lg:border-b-0 ";
 
 function getItemKey(item, index) {
   return item.key ?? item.href ?? item.label ?? index;
@@ -215,7 +214,7 @@ function DashboardProfileMenu({ profileMenu, collapsed = false }) {
     <div
       ref={profileMenu.ref}
       className="relative border-t p-2"
-      style={{ borderColor: "var(--fhl-navbar-border)" }}
+      //style={{ borderColor: "var(--fhl-navbar-border)" }}
     >
       <button
         type="button"
@@ -376,17 +375,22 @@ export function DashboardNavbar({
         </div>
       ) : null}
 
-      <div className="flex-1 overflow-y-auto p-2">
+      <div className="min-h-0 flex-1 overflow-hidden p-2">
         <nav className="space-y-3">
           {resolvedNavSections.map((section, sectionIndex) => {
-            const sectionItems = Array.isArray(section.items) ? section.items : [];
+            const sectionItems = Array.isArray(section.items)
+              ? section.items
+              : [];
 
             if (sectionItems.length === 0) {
               return null;
             }
 
             return (
-              <div key={getSectionKey(section, sectionIndex)} className="space-y-1.5">
+              <div
+                key={getSectionKey(section, sectionIndex)}
+                className="space-y-1.5"
+              >
                 {section.title && !collapsed ? (
                   <p className="px-3 pt-2 text-[10px] font-bold tracking-[0.14em] text-[var(--fhl-navbar-text-muted)] uppercase">
                     {section.title}
