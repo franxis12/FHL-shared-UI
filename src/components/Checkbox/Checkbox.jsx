@@ -155,13 +155,14 @@ export const Checkbox = forwardRef(function Checkbox(
             className={joinClassNames(
               "relative flex h-5 w-5 items-center justify-center rounded-md border bg-[var(--fhl-checkbox-bg)] text-[var(--fhl-checkbox-current-checked-color)] shadow-sm transition",
               "border-[var(--fhl-checkbox-current-border)] peer-checked:bg-[var(--fhl-checkbox-current-checked-bg)] peer-indeterminate:bg-[var(--fhl-checkbox-current-checked-bg)]",
+              "peer-checked:[&>svg]:opacity-100 peer-indeterminate:[&>svg]:opacity-0 peer-indeterminate:[&>span]:opacity-100",
               "peer-focus-visible:ring-4 peer-focus-visible:ring-[var(--fhl-checkbox-current-ring)]",
               "peer-disabled:border-[var(--fhl-checkbox-border)] peer-disabled:bg-[var(--fhl-checkbox-disabled-bg)]",
               controlClassName,
             )}
           >
             <FiCheck
-              className="h-3.5 w-3.5 opacity-0 transition peer-checked:opacity-100 peer-indeterminate:opacity-0"
+              className="h-3.5 w-3.5 opacity-0 transition"
               aria-hidden="true"
               focusable="false"
             />
