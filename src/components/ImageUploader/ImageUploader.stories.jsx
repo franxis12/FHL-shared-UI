@@ -16,7 +16,7 @@ function SingleFileDemo(args) {
   const [error, setError] = useState('')
 
   return (
-    <div className="w-80">
+    <div className="w-[26rem]">
       <ImageUploader
         {...args}
         value={value}
@@ -33,7 +33,7 @@ function MultipleFilesDemo(args) {
   const [error, setError] = useState('')
 
   return (
-    <div className="w-80">
+    <div className="w-[30rem]">
       <ImageUploader
         {...args}
         value={value}
