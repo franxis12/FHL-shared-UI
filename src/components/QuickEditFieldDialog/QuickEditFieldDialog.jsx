@@ -24,6 +24,7 @@ export function QuickEditFieldDialog({
   description = "",
   label,
   value = "",
+  fields = [],
   placeholder = "",
   type = "text",
   options = [],
@@ -33,15 +34,33 @@ export function QuickEditFieldDialog({
   onClose,
   onSubmit,
 }) {
+  const hasFieldGroup = Array.isArray(fields) && fields.length > 0;
   const [draftValue, setDraftValue] = useState(String(value ?? ""));
+  const [draftFields, setDraftFields] = useState(() =>
+    Object.fromEntries(
+      (Array.isArray(fields) ? fields : []).map((field) => [
+        field.key,
+        String(field.value ?? ""),
+      ]),
+    ),
+  );
 
   useEffect(() => {
     if (!isOpen) {
       return;
     }
 
+    if (hasFieldGroup) {
+      setDraftFields(
+        Object.fromEntries(
+          fields.map((field) => [field.key, String(field.value ?? "")]),
+        ),
+      );
+      return;
+    }
+
     setDraftValue(String(value ?? ""));
-  }, [isOpen, value]);
+  }, [fields, hasFieldGroup, isOpen, value]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -102,10 +121,84 @@ export function QuickEditFieldDialog({
           className="mt-5 space-y-4"
           onSubmit={(event) => {
             event.preventDefault();
-            onSubmit?.(draftValue);
+            onSubmit?.(hasFieldGroup ? draftFields : draftValue);
           }}
         >
-          {options.length > 0 ? (
+          {hasFieldGroup ? (
+            <div className="grid gap-3 md:grid-cols-2">
+              {fields.map((field) =>
+                field.options?.length > 0 ? (
+                  <label key={field.key} className="grid gap-1.5">
+                    <span className="text-sm font-semibold text-[var(--fhl-color-text)]">
+                      {field.label}
+                    </span>
+                    <select
+                      value={draftFields[field.key] ?? ""}
+                      onChange={(event) =>
+                        setDraftFields((previous) => ({
+                          ...previous,
+                          [field.key]: event.target.value,
+                        }))
+                      }
+                      className="min-h-12 w-full appearance-none rounded-2xl border px-3.5 py-3 pr-11 shadow-sm transition outline-none focus:border-[var(--fhl-color-primary)] focus:ring-4 focus:ring-[var(--fhl-color-selected-soft)]"
+                      style={{
+                        borderColor: "var(--fhl-color-border)",
+                        backgroundColor: "var(--fhl-color-surface)",
+                        color: "var(--fhl-color-text)",
+                      }}
+                    >
+                      {field.options.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                ) : field.multiline ? (
+                  <label
+                    key={field.key}
+                    className="grid gap-1.5 md:col-span-2"
+                  >
+                    <span className="text-sm font-semibold text-[var(--fhl-color-text)]">
+                      {field.label}
+                    </span>
+                    <textarea
+                      value={draftFields[field.key] ?? ""}
+                      onChange={(event) =>
+                        setDraftFields((previous) => ({
+                          ...previous,
+                          [field.key]: event.target.value,
+                        }))
+                      }
+                      placeholder={field.placeholder}
+                      rows={field.rows || 4}
+                      className="min-h-32 w-full rounded-2xl border px-3.5 py-3 shadow-sm transition outline-none focus:border-[var(--fhl-color-primary)] focus:ring-4 focus:ring-[var(--fhl-color-selected-soft)]"
+                      style={{
+                        borderColor: "var(--fhl-color-border)",
+                        backgroundColor: "var(--fhl-color-surface)",
+                        color: "var(--fhl-color-text)",
+                      }}
+                    />
+                  </label>
+                ) : (
+                  <Input
+                    key={field.key}
+                    label={field.label}
+                    type={field.type || "text"}
+                    value={draftFields[field.key] ?? ""}
+                    onChange={(event) =>
+                      setDraftFields((previous) => ({
+                        ...previous,
+                        [field.key]: event.target.value,
+                      }))
+                    }
+                    placeholder={field.placeholder}
+                    status={errorMessage ? INPUT_STATUS.ERROR : undefined}
+                  />
+                ),
+              )}
+            </div>
+          ) : options.length > 0 ? (
             <label className="grid gap-1.5">
               <span className="text-sm font-semibold text-[var(--fhl-color-text)]">
                 {label}
