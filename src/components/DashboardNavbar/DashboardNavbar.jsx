@@ -70,7 +70,7 @@ function DashboardSubItem({ item }) {
       className={`flex w-full items-center rounded-lg px-2.5 py-1.5 text-left text-xs font-semibold transition ${
         item.isActive
           ? ""
-          : "text-[var(--fhl-navbar-text-muted)] hover:bg-[var(--fhl-navbar-surface-soft)] hover:text-[var(--fhl-navbar-text)]"
+          : "text-(--fhl-navbar-text-muted) hover:bg-[var(--fhl-navbar-surface-soft)] hover:text-[var(--fhl-navbar-text)]"
       }`}
       style={style}
       aria-current={item.isActive ? "page" : undefined}

@@ -43,7 +43,6 @@ function AddTile({ disabled, multiple, onClick }) {
           : "hover:border-[var(--fhl-color-primary)] hover:bg-[var(--fhl-color-selected-soft)]",
       ].join(" ")}
     >
-      <span className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-[var(--fhl-color-selected-soft)] opacity-70" />
       <span className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--fhl-container-bg)] shadow-sm ring-1 ring-[var(--fhl-container-border)]">
         <HiOutlinePhoto className="h-6 w-6 opacity-80" />
         <span className="absolute -bottom-1.5 -right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--fhl-color-primary-strong)] text-[var(--fhl-white)] shadow-sm">
@@ -132,7 +131,15 @@ export function ImageUploader({
   const hasReachedMaxFiles = Boolean(multiple && maxFiles && files.length >= maxFiles);
 
   useEffect(() => {
-    const nextPreviewUrls = files.map((file, fileIndex) => ({
+    const currentFiles = multiple
+      ? Array.isArray(value)
+        ? value
+        : []
+      : value
+        ? [value]
+        : [];
+
+    const nextPreviewUrls = currentFiles.map((file, fileIndex) => ({
       key: buildPreviewKey(file, fileIndex),
       url: URL.createObjectURL(file),
     }));
@@ -144,7 +151,7 @@ export function ImageUploader({
         URL.revokeObjectURL(preview.url);
       });
     };
-  }, [files]);
+  }, [multiple, value]);
 
   const openFilePicker = () => {
     inputRef.current?.click();
