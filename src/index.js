@@ -2,6 +2,7 @@ import './index.css'
 
 export { Button } from './components/Button'
 export { AuthRedirectCard } from './components/AuthRedirectCard'
+export { Checkbox, CHECKBOX_STATUS } from './components/Checkbox'
 export { DashboardBreadcrumb } from './components/DashboardBreadcrumb'
 export { Card } from './components/Card'
 export { Container, CONTAINER_PADDING, CONTAINER_SURFACE } from './components/Container'

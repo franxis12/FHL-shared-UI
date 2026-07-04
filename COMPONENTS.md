@@ -171,6 +171,47 @@ import { FiKey } from "react-icons/fi";
 />;
 ```
 
+## Checkbox
+
+Use `Checkbox` for terms acceptance, boolean preferences, and settings toggles that should share the same visual language as the rest of the UI.
+
+Exports:
+- `Checkbox`
+- `CHECKBOX_STATUS`
+
+Common props:
+- `label`
+- `helperText`
+- `status`
+- `statusMessage`
+- `checked`
+- `defaultChecked`
+- `selected`
+- `indeterminate`
+- `disabled`
+- `required`
+- `className`
+- `controlClassName`
+
+Available status values:
+- `CHECKBOX_STATUS.SUCCESS`
+- `CHECKBOX_STATUS.ERROR`
+- `CHECKBOX_STATUS.WARNING`
+
+Example:
+
+```jsx
+import { Checkbox, CHECKBOX_STATUS } from "@franxis12/fhl-shared-ui";
+
+<Checkbox
+  label="I agree to the terms and conditions."
+  checked={acceptedTerms}
+  onChange={(event) => setAcceptedTerms(event.target.checked)}
+  status={!acceptedTerms ? CHECKBOX_STATUS.ERROR : undefined}
+  statusMessage={!acceptedTerms ? "Required to continue." : ""}
+/>;
+```
+
 ## Text
 
 Use `Text` as the shared typography layer. If the text system changes later, components that use this API can update together.
