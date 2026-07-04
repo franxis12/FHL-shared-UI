@@ -87,7 +87,7 @@ export function PropertyDashboardCard({
   return (
     <article
       className={joinClassNames(
-        "group relative overflow-hidden rounded-[28px] border transition duration-200 hover:-translate-y-1 hover:shadow-[0_22px_40px_-26px_var(--fhl-color-shadow)]",
+        "group relative overflow-hidden rounded-2xl border transition duration-200 hover:-translate-y-1 hover:shadow-[0_22px_40px_-26px_var(--fhl-color-shadow)]",
         className,
       )}
       style={{
