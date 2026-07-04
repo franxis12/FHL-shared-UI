@@ -9,6 +9,7 @@ export { Container, CONTAINER_PADDING, CONTAINER_SURFACE } from './components/Co
 export { DashboardNavbar } from './components/DashboardNavbar'
 export { DashboardRouteBar } from './components/DashboardRouteBar'
 export { DashboardTopbar } from './components/DashboardTopbar'
+export { ImageUploader } from './components/ImageUploader'
 export { Input, INPUT_STATUS } from './components/Input'
 export { Logo, LOGO_MODES } from './components/Logo'
 export { MetricCard } from './components/MetricCard'

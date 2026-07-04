@@ -1,20 +1,20 @@
 export function MetricCard({ label, value, hint, icon: Icon }) {
   return (
     <article
-      className="rounded-2xl border p-5"
+      className="rounded-2xl border p-4"
       style={{
         borderColor: "var(--fhl-color-border)",
         backgroundColor: "var(--fhl-color-surface)",
         boxShadow: `0 10px 24px var(--fhl-color-shadow)`,
       }}
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-center justify-between gap-3">
         <p className="text-sm font-semibold text-[var(--fhl-color-text-muted)]">
           {label}
         </p>
         {Icon ? (
           <span
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border"
             style={{
               borderColor: "var(--fhl-color-primary)",
               color: "var(--fhl-color-primary)",
@@ -24,10 +24,12 @@ export function MetricCard({ label, value, hint, icon: Icon }) {
           </span>
         ) : null}
       </div>
-      <p className="mt-5 text-4xl font-extrabold text-[var(--fhl-color-text)]">
-        {value}
-      </p>
-      <p className="mt-2 text-sm text-[var(--fhl-color-text-muted)]">{hint}</p>
+      <div className="mt-2 flex items-baseline gap-2">
+        <p className="text-3xl font-extrabold text-[var(--fhl-color-text)]">
+          {value}
+        </p>
+        <p className="text-xs text-[var(--fhl-color-text-muted)]">{hint}</p>
+      </div>
     </article>
   );
 }
