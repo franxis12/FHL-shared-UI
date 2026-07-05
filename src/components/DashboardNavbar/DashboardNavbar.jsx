@@ -1,14 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  Button,
-  BUTTON_VARIANT,
-  BUTTON_SIZE,
-  BUTTON_SHAPE,
-} from "../Button";
+import { Button, BUTTON_VARIANT, BUTTON_SIZE, BUTTON_SHAPE } from "../Button";
 import { LOGO_MODES, Logo } from "../Logo";
 import { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from "../Text";
 
-const baseClassName = "hidden min-h-0 flex-col lg:flex lg:h-full lg:border-b-0";
+const baseClassName = "hidden min-h-0 flex-col md:flex md:h-full md:border-b-0";
 
 function PhoneIcon(props) {
   return (
