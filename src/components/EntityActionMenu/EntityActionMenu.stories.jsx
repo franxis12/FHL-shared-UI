@@ -46,18 +46,44 @@ const meta = {
 
 export default meta;
 
-const lightItems = [
-  { key: "open", label: "Open property" },
-  { key: "address", label: "Change address" },
-  { key: "name", label: "Change name" },
-  { key: "type", label: "Change type" },
+const lightSections = [
+  {
+    key: "navigate",
+    title: "Navigate",
+    items: [
+      { key: "open", label: "Open property" },
+      { key: "units", label: "Open units" },
+    ],
+  },
+  {
+    key: "details",
+    title: "Property details",
+    items: [
+      { key: "address", label: "Change full address" },
+      { key: "name", label: "Change name" },
+      { key: "type", label: "Change type" },
+    ],
+  },
 ];
 
-const darkItems = [
-  { key: "rent", label: "Change rent" },
-  { key: "status", label: "Change status" },
-  { key: "parking", label: "Change parking spaces" },
-  { key: "delete", label: "Archive unit", tone: "danger" },
+const darkSections = [
+  {
+    key: "pricing",
+    title: "Pricing and status",
+    items: [
+      { key: "rent", label: "Change rent" },
+      { key: "status", label: "Change status" },
+    ],
+  },
+  {
+    key: "photos",
+    title: "Photos",
+    items: [
+      { key: "cover", label: "Edit unit cover photo" },
+      { key: "interiors", label: "Edit interior photos" },
+      { key: "delete", label: "Archive unit", tone: "danger" },
+    ],
+  },
 ];
 
 export const Default = {
@@ -69,7 +95,7 @@ export const Default = {
       <EntityActionMenu
         isOpen
         position={{ x: 260, y: 140 }}
-        items={lightItems}
+        sections={lightSections}
         onClose={() => {}}
       />
     </StoryShell>
@@ -85,7 +111,7 @@ export const DarkMode = {
       <EntityActionMenu
         isOpen
         position={{ x: 260, y: 140 }}
-        items={darkItems}
+        sections={darkSections}
         onClose={() => {}}
       />
     </StoryShell>

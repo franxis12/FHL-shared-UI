@@ -16,13 +16,12 @@ export function DashboardTopbar({
   const resolvedDisplayName = String(displayName || "User").trim() || "User";
   const resolvedAvatarContent =
     avatarContent ?? resolvedDisplayName.charAt(0).toUpperCase();
-  const resolvedClassName = `border-b px-4 py-3 md:px-5 ${className}`.trim();
+  const resolvedClassName = `px-4 py-3 md:px-5 ${className}`.trim();
 
   return (
     <header
       className={resolvedClassName}
       style={{
-        borderColor: "var(--fhl-color-border)",
         backgroundColor: "var(--fhl-color-surface)",
         ...style,
       }}
@@ -46,10 +45,9 @@ export function DashboardTopbar({
               {topbarBadges.map((badge, index) => (
                 <span
                   key={getBadgeKey(badge, index)}
-                  className="rounded-full border px-3 py-1 text-[11px] font-medium"
+                  className="rounded-full px-3 py-1 text-[11px] font-medium"
                   style={{
-                    borderColor: "var(--fhl-color-border)",
-                    backgroundColor: "var(--fhl-color-surface)",
+                    backgroundColor: "var(--fhl-color-surface-soft)",
                     color: "var(--fhl-color-text-muted)",
                   }}
                 >
@@ -60,10 +58,7 @@ export function DashboardTopbar({
           ) : null}
         </div>
 
-        <div
-          className="inline-flex items-center gap-2 border-l pl-3"
-          style={{ borderColor: "var(--fhl-color-border)" }}
-        >
+        <div className="inline-flex items-center gap-2 pl-1">
           <span
             className="inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold"
             style={{
