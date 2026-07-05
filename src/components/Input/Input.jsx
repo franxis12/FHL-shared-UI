@@ -1,5 +1,6 @@
 import { forwardRef, useId, useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from "../Text";
 
 export const INPUT_STATUS = Object.freeze({
   SUCCESS: "success",
@@ -115,10 +116,13 @@ export const Input = forwardRef(function Input(
   return (
     <div className={joinClassNames("w-full space-y-1.5", className)}>
       {label ? (
-        <label
+        <Text
+          as="label"
           htmlFor={inputId}
+          size={TEXT_SIZE.SM}
+          weight={TEXT_WEIGHT.SEMIBOLD}
           className={joinClassNames(
-            "block text-sm font-semibold text-[var(--fhl-input-label)]",
+            "block text-[var(--fhl-input-label)]",
             labelClassName,
           )}
         >
@@ -126,7 +130,7 @@ export const Input = forwardRef(function Input(
           {required ? (
             <span className="ml-1 text-[var(--fhl-color-primary)]">*</span>
           ) : null}
-        </label>
+        </Text>
       ) : null}
 
       <div
@@ -158,7 +162,7 @@ export const Input = forwardRef(function Input(
           aria-describedby={describedBy}
           aria-invalid={resolvedAriaInvalid}
           className={joinClassNames(
-            "min-w-0 flex-1 bg-transparent text-sm font-medium text-[var(--fhl-input-text)] outline-none",
+            "min-w-0 flex-1 bg-transparent text-[length:var(--fhl-text-size-sm)] leading-[var(--fhl-text-leading-sm)] font-medium text-[var(--fhl-input-text)] outline-none",
             "placeholder:text-[var(--fhl-input-placeholder)] disabled:cursor-not-allowed disabled:text-[var(--fhl-input-disabled-text)]",
             inputClassName,
           )}
@@ -214,25 +218,32 @@ export const Input = forwardRef(function Input(
       </div>
 
       {helperText ? (
-        <p
+        <Text
+          as="p"
           id={helperId}
+          size={TEXT_SIZE.XS}
+          weight={TEXT_WEIGHT.MEDIUM}
+          tone={TEXT_TONE.MUTED}
           className={joinClassNames(
-            "text-xs font-medium text-[var(--fhl-input-helper)]",
+            "text-[var(--fhl-input-helper)]",
             helperClassName,
           )}
         >
           {helperText}
-        </p>
+        </Text>
       ) : null}
 
       {statusMessage ? (
-        <p
+        <Text
+          as="p"
           id={statusId}
-          className={joinClassNames("text-xs font-semibold", statusClassName)}
+          size={TEXT_SIZE.XS}
+          weight={TEXT_WEIGHT.SEMIBOLD}
+          className={statusClassName}
           style={{ color: "var(--fhl-input-current-message)" }}
         >
           {statusMessage}
-        </p>
+        </Text>
       ) : null}
     </div>
   );

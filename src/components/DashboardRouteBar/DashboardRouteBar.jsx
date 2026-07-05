@@ -37,7 +37,7 @@ function getActionStyle(variant = "secondary") {
 
 function DashboardRouteAction({ action }) {
   const label = action.loading
-    ? action.loadingLabel ?? `${action.label}...`
+    ? (action.loadingLabel ?? `${action.label}...`)
     : action.label;
   const sharedProps = {
     className: getActionClassName(action.variant),

@@ -5,6 +5,7 @@ import { Input } from "../Input";
 import {
   Container,
   CONTAINER_PADDING,
+  CONTAINER_RADIUS,
   CONTAINER_SURFACE,
 } from "./Container";
 
@@ -133,6 +134,24 @@ export const ModalLayout = {
           <Input label="Owner name" placeholder="Jessica Parker" icon={FiUser} />
           <Input label="Email" type="email" placeholder="owner@example.com" icon={FiMail} />
         </div>
+      </Container>
+    </StoryShell>
+  ),
+};
+
+export const CompactRadius = {
+  render: (args) => (
+    <StoryShell>
+      <Container
+        {...args}
+        className="max-w-[480px]"
+        radius={CONTAINER_RADIUS.MD}
+        title="rounded-2xl card"
+        description="Use radius='md' for tighter detail-page cards instead of the default 28px."
+      >
+        <p className="text-sm leading-6 text-[var(--fhl-container-text-muted)]">
+          Same container, smaller corner radius.
+        </p>
       </Container>
     </StoryShell>
   ),

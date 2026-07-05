@@ -74,6 +74,63 @@ export const WithIcon = {
   },
 };
 
+export const Outline = {
+  args: {
+    children: "Outline button",
+    variant: "outline",
+  },
+};
+
+export const Ghost = {
+  args: {
+    children: "Ghost button",
+    variant: "ghost",
+  },
+};
+
+export const Large = {
+  args: {
+    children: "Large CTA",
+    size: "lg",
+  },
+};
+
+export const Pill = {
+  args: {
+    children: "Pill shaped",
+    shape: "pill",
+  },
+};
+
+export const IconOnlyCircle = {
+  args: {
+    icon: ExampleIcon,
+    shape: "circle",
+    "aria-label": "Icon only action",
+  },
+};
+
+export const AsLink = {
+  args: {
+    children: "Go to listings",
+    href: "#",
+  },
+};
+
+export const FullWidth = {
+  args: {
+    children: "Full width",
+    fullWidth: true,
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: "20rem" }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
 export const DarkMode = {
   render: (args) => (
     <StoryShell theme="dark">

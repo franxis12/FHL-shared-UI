@@ -78,6 +78,18 @@
     var(--fhl-color-surface)
   );
   --fhl-navbar-shadow: var(--fhl-color-shadow);
+  --fhl-navy-surface: var(--color-navy-surface, var(--fhl-primary-navy));
+  --fhl-navy-text: var(--color-navy-text, var(--fhl-white));
+  --fhl-navy-muted: var(--color-navy-muted, rgba(255, 255, 255, 0.72));
+  --fhl-navy-border: var(--color-navy-border, rgba(255, 255, 255, 0.16));
+  --fhl-public-navbar-bg: var(
+    --color-navbar-bg,
+    color-mix(in oklab, var(--fhl-navy-surface) 30%, transparent)
+  );
+  --fhl-public-navbar-menu-bg: var(
+    --color-navbar-menu-bg,
+    color-mix(in oklab, var(--fhl-navy-surface) 72%, transparent)
+  );
   --fhl-container-bg: var(
     --color-container-surface,
     var(--fhl-color-surface)
@@ -132,6 +144,44 @@
     --color-button-secondary-ring,
     var(--fhl-color-selected-soft)
   );
+  --fhl-text-size-xs: var(--font-size-xs, 0.75rem);
+  --fhl-text-size-sm: var(--font-size-sm, 0.875rem);
+  --fhl-text-size-md: var(--font-size-md, 1rem);
+  --fhl-text-size-lg: var(--font-size-lg, 1.125rem);
+  --fhl-text-size-xl: var(--font-size-xl, 1.25rem);
+  --fhl-text-size-2xl: var(--font-size-2xl, 1.5rem);
+  --fhl-text-size-3xl: var(--font-size-3xl, 1.875rem);
+  --fhl-text-size-4xl: var(--font-size-4xl, 2.25rem);
+  --fhl-text-leading-xs: var(--line-height-xs, 1rem);
+  --fhl-text-leading-sm: var(--line-height-sm, 1.25rem);
+  --fhl-text-leading-md: var(--line-height-md, 1.5rem);
+  --fhl-text-leading-lg: var(--line-height-lg, 1.75rem);
+  --fhl-text-leading-xl: var(--line-height-xl, 1.875rem);
+  --fhl-text-leading-2xl: var(--line-height-2xl, 2rem);
+  --fhl-text-leading-3xl: var(--line-height-3xl, 2.25rem);
+  --fhl-text-leading-4xl: var(--line-height-4xl, 2.5rem);
+  --fhl-text-tone-default: var(--color-text-default, var(--fhl-color-text));
+  --fhl-text-tone-muted: var(
+    --color-text-muted-tone,
+    var(--fhl-color-text-muted)
+  );
+  --fhl-text-tone-primary: var(
+    --color-text-primary-tone,
+    var(--fhl-color-primary-strong)
+  );
+  --fhl-text-tone-accent: var(--color-text-accent-tone, var(--fhl-color-accent));
+  --fhl-text-tone-success: var(
+    --color-text-success-tone,
+    var(--fhl-color-success)
+  );
+  --fhl-text-tone-warning: var(
+    --color-text-warning-tone,
+    var(--fhl-color-warning)
+  );
+  --fhl-text-tone-danger: var(
+    --color-text-danger-tone,
+    var(--fhl-color-alert)
+  );
   --fhl-input-bg: var(--color-input-surface, var(--fhl-color-surface));
   --fhl-input-border: var(--color-input-border, var(--fhl-color-border));
   --fhl-input-text: var(--color-input-text, var(--fhl-color-text));
@@ -154,6 +204,24 @@
     var(--fhl-color-text-muted)
   );
   --fhl-input-shadow: var(--color-input-shadow, var(--fhl-color-shadow));
+  --fhl-checkbox-bg: var(--color-checkbox-surface, var(--fhl-color-surface));
+  --fhl-checkbox-border: var(
+    --color-checkbox-border,
+    var(--fhl-color-border)
+  );
+  --fhl-checkbox-label: var(--color-checkbox-label, var(--fhl-color-text));
+  --fhl-checkbox-helper: var(
+    --color-checkbox-helper,
+    var(--fhl-color-text-muted)
+  );
+  --fhl-checkbox-ring: var(
+    --color-checkbox-ring,
+    var(--fhl-color-selected-soft)
+  );
+  --fhl-checkbox-disabled-bg: var(
+    --color-checkbox-disabled-bg,
+    var(--fhl-color-surface-soft)
+  );
 }
 
 :root[data-theme="dark"] {
@@ -303,6 +371,35 @@
       --color-dashboard-navbar-menu-surface,
       var(--fhl-color-surface)
     );
+  }
+}
+
+.home-filters-more-panel-shell {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(-0.25rem);
+  transition:
+    grid-template-rows 220ms ease,
+    opacity 160ms ease,
+    transform 220ms ease;
+}
+
+.home-filters-more-panel-shell.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.home-filters-more-panel {
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-filters-more-panel-shell {
+    transform: none;
+    transition: none;
   }
 }
 

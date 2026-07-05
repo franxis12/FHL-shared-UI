@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { DashboardNavbar } from "./DashboardNavbar";
 
 function HomeIcon(props) {
@@ -164,9 +164,7 @@ function UserNavbarStory({ storyTheme = "light", ...args }) {
 }
 
 function OwnerNavbarStory({ storyTheme = "light", ...args }) {
-  const menuRef = useRef(null);
   const [collapsed, setCollapsed] = useState(false);
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   const navItems = [
     { href: "#overview", label: "Overview", icon: OverviewIcon, isActive: true },
@@ -210,26 +208,15 @@ function OwnerNavbarStory({ storyTheme = "light", ...args }) {
         navItems={navItems}
         collapsed={collapsed}
         collapseToggle={{
-          onToggle: () => {
-            setCollapsed((previous) => !previous);
-            setProfileMenuOpen(false);
-          },
+          onToggle: () => setCollapsed((previous) => !previous),
           expandedLabel: "Collapse menu",
           collapsedLabel: "Expand menu",
           expandedIcon: <ChevronLeftDoubleIcon className="h-4 w-4" />,
           collapsedIcon: <ChevronRightDoubleIcon className="h-4 w-4" />,
         }}
-        profileMenu={{
-          ref: menuRef,
-          isOpen: profileMenuOpen,
-          onToggle: () => setProfileMenuOpen((previous) => !previous),
-          displayName: "Owner",
-          avatarContent: "O",
-          menuItems: [
-            { href: "#home", label: "Home" },
-            { label: "Sign out" },
-          ],
-        }}
+        footerItems={[{ href: "#home", label: "Home", icon: HomeIcon }]}
+        signOutIcon={ArrowExitIcon}
+        signOutLabel="Sign out"
       />
     </StoryShell>
   );
