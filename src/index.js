@@ -14,6 +14,7 @@ export {
 export { DashboardNavbar } from './components/DashboardNavbar'
 export { DashboardRouteBar } from './components/DashboardRouteBar'
 export { DashboardTopbar } from './components/DashboardTopbar'
+export { DataTable } from './components/DataTable'
 export { DefinitionList } from './components/DefinitionList'
 export { EntityActionMenu } from './components/EntityActionMenu'
 export { EntityListItem } from './components/EntityListItem'
