@@ -57,20 +57,20 @@ The compiled CSS is already included in the package.
 Install directly from GitHub:
 
 ```bash
-npm install github:franxis12/FHL-shared-UI#main
+npm install git+https://github.com/franxis12/FHL-shared-UI.git#main
 ```
 
 Or install from another branch:
 
 ```bash
-npm install github:franxis12/FHL-shared-UI#branch-name
+npm install git+https://github.com/franxis12/FHL-shared-UI.git#branch-name
 ```
 
 For a brand-new React project:
 
 ```bash
 npm install react react-dom
-npm install github:franxis12/FHL-shared-UI#main
+npm install git+https://github.com/franxis12/FHL-shared-UI.git#main
 ```
 
 The package includes a `prepare` script, so it is automatically built when installed directly from GitHub.
@@ -168,13 +168,13 @@ v1.2.0
 Consumer projects can install a specific version:
 
 ```bash
-npm install github:franxis12/FHL-shared-UI#v1.0.0
+npm install git+https://github.com/franxis12/FHL-shared-UI.git#v1.0.0
 ```
 
 or follow the latest changes from the main branch:
 
 ```bash
-npm install github:franxis12/FHL-shared-UI#main
+npm install git+https://github.com/franxis12/FHL-shared-UI.git#main
 ```
 
 ## ...
