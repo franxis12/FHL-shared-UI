@@ -1,6 +1,40 @@
+import { useEffect, useMemo, useState } from "react";
+import {
+  Button,
+  BUTTON_VARIANT,
+  BUTTON_SIZE,
+  BUTTON_SHAPE,
+} from "../Button";
 import { LOGO_MODES, Logo } from "../Logo";
+import { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from "../Text";
 
-const baseClassName = "flex min-h-0 flex-col  lg:h-full lg:border-b-0 ";
+const baseClassName = "hidden min-h-0 flex-col lg:flex lg:h-full lg:border-b-0";
+
+function PhoneIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
+      <path
+        d="M3.75 5.25c0-.83.67-1.5 1.5-1.5h2.36c.72 0 1.33.5 1.47 1.21l.54 2.7c.1.5-.06 1.01-.43 1.37l-1.7 1.7a13.49 13.49 0 0 0 5.73 5.73l1.7-1.7c.36-.37.87-.53 1.37-.43l2.7.54c.71.14 1.21.75 1.21 1.47v2.36c0 .83-.67 1.5-1.5 1.5h-1.5C9.14 21.75 2.25 14.86 2.25 6.75v-1.5Z"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function CloseIcon(props) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" {...props}>
+      <path
+        d="M5 5 15 15M15 5 5 15"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 function getItemKey(item, index) {
   return item.key ?? item.href ?? item.label ?? index;
@@ -34,6 +68,101 @@ function renderBrandContent(brand) {
       lightClassName={brand.lightLogoClassName}
       darkClassName={brand.darkLogoClassName}
     />
+  );
+}
+
+function DashboardConfirmDialog({
+  isOpen,
+  title,
+  message,
+  confirmLabel,
+  cancelLabel,
+  isConfirming = false,
+  onCancel,
+  onConfirm,
+}) {
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    function handleKeyDown(event) {
+      if (event.key === "Escape") {
+        onCancel?.();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onCancel]);
+
+  if (!isOpen) {
+    return null;
+  }
+
+  return (
+    <div className="fixed inset-0 z-[95] flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm">
+      <div
+        className="w-full max-w-md rounded-[28px] border p-5 md:p-6"
+        style={{
+          borderColor: "var(--fhl-color-border)",
+          backgroundColor: "var(--fhl-color-surface)",
+          boxShadow: "0 28px 60px -28px rgba(15, 23, 42, 0.55)",
+        }}
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <Text as="h3" size={TEXT_SIZE.XL} weight={TEXT_WEIGHT.BOLD}>
+              {title}
+            </Text>
+            <Text
+              as="p"
+              size={TEXT_SIZE.SM}
+              tone={TEXT_TONE.MUTED}
+              className="mt-1"
+            >
+              {message}
+            </Text>
+          </div>
+
+          <button
+            type="button"
+            onClick={onCancel}
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-[var(--fhl-color-text)] transition hover:bg-[var(--fhl-color-surface-soft)]"
+            style={{ borderColor: "var(--fhl-color-border)" }}
+            aria-label="Close logout confirmation"
+          >
+            <CloseIcon className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className="mt-5 flex flex-wrap justify-end gap-2">
+          <Button
+            type="button"
+            variant={BUTTON_VARIANT.SECONDARY}
+            size={BUTTON_SIZE.SM}
+            shape={BUTTON_SHAPE.PILL}
+            onClick={onCancel}
+            disabled={isConfirming}
+          >
+            {cancelLabel}
+          </Button>
+          <Button
+            type="button"
+            variant={BUTTON_VARIANT.PRIMARY}
+            size={BUTTON_SIZE.SM}
+            shape={BUTTON_SHAPE.PILL}
+            onClick={onConfirm}
+            disabled={isConfirming}
+          >
+            {isConfirming ? `${confirmLabel}...` : confirmLabel}
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -215,158 +344,231 @@ export function DashboardNavbar({
   signOutIcon: SignOutIcon,
   signOutLabel = "Log out",
   signingOutLabel = "Signing out...",
+  supportItem,
+  supportLabel = "Call support",
+  supportHref = "tel:+13055550199",
+  supportIcon: SupportIcon = PhoneIcon,
+  requireSignOutConfirmation = true,
+  signOutConfirmationTitle = "Sign out?",
+  signOutConfirmationMessage = "You will need to sign in again to access this dashboard.",
+  signOutConfirmationLabel = "Sign out",
+  signOutCancelLabel = "Cancel",
 }) {
+  const [isSignOutConfirmOpen, setIsSignOutConfirmOpen] = useState(false);
   const resolvedClassName = `${baseClassName} ${className}`.trim();
-  const hasSimpleFooter = footerItems.length > 0 || onSignOut;
   const brandContent = renderBrandContent(brand);
+  const resolvedSupportItem = useMemo(() => {
+    if (supportItem === false || supportItem === null) {
+      return null;
+    }
+
+    const nextSupportItem =
+      typeof supportItem === "object" && supportItem
+        ? supportItem
+        : {
+            href: supportHref,
+            label: supportLabel,
+          };
+
+    return {
+      key: nextSupportItem.key ?? "dashboard-support",
+      label: nextSupportItem.label ?? supportLabel,
+      href: nextSupportItem.href ?? supportHref,
+      onClick: nextSupportItem.onClick,
+      icon: nextSupportItem.icon ?? SupportIcon,
+    };
+  }, [SupportIcon, supportHref, supportItem, supportLabel]);
+  const hasSimpleFooter =
+    Boolean(resolvedSupportItem) || footerItems.length > 0 || onSignOut;
   const resolvedNavSections =
     Array.isArray(navSections) && navSections.length > 0
       ? navSections
       : [{ items: navItems }];
 
+  function handleSignOutRequest() {
+    if (!onSignOut || isSigningOut) {
+      return;
+    }
+
+    if (!requireSignOutConfirmation) {
+      onSignOut();
+      return;
+    }
+
+    setIsSignOutConfirmOpen(true);
+  }
+
+  async function handleConfirmSignOut() {
+    if (!onSignOut || isSigningOut) {
+      return;
+    }
+
+    setIsSignOutConfirmOpen(false);
+    await Promise.resolve(onSignOut());
+  }
+
   return (
-    <aside
-      className={resolvedClassName}
-      style={{
-        borderColor: "var(--fhl-navbar-border)",
-        backgroundColor: "var(--fhl-navbar-bg)",
-        color: "var(--fhl-navbar-text)",
-        ...style,
-      }}
-    >
-      {collapseToggle?.onToggle ? (
-        <div
-          className={`flex h-20 border-b px-2 py-2 transition-all duration-300 ${
-            collapsed ? "justify-center" : "items-center justify-between"
-          }`}
-          style={{ borderColor: "var(--fhl-navbar-border)" }}
-        >
-          {brandContent ? (
+    <>
+      <aside
+        className={resolvedClassName}
+        style={{
+          borderColor: "var(--fhl-navbar-border)",
+          backgroundColor: "var(--fhl-navbar-bg)",
+          color: "var(--fhl-navbar-text)",
+          ...style,
+        }}
+      >
+        {collapseToggle?.onToggle ? (
+          <div
+            className={`flex h-20 border-b px-2 py-2 transition-all duration-300 ${
+              collapsed ? "justify-center" : "items-center justify-between"
+            }`}
+            style={{ borderColor: "var(--fhl-navbar-border)" }}
+          >
+            {brandContent ? (
+              <a
+                href={brand.href ?? "/"}
+                onClick={brand.onClick}
+                aria-label={brand.ariaLabel ?? "Dashboard home"}
+                className={`inline-flex items-center overflow-hidden rounded-md p-1 transition-all duration-300 ease-in-out ${
+                  collapsed
+                    ? "pointer-events-none w-0 -translate-x-2 opacity-0"
+                    : "w-44 translate-x-0 opacity-100"
+                }`}
+              >
+                {brandContent}
+              </a>
+            ) : null}
+
+            <button
+              type="button"
+              onClick={collapseToggle.onToggle}
+              className="rounded-md p-1.5 transition hover:bg-[var(--fhl-navbar-hover-bg)]"
+              style={{
+                backgroundColor: "var(--fhl-navbar-surface-soft)",
+                color: "var(--fhl-navbar-text)",
+              }}
+              aria-label={
+                collapsed
+                  ? (collapseToggle.collapsedLabel ?? "Expand menu")
+                  : (collapseToggle.expandedLabel ?? "Collapse menu")
+              }
+              title={
+                collapsed
+                  ? (collapseToggle.collapsedLabel ?? "Expand menu")
+                  : (collapseToggle.expandedLabel ?? "Collapse menu")
+              }
+            >
+              {collapsed
+                ? collapseToggle.collapsedIcon
+                : collapseToggle.expandedIcon}
+            </button>
+          </div>
+        ) : brandContent ? (
+          <div className="px-3 pb-1 pt-3">
             <a
               href={brand.href ?? "/"}
               onClick={brand.onClick}
               aria-label={brand.ariaLabel ?? "Dashboard home"}
-              className={`inline-flex items-center overflow-hidden rounded-md p-1 transition-all duration-300 ease-in-out ${
-                collapsed
-                  ? "pointer-events-none w-0 -translate-x-2 opacity-0"
-                  : "w-44 translate-x-0 opacity-100"
-              }`}
+              className="inline-flex items-center px-1 transition hover:opacity-85"
             >
               {brandContent}
             </a>
-          ) : null}
+          </div>
+        ) : null}
 
-          <button
-            type="button"
-            onClick={collapseToggle.onToggle}
-            className="rounded-md p-1.5 transition hover:bg-[var(--fhl-navbar-hover-bg)]"
-            style={{
-              backgroundColor: "var(--fhl-navbar-surface-soft)",
-              color: "var(--fhl-navbar-text)",
-            }}
-            aria-label={
-              collapsed
-                ? (collapseToggle.collapsedLabel ?? "Expand menu")
-                : (collapseToggle.expandedLabel ?? "Collapse menu")
-            }
-            title={
-              collapsed
-                ? (collapseToggle.collapsedLabel ?? "Expand menu")
-                : (collapseToggle.expandedLabel ?? "Collapse menu")
-            }
-          >
-            {collapsed
-              ? collapseToggle.collapsedIcon
-              : collapseToggle.expandedIcon}
-          </button>
+        <div className="min-h-0 flex-1 overflow-hidden p-2">
+          <nav className="space-y-3">
+            {resolvedNavSections.map((section, sectionIndex) => {
+              const sectionItems = Array.isArray(section.items)
+                ? section.items
+                : [];
+
+              if (sectionItems.length === 0) {
+                return null;
+              }
+
+              return (
+                <div
+                  key={getSectionKey(section, sectionIndex)}
+                  className="space-y-1.5"
+                >
+                  {section.title && !collapsed ? (
+                    <p className="px-3 pt-2 text-[10px] font-bold tracking-[0.14em] text-[var(--fhl-navbar-text-muted)] uppercase">
+                      {section.title}
+                    </p>
+                  ) : null}
+
+                  {sectionItems.map((item, itemIndex) => (
+                    <DashboardNavItem
+                      key={getItemKey(item, itemIndex)}
+                      item={item}
+                      collapsed={collapsed}
+                    />
+                  ))}
+                </div>
+              );
+            })}
+          </nav>
         </div>
-      ) : brandContent ? (
-        <div className="px-3 pb-1 pt-3">
-          <a
-            href={brand.href ?? "/"}
-            onClick={brand.onClick}
-            aria-label={brand.ariaLabel ?? "Dashboard home"}
-            className="inline-flex items-center px-1 transition hover:opacity-85"
+        {hasSimpleFooter ? (
+          <div
+            className="mt-auto space-y-2 border-t p-3"
+            style={{ borderColor: "var(--fhl-navbar-border)" }}
           >
-            {brandContent}
-          </a>
-        </div>
-      ) : null}
+            {resolvedSupportItem ? (
+              <DashboardFooterItem
+                item={resolvedSupportItem}
+                collapsed={collapsed}
+              />
+            ) : null}
 
-      <div className="min-h-0 flex-1 overflow-hidden p-2">
-        <nav className="space-y-3">
-          {resolvedNavSections.map((section, sectionIndex) => {
-            const sectionItems = Array.isArray(section.items)
-              ? section.items
-              : [];
+            {footerItems.map((item, index) => (
+              <DashboardFooterItem
+                key={getItemKey(item, index)}
+                item={item}
+                collapsed={collapsed}
+              />
+            ))}
 
-            if (sectionItems.length === 0) {
-              return null;
-            }
-
-            return (
-              <div
-                key={getSectionKey(section, sectionIndex)}
-                className="space-y-1.5"
+            {onSignOut ? (
+              <button
+                type="button"
+                onClick={handleSignOutRequest}
+                disabled={isSigningOut}
+                className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] disabled:opacity-60 ${
+                  collapsed ? "justify-center px-2.5" : ""
+                }`}
+                style={{ color: "var(--fhl-navbar-text-muted)" }}
+                aria-label={isSigningOut ? signingOutLabel : signOutLabel}
+                title={collapsed ? signOutLabel : undefined}
               >
-                {section.title && !collapsed ? (
-                  <p className="px-3 pt-2 text-[10px] font-bold tracking-[0.14em] text-[var(--fhl-navbar-text-muted)] uppercase">
-                    {section.title}
-                  </p>
-                ) : null}
-
-                {sectionItems.map((item, itemIndex) => (
-                  <DashboardNavItem
-                    key={getItemKey(item, itemIndex)}
-                    item={item}
-                    collapsed={collapsed}
+                {SignOutIcon ? (
+                  <SignOutIcon
+                    className="h-5 w-5 shrink-0"
+                    aria-hidden="true"
+                    focusable="false"
                   />
-                ))}
-              </div>
-            );
-          })}
-        </nav>
-      </div>
+                ) : null}
+                <span className={getCollapsibleLabelClassName(collapsed)}>
+                  {isSigningOut ? signingOutLabel : signOutLabel}
+                </span>
+              </button>
+            ) : null}
+          </div>
+        ) : null}
+      </aside>
 
-      {hasSimpleFooter ? (
-        <div
-          className="mt-auto space-y-2 border-t p-3"
-          style={{ borderColor: "var(--fhl-navbar-border)" }}
-        >
-          {footerItems.map((item, index) => (
-            <DashboardFooterItem
-              key={getItemKey(item, index)}
-              item={item}
-              collapsed={collapsed}
-            />
-          ))}
-
-          {onSignOut ? (
-            <button
-              type="button"
-              onClick={onSignOut}
-              disabled={isSigningOut}
-              className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] disabled:opacity-60 ${
-                collapsed ? "justify-center px-2.5" : ""
-              }`}
-              style={{ color: "var(--fhl-navbar-text-muted)" }}
-              aria-label={isSigningOut ? signingOutLabel : signOutLabel}
-              title={collapsed ? signOutLabel : undefined}
-            >
-              {SignOutIcon ? (
-                <SignOutIcon
-                  className="h-5 w-5 shrink-0"
-                  aria-hidden="true"
-                  focusable="false"
-                />
-              ) : null}
-              <span className={getCollapsibleLabelClassName(collapsed)}>
-                {isSigningOut ? signingOutLabel : signOutLabel}
-              </span>
-            </button>
-          ) : null}
-        </div>
-      ) : null}
-    </aside>
+      <DashboardConfirmDialog
+        isOpen={isSignOutConfirmOpen}
+        title={signOutConfirmationTitle}
+        message={signOutConfirmationMessage}
+        confirmLabel={signOutConfirmationLabel}
+        cancelLabel={signOutCancelLabel}
+        isConfirming={isSigningOut}
+        onCancel={() => setIsSignOutConfirmOpen(false)}
+        onConfirm={handleConfirmSignOut}
+      />
+    </>
   );
 }

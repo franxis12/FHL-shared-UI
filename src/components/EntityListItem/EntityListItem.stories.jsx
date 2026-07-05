@@ -62,10 +62,11 @@ export const PropertyRow = {
         eyebrow="Property"
         title="Peace St Property"
         subtitle="108 Peace St, Miami, FL 33101"
-        description="2/10 units available for this property."
         meta={[
           { key: "type", label: "Type", value: "Multi family" },
+          { key: "units", label: "Units", value: "2/10 available" },
           { key: "reviews", label: "Reviews", value: "4.8 avg" },
+          { key: "agreement", label: "Agreement", value: "Configured" },
         ]}
         badges={[
           { key: "occupancy", label: "High vacancy", tone: "warning" },
@@ -84,14 +85,21 @@ export const UnitRowDark = {
       <EntityListItem
         eyebrow="Unit"
         title="Unit 2A"
-        subtitle="Level: Second floor · Parking: 1"
+        subtitle="Level: Second floor"
         description="$1,850 per month"
         meta={[
+          { key: "rent", label: "Rent", value: "$1,850" },
           { key: "beds", label: "Beds", value: "2" },
           { key: "baths", label: "Baths", value: "2" },
           { key: "sqft", label: "Sq ft", value: "950" },
+          { key: "deposit", label: "Deposit", value: "$1,850" },
+          { key: "parking", label: "Parking", value: "1" },
         ]}
-        badges={[{ key: "status", label: "Available", tone: "success" }]}
+        badges={[
+          { key: "status", label: "Available", tone: "success" },
+          { key: "pets", label: "Pets allowed", tone: "default" },
+          { key: "smoking", label: "No smoking", tone: "default" },
+        ]}
         actionIcon={EllipsisIcon}
         actionsLabel="Actions"
       />

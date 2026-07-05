@@ -138,6 +138,7 @@ function UserNavbarStory({ storyTheme = "light", ...args }) {
     <StoryShell theme={storyTheme} width={collapsed ? "64px" : "240px"}>
       <DashboardNavbar
         {...args}
+        className={`!flex ${args.className || ""}`.trim()}
         brand={{
           href: "#home",
           ariaLabel: "FHL Enterprises home",
@@ -156,6 +157,7 @@ function UserNavbarStory({ storyTheme = "light", ...args }) {
           collapsedIcon: <ChevronRightDoubleIcon className="h-4 w-4" />,
         }}
         footerItems={[{ href: "#home", label: "Home", icon: HomeIcon }]}
+        onSignOut={() => {}}
         signOutIcon={ArrowExitIcon}
         signOutLabel="Log out"
       />
@@ -197,6 +199,7 @@ function OwnerNavbarStory({ storyTheme = "light", ...args }) {
     >
       <DashboardNavbar
         {...args}
+        className={`!flex ${args.className || ""}`.trim()}
         brand={{
           href: "#overview",
           ariaLabel: "Owner dashboard home",
@@ -215,6 +218,7 @@ function OwnerNavbarStory({ storyTheme = "light", ...args }) {
           collapsedIcon: <ChevronRightDoubleIcon className="h-4 w-4" />,
         }}
         footerItems={[{ href: "#home", label: "Home", icon: HomeIcon }]}
+        onSignOut={() => {}}
         signOutIcon={ArrowExitIcon}
         signOutLabel="Sign out"
       />
@@ -249,6 +253,7 @@ export const Admin = {
     <StoryShell width="280px">
       <DashboardNavbar
         {...args}
+        className={`!flex ${args.className || ""}`.trim()}
         brand={{
           href: "#admin",
           ariaLabel: "Admin dashboard home",
@@ -276,6 +281,7 @@ export const Admin = {
           },
         ]}
         footerItems={[{ href: "#home", label: "Home", icon: HomeIcon }]}
+        onSignOut={() => {}}
         signOutIcon={ArrowExitIcon}
         signOutLabel="Sign out"
       />

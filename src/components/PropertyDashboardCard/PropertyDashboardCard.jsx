@@ -102,7 +102,7 @@ export function PropertyDashboardCard({
         className="block w-full text-left"
         aria-label={`Open ${title}`}
       >
-        <div className="relative h-44 overflow-hidden bg-[var(--fhl-color-surface-soft)]">
+        <div className="relative h-36 overflow-hidden bg-[var(--fhl-color-surface-soft)]">
           {coverImageUrl ? (
             <img
               src={coverImageUrl}
@@ -119,15 +119,6 @@ export function PropertyDashboardCard({
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 space-y-1">
               <Text
-                as="p"
-                size={TEXT_SIZE.XS}
-                weight={TEXT_WEIGHT.SEMIBOLD}
-                tone={TEXT_TONE.MUTED}
-                uppercase
-              >
-                {propertyType || "Property"}
-              </Text>
-              <Text
                 as="h3"
                 size={TEXT_SIZE.LG}
                 weight={TEXT_WEIGHT.SEMIBOLD}
@@ -135,56 +126,14 @@ export function PropertyDashboardCard({
               >
                 {title}
               </Text>
-            </div>
-
-            <div className="shrink-0 rounded-full border border-[var(--fhl-color-border)] bg-[var(--fhl-color-surface-soft)] px-2.5 py-1">
-              {hasRating ? (
-                <div className="flex items-center gap-1.5">
-                  <StarIcon className="h-4 w-4 text-[var(--fhl-color-primary)]" />
-                  <Text
-                    as="span"
-                    size={TEXT_SIZE.XS}
-                    weight={TEXT_WEIGHT.SEMIBOLD}
-                  >
-                    {Number(ratingValue).toFixed(1)}
-                  </Text>
-                </div>
-              ) : (
-                <Text
-                  as="span"
-                  size={TEXT_SIZE.XS}
-                  weight={TEXT_WEIGHT.SEMIBOLD}
-                  tone={TEXT_TONE.MUTED}
-                >
-                  New
-                </Text>
-              )}
-            </div>
-          </div>
-
-          <Text
-            as="p"
-            size={TEXT_SIZE.SM}
-            tone={TEXT_TONE.MUTED}
-            className="min-h-[2.75rem]"
-          >
-            {address}
-          </Text>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="rounded-full border border-[var(--fhl-color-border)] bg-[var(--fhl-color-surface-soft)] px-3 py-1.5">
-              <Text
-                as="span"
-                size={TEXT_SIZE.XS}
-                weight={TEXT_WEIGHT.SEMIBOLD}
-              >
-                {availableUnitsLabel}
+              <Text as="p" size={TEXT_SIZE.SM} tone={TEXT_TONE.MUTED}>
+                {address}
               </Text>
             </div>
 
             {occupancyLabel ? (
               <div
-                className="rounded-full border px-3 py-1.5"
+                className="shrink-0 rounded-full border px-2.5 py-1"
                 style={feedbackStyle}
               >
                 <Text
@@ -199,17 +148,69 @@ export function PropertyDashboardCard({
             ) : null}
           </div>
 
-          <div className="flex items-center gap-2">
-            <StarIcon className="h-4 w-4 text-[var(--fhl-color-primary)]" />
-            {hasRating ? (
-              <Text as="p" size={TEXT_SIZE.XS} tone={TEXT_TONE.MUTED}>
-                {`${Number(ratingValue).toFixed(1)} average · ${reviewCountLabel}`}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="rounded-full bg-[var(--fhl-color-surface-soft)] px-3 py-1.5">
+              <Text
+                as="span"
+                size={TEXT_SIZE.XS}
+                weight={TEXT_WEIGHT.SEMIBOLD}
+                tone={TEXT_TONE.MUTED}
+                uppercase
+              >
+                {propertyType || "Property"}
               </Text>
-            ) : (
-              <Text as="p" size={TEXT_SIZE.XS} tone={TEXT_TONE.MUTED}>
-                No ratings yet
+            </div>
+
+            <div className="rounded-full bg-[var(--fhl-color-surface-soft)] px-3 py-1.5">
+              <Text
+                as="span"
+                size={TEXT_SIZE.XS}
+                weight={TEXT_WEIGHT.SEMIBOLD}
+              >
+                {availableUnitsLabel}
               </Text>
-            )}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div className="rounded-xl bg-[var(--fhl-color-surface-soft)] px-3 py-2">
+              <Text
+                as="p"
+                size={TEXT_SIZE.XS}
+                weight={TEXT_WEIGHT.SEMIBOLD}
+                tone={TEXT_TONE.MUTED}
+                uppercase
+              >
+                Reviews
+              </Text>
+              <div className="mt-1 flex items-center gap-2">
+                <StarIcon className="h-4 w-4 text-[var(--fhl-color-primary)]" />
+                {hasRating ? (
+                  <Text as="p" size={TEXT_SIZE.SM}>
+                    {`${Number(ratingValue).toFixed(1)} · ${reviewCountLabel}`}
+                  </Text>
+                ) : (
+                  <Text as="p" size={TEXT_SIZE.SM} tone={TEXT_TONE.MUTED}>
+                    No ratings yet
+                  </Text>
+                )}
+              </div>
+            </div>
+
+            <div className="rounded-xl bg-[var(--fhl-color-surface-soft)] px-3 py-2">
+              <Text
+                as="p"
+                size={TEXT_SIZE.XS}
+                weight={TEXT_WEIGHT.SEMIBOLD}
+                tone={TEXT_TONE.MUTED}
+                uppercase
+              >
+                Availability
+              </Text>
+              <Text as="p" size={TEXT_SIZE.SM} className="mt-1">
+                {availableUnitsLabel}
+              </Text>
+            </div>
           </div>
         </div>
       </button>

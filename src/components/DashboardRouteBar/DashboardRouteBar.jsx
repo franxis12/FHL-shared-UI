@@ -13,7 +13,7 @@ function getActionClassName(variant = "secondary") {
     return "rounded-lg px-3 py-1.5 text-xs font-semibold text-[var(--fhl-color-text)] transition hover:bg-[var(--fhl-color-surface-soft)] disabled:opacity-60";
   }
 
-  return "rounded-lg border px-3 py-1.5 text-xs font-semibold disabled:opacity-60";
+  return "rounded-lg px-3 py-1.5 text-xs font-semibold disabled:opacity-60";
 }
 
 function getActionStyle(variant = "secondary") {
@@ -29,7 +29,6 @@ function getActionStyle(variant = "secondary") {
   }
 
   return {
-    borderColor: "var(--fhl-color-border)",
     backgroundColor: "var(--fhl-color-surface-soft)",
     color: "var(--fhl-color-text)",
   };
@@ -72,13 +71,12 @@ export function DashboardRouteBar({
   className = "",
   style,
 }) {
-  const resolvedClassName = `border-t px-4 py-2 md:px-5 ${className}`.trim();
+  const resolvedClassName = `px-4 py-2 md:px-5 ${className}`.trim();
 
   return (
     <section
       className={resolvedClassName}
       style={{
-        borderColor: "var(--fhl-color-border)",
         backgroundColor: "var(--fhl-color-surface)",
         ...style,
       }}
