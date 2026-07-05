@@ -243,29 +243,33 @@ export function PublicNavbar({
             </div>
           ) : (
             <>
-              <a
-                href={loginHref}
-                className="rounded-lg border px-3 py-2 text-xs font-semibold md:text-sm"
-                style={{
-                  borderColor: "var(--fhl-navy-border)",
-                  color: "var(--fhl-navy-text)",
-                  backgroundColor:
-                    "color-mix(in oklab, var(--fhl-navy-surface) 88%, white)",
-                }}
-              >
-                Login
-              </a>
+              {loginHref ? (
+                <a
+                  href={loginHref}
+                  className="rounded-lg border px-3 py-2 text-xs font-semibold md:text-sm"
+                  style={{
+                    borderColor: "var(--fhl-navy-border)",
+                    color: "var(--fhl-navy-text)",
+                    backgroundColor:
+                      "color-mix(in oklab, var(--fhl-navy-surface) 88%, white)",
+                  }}
+                >
+                  Login
+                </a>
+              ) : null}
 
-              <a
-                href={registerHref}
-                className="rounded-lg px-3 py-2 text-xs font-semibold md:text-sm"
-                style={{
-                  color: "var(--fhl-color-accent-contrast)",
-                  backgroundColor: "var(--fhl-color-accent)",
-                }}
-              >
-                Register
-              </a>
+              {registerHref ? (
+                <a
+                  href={registerHref}
+                  className="rounded-lg px-3 py-2 text-xs font-semibold md:text-sm"
+                  style={{
+                    color: "var(--fhl-color-accent-contrast)",
+                    backgroundColor: "var(--fhl-color-accent)",
+                  }}
+                >
+                  Register
+                </a>
+              ) : null}
             </>
           )}
         </div>
