@@ -1,5 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FiChevronDown } from "react-icons/fi";
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
+import {
+  Button,
+  BUTTON_SHAPE,
+  BUTTON_SIZE,
+  BUTTON_VARIANT,
+} from "../Button";
+import {
+  Container,
+  CONTAINER_PADDING,
+  CONTAINER_RADIUS,
+} from "../Container";
+import { Input } from "../Input";
+import { Select } from "../Select";
 
 const BOOLEAN_FILTER_OPTIONS = [
   { value: "any", label: "Any" },
@@ -15,11 +29,14 @@ function formatOptionLabel(value) {
     .join(" ");
 }
 
-const labelClass = "flex flex-col gap-1.5";
-const labelTextClass =
-  "text-xs font-semibold tracking-wide text-[var(--fhl-color-text-muted)] uppercase";
-const controlClass =
-  "h-10 rounded-xl border border-[var(--fhl-color-border)] bg-[var(--fhl-color-surface)] px-3 text-sm text-[var(--fhl-color-text)] placeholder:text-[var(--fhl-color-text-muted)] outline-none transition focus:border-[var(--fhl-color-primary)]";
+const fieldClassName = "flex flex-col gap-1.5";
+const compactLabelClassName =
+  "text-xs font-semibold tracking-wide uppercase text-[var(--fhl-color-text-muted)]";
+const compactInputContainerClassName =
+  "min-h-10 rounded-xl border-[var(--fhl-color-border)] px-3 py-2 shadow-none";
+const compactInputClassName = "text-sm";
+const pillButtonClassName =
+  "h-8 px-3 shadow-none transition-colors duration-200";
 
 export function HomeFilters({
   filters,
@@ -138,61 +155,67 @@ export function HomeFilters({
   };
 
   return (
-    <section
+    <Container
       id="search"
-      className="relative z-20 -mt-14 rounded-3xl border border-[var(--fhl-color-border)] bg-[var(--fhl-color-surface)] p-4 md:-mt-16 md:p-5"
+      padding={CONTAINER_PADDING.NONE}
+      radius={CONTAINER_RADIUS.XL}
+      shadow={false}
+      className="relative z-20 -mt-14 md:-mt-16"
+      contentClassName="p-4 md:p-5"
       style={{ boxShadow: "0 10px 28px var(--fhl-color-shadow)" }}
     >
       <div className="grid grid-cols-2 gap-2 md:grid-cols-[5fr_1fr_2fr_2fr]">
-        <label className={`${labelClass} col-span-2 md:col-span-1`}>
-          <span className={labelTextClass}>Search</span>
-          <span className="relative">
-            <HiOutlineMagnifyingGlass className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--fhl-color-primary)]" />
-            <input
-              type="text"
-              value={filters.searchText}
-              onChange={handleChange("searchText")}
-              placeholder="City, address, property, or unit"
-              className={`${controlClass} w-full pl-9`}
-            />
-          </span>
-        </label>
+        <Input
+          label="Search"
+          icon={HiOutlineMagnifyingGlass}
+          type="text"
+          value={filters.searchText}
+          onChange={handleChange("searchText")}
+          placeholder="City, address, property, or unit"
+          className={`${fieldClassName} col-span-2 md:col-span-1`}
+          labelClassName={compactLabelClassName}
+          containerClassName={compactInputContainerClassName}
+          inputClassName={compactInputClassName}
+        />
 
-        <label className={`${labelClass} hidden md:flex`}>
-          <span className={labelTextClass}>Zip</span>
-          <input
-            type="text"
-            value={filters.zipcode}
-            onChange={handleChange("zipcode")}
-            inputMode="numeric"
-            placeholder="33101"
-            className={controlClass}
-          />
-        </label>
+        <Input
+          label="Zip"
+          type="text"
+          value={filters.zipcode}
+          onChange={handleChange("zipcode")}
+          inputMode="numeric"
+          placeholder="33101"
+          className={`${fieldClassName} hidden md:block`}
+          labelClassName={compactLabelClassName}
+          containerClassName={compactInputContainerClassName}
+          inputClassName={compactInputClassName}
+        />
 
-        <label className={labelClass}>
-          <span className={labelTextClass}>Min</span>
-          <input
-            type="number"
-            value={filters.minPrice}
-            onChange={handleChange("minPrice")}
-            placeholder="$ Min"
-            min="0"
-            className={controlClass}
-          />
-        </label>
+        <Input
+          label="Min"
+          type="number"
+          value={filters.minPrice}
+          onChange={handleChange("minPrice")}
+          placeholder="$ Min"
+          min="0"
+          className={fieldClassName}
+          labelClassName={compactLabelClassName}
+          containerClassName={compactInputContainerClassName}
+          inputClassName={compactInputClassName}
+        />
 
-        <label className={labelClass}>
-          <span className={labelTextClass}>Max</span>
-          <input
-            type="number"
-            value={filters.maxPrice}
-            onChange={handleChange("maxPrice")}
-            placeholder="$ Max"
-            min="0"
-            className={controlClass}
-          />
-        </label>
+        <Input
+          label="Max"
+          type="number"
+          value={filters.maxPrice}
+          onChange={handleChange("maxPrice")}
+          placeholder="$ Max"
+          min="0"
+          className={fieldClassName}
+          labelClassName={compactLabelClassName}
+          containerClassName={compactInputContainerClassName}
+          inputClassName={compactInputClassName}
+        />
       </div>
 
       <div
@@ -203,29 +226,33 @@ export function HomeFilters({
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-2">
-            <button
+            <Button
               type="button"
               onClick={() => setIsMoreOpen((current) => !current)}
               onFocus={keepMoreFiltersOpen}
-              className="inline-flex cursor-pointer list-none items-center gap-2 rounded-full px-1 text-xs font-semibold text-[var(--fhl-color-primary-strong)] transition hover:text-[var(--fhl-color-primary)]"
+              variant={BUTTON_VARIANT.GHOST}
+              size={BUTTON_SIZE.SM}
+              shape={BUTTON_SHAPE.PILL}
+              icon={FiChevronDown}
+              iconPosition="end"
+              iconClassName={`h-3 w-3 shrink-0 transition ${
+                isMoreOpen ? "rotate-180" : ""
+              }`}
+              className="h-8 border-transparent px-1 text-[var(--fhl-color-primary-strong)] shadow-none hover:bg-transparent hover:text-[var(--fhl-color-primary)]"
               aria-expanded={isMoreOpen}
             >
               More filters
-              <span
-                className={`text-[10px] transition ${
-                  isMoreOpen ? "rotate-180" : ""
-                }`}
-              >
-                ⌄
-              </span>
-            </button>
+            </Button>
 
             {activeAdvancedFilters.map((filter) => (
-              <button
+              <Button
                 key={filter.field}
                 type="button"
                 onClick={() => onFilterChange(filter.field, filter.resetValue)}
-                className={`h-8 items-center gap-1.5 rounded-full bg-[var(--fhl-color-hover-soft)] px-3 text-xs font-semibold text-[var(--fhl-color-text)] transition hover:bg-[var(--fhl-color-selected-soft)] ${
+                variant={BUTTON_VARIANT.SECONDARY}
+                size={BUTTON_SIZE.SM}
+                shape={BUTTON_SHAPE.PILL}
+                className={`${pillButtonClassName} border-transparent bg-[var(--fhl-color-hover-soft)] text-[var(--fhl-color-text)] hover:bg-[var(--fhl-color-selected-soft)] ${
                   filter.mobileOnly ? "inline-flex md:hidden" : "inline-flex"
                 }`}
                 title={`Remove ${filter.label}`}
@@ -234,17 +261,20 @@ export function HomeFilters({
                 <span className="text-base leading-none text-[var(--fhl-color-alert)]">
                   ×
                 </span>
-              </button>
+              </Button>
             ))}
           </div>
 
-          <button
+          <Button
             type="button"
             onClick={onClearFilters}
-            className="h-8 rounded-full bg-[var(--fhl-color-accent)] px-3 text-xs font-semibold text-[var(--fhl-color-accent-contrast)] transition hover:brightness-95"
+            variant={BUTTON_VARIANT.SECONDARY}
+            size={BUTTON_SIZE.SM}
+            shape={BUTTON_SHAPE.PILL}
+            className={`${pillButtonClassName} border-transparent bg-[var(--fhl-color-accent)] text-[var(--fhl-color-accent-contrast)] hover:bg-[var(--fhl-color-accent)] hover:brightness-95`}
           >
             Clear
-          </button>
+          </Button>
         </div>
 
         <div
@@ -255,123 +285,131 @@ export function HomeFilters({
           inert={isMoreOpen ? undefined : true}
         >
           <div className="home-filters-more-panel grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4">
-            <label className={`${labelClass} md:hidden`}>
-              <span className={labelTextClass}>Zip</span>
-              <input
-                type="text"
-                value={filters.zipcode}
-                onChange={handleChange("zipcode")}
-                inputMode="numeric"
-                placeholder="33101"
-                className={controlClass}
-              />
-            </label>
+            <Input
+              label="Zip"
+              type="text"
+              value={filters.zipcode}
+              onChange={handleChange("zipcode")}
+              inputMode="numeric"
+              placeholder="33101"
+              className={`${fieldClassName} md:hidden`}
+              labelClassName={compactLabelClassName}
+              containerClassName={compactInputContainerClassName}
+              inputClassName={compactInputClassName}
+            />
 
-            <label className={labelClass}>
-              <span className={labelTextClass}>Property type</span>
-              <select
-                value={filters.propertyType}
-                onChange={handleChange("propertyType")}
-                className={controlClass}
-              >
-                <option value="">Any type</option>
-                {propertyTypeOptions.map((type) => (
-                  <option key={type} value={type}>
-                    {formatOptionLabel(type)}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <Select
+              label="Property type"
+              value={filters.propertyType}
+              onChange={handleChange("propertyType")}
+              className={fieldClassName}
+              labelClassName={compactLabelClassName}
+              containerClassName={compactInputContainerClassName}
+              selectClassName={compactInputClassName}
+            >
+              <option value="">Any type</option>
+              {propertyTypeOptions.map((type) => (
+                <option key={type} value={type}>
+                  {formatOptionLabel(type)}
+                </option>
+              ))}
+            </Select>
 
-            <label className={labelClass}>
-              <span className={labelTextClass}>Bedrooms</span>
-              <select
-                value={filters.minBedrooms}
-                onChange={handleChange("minBedrooms")}
-                className={controlClass}
-              >
-                <option value="">Any</option>
-                <option value="0">Studio</option>
-                <option value="1">1+</option>
-                <option value="2">2+</option>
-                <option value="3">3+</option>
-                <option value="4">4+</option>
-              </select>
-            </label>
+            <Select
+              label="Bedrooms"
+              value={filters.minBedrooms}
+              onChange={handleChange("minBedrooms")}
+              className={fieldClassName}
+              labelClassName={compactLabelClassName}
+              containerClassName={compactInputContainerClassName}
+              selectClassName={compactInputClassName}
+            >
+              <option value="">Any</option>
+              <option value="0">Studio</option>
+              <option value="1">1+</option>
+              <option value="2">2+</option>
+              <option value="3">3+</option>
+              <option value="4">4+</option>
+            </Select>
 
-            <label className={labelClass}>
-              <span className={labelTextClass}>Bathrooms</span>
-              <select
-                value={filters.minBathrooms}
-                onChange={handleChange("minBathrooms")}
-                className={controlClass}
-              >
-                <option value="">Any</option>
-                <option value="1">1+</option>
-                <option value="1.5">1.5+</option>
-                <option value="2">2+</option>
-                <option value="3">3+</option>
-              </select>
-            </label>
+            <Select
+              label="Bathrooms"
+              value={filters.minBathrooms}
+              onChange={handleChange("minBathrooms")}
+              className={fieldClassName}
+              labelClassName={compactLabelClassName}
+              containerClassName={compactInputContainerClassName}
+              selectClassName={compactInputClassName}
+            >
+              <option value="">Any</option>
+              <option value="1">1+</option>
+              <option value="1.5">1.5+</option>
+              <option value="2">2+</option>
+              <option value="3">3+</option>
+            </Select>
 
-            <label className={labelClass}>
-              <span className={labelTextClass}>Min sq ft</span>
-              <input
-                type="number"
-                value={filters.minSquareFeet}
-                onChange={handleChange("minSquareFeet")}
-                placeholder="e.g. 900"
-                min="0"
-                className={controlClass}
-              />
-            </label>
+            <Input
+              label="Min sq ft"
+              type="number"
+              value={filters.minSquareFeet}
+              onChange={handleChange("minSquareFeet")}
+              placeholder="e.g. 900"
+              min="0"
+              className={fieldClassName}
+              labelClassName={compactLabelClassName}
+              containerClassName={compactInputContainerClassName}
+              inputClassName={compactInputClassName}
+            />
 
-            <label className={labelClass}>
-              <span className={labelTextClass}>Min parking</span>
-              <select
-                value={filters.minParkingSpaces}
-                onChange={handleChange("minParkingSpaces")}
-                className={controlClass}
-              >
-                <option value="">Any</option>
-                <option value="1">1+</option>
-                <option value="2">2+</option>
-                <option value="3">3+</option>
-              </select>
-            </label>
+            <Select
+              label="Min parking"
+              value={filters.minParkingSpaces}
+              onChange={handleChange("minParkingSpaces")}
+              className={fieldClassName}
+              labelClassName={compactLabelClassName}
+              containerClassName={compactInputContainerClassName}
+              selectClassName={compactInputClassName}
+            >
+              <option value="">Any</option>
+              <option value="1">1+</option>
+              <option value="2">2+</option>
+              <option value="3">3+</option>
+            </Select>
 
-            <label className={labelClass}>
-              <span className={labelTextClass}>Pets</span>
-              <select
-                value={filters.petsAllowed}
-                onChange={handleChange("petsAllowed")}
-                className={controlClass}
-              >
-                {BOOLEAN_FILTER_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <Select
+              label="Pets"
+              value={filters.petsAllowed}
+              onChange={handleChange("petsAllowed")}
+              className={fieldClassName}
+              labelClassName={compactLabelClassName}
+              containerClassName={compactInputContainerClassName}
+              selectClassName={compactInputClassName}
+            >
+              {BOOLEAN_FILTER_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </Select>
 
-            <label className={labelClass}>
-              <span className={labelTextClass}>Smoking</span>
-              <select
-                value={filters.allowsSmoking}
-                onChange={handleChange("allowsSmoking")}
-                className={controlClass}
-              >
-                {BOOLEAN_FILTER_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <Select
+              label="Smoking"
+              value={filters.allowsSmoking}
+              onChange={handleChange("allowsSmoking")}
+              className={fieldClassName}
+              labelClassName={compactLabelClassName}
+              containerClassName={compactInputContainerClassName}
+              selectClassName={compactInputClassName}
+            >
+              {BOOLEAN_FILTER_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </Select>
           </div>
         </div>
       </div>
-    </section>
+    </Container>
   );
 }

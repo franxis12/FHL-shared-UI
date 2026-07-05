@@ -26,12 +26,14 @@ export { MetricCard } from './components/MetricCard'
 export { Notice, NOTICE_TONE } from './components/Notice'
 export { PhotoCarouselModal } from './components/PhotoCarouselModal'
 export { PhotoGallery } from './components/PhotoGallery'
+export { PublicFooter } from './components/PublicFooter'
 export { PublicNavbar } from './components/PublicNavbar'
 export {
   PropertyDashboardCard,
   PROPERTY_DASHBOARD_CARD_FEEDBACK_TONE,
 } from './components/PropertyDashboardCard'
 export { QuickEditFieldDialog } from './components/QuickEditFieldDialog'
+export { Select, SELECT_STATUS } from './components/Select'
 export { StatItem, STAT_ITEM_SIZE } from './components/StatItem'
 export { Tabs } from './components/Tabs'
 export { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from './components/Text'
