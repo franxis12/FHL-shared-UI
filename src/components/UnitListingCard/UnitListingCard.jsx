@@ -9,6 +9,7 @@ import {
   HiOutlineTruck,
 } from "react-icons/hi2";
 import { FavoriteButton } from "../FavoriteButton";
+import { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from "../Text";
 
 const currency = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -93,36 +94,74 @@ export function UnitListingCard({
               loading="lazy"
             />
           ) : (
-            <div className="flex h-44 items-center justify-center bg-[var(--fhl-color-surface-soft)] text-sm text-[var(--fhl-color-text-muted)]">
-              No image available
+            <div className="flex h-44 items-center justify-center bg-[var(--fhl-color-surface-soft)]">
+              <Text
+                as="span"
+                size={TEXT_SIZE.SM}
+                tone={TEXT_TONE.MUTED}
+                weight={TEXT_WEIGHT.MEDIUM}
+              >
+                No image available
+              </Text>
             </div>
           )}
         </div>
 
         <div className="px-5 pb-5">
-          <span className="mb-3 inline-flex rounded-full bg-[var(--fhl-color-surface-soft)] px-2.5 py-1 text-xs font-bold uppercase tracking-wide text-[var(--fhl-color-text-muted)]">
+          <Text
+            as="span"
+            size={TEXT_SIZE.XS}
+            tone={TEXT_TONE.MUTED}
+            weight={TEXT_WEIGHT.BOLD}
+            uppercase
+            className="mb-3 inline-flex rounded-full bg-[var(--fhl-color-surface-soft)] px-2.5 py-1"
+          >
             {propertyType}
-          </span>
+          </Text>
 
           <div className="mb-3 flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <h3 className="truncate text-lg font-extrabold tracking-tight text-[var(--fhl-color-text)]">
+              <Text
+                as="h3"
+                size={TEXT_SIZE.LG}
+                weight={TEXT_WEIGHT.BOLD}
+                truncate
+                className="tracking-tight"
+              >
                 {listing.unit.unitName}
-              </h3>
-              <div className="mt-1.5 flex items-center gap-1.5 text-xs font-medium text-[var(--fhl-color-text-muted)]">
+              </Text>
+              <div className="mt-1.5 flex items-center gap-1.5">
                 <HiOutlineMapPin className="h-4 w-4 shrink-0 text-[var(--fhl-color-primary)]" />
-                <span className="truncate">
+                <Text
+                  as="span"
+                  size={TEXT_SIZE.XS}
+                  tone={TEXT_TONE.MUTED}
+                  weight={TEXT_WEIGHT.MEDIUM}
+                  truncate
+                >
                   {formatListingLocation(listing.property)}
-                </span>
+                </Text>
               </div>
             </div>
 
-            <p className="shrink-0 text-right text-lg font-extrabold tracking-tight text-[var(--fhl-color-text)]">
+            <Text
+              as="p"
+              size={TEXT_SIZE.LG}
+              weight={TEXT_WEIGHT.BOLD}
+              align="right"
+              className="shrink-0 tracking-tight"
+            >
               {hasRentAmount ? currency.format(rentAmount) : "Price"}
-              <span className="ml-1 text-xs font-semibold text-[var(--fhl-color-text-muted)]">
+              <Text
+                as="span"
+                size={TEXT_SIZE.XS}
+                tone={TEXT_TONE.MUTED}
+                weight={TEXT_WEIGHT.SEMIBOLD}
+                className="ml-1"
+              >
                 {hasRentAmount ? "/month" : "not set"}
-              </span>
-            </p>
+              </Text>
+            </Text>
           </div>
 
           <div className="mb-3 border-t border-[var(--fhl-color-border)]" />
@@ -131,61 +170,112 @@ export function UnitListingCard({
             <div className="flex items-center justify-center gap-2 px-1">
               <HiOutlineHomeModern className="h-5 w-5 text-[var(--fhl-color-primary)]" />
               <div className="text-left">
-                <p className="text-sm font-extrabold text-[var(--fhl-color-text)]">
+                <Text
+                  as="p"
+                  size={TEXT_SIZE.SM}
+                  weight={TEXT_WEIGHT.BOLD}
+                >
                   {formatOptionalNumber(listing.bedrooms)}
-                </p>
-                <p className="text-[11px] font-semibold text-[var(--fhl-color-text-muted)]">
+                </Text>
+                <Text
+                  as="p"
+                  size={TEXT_SIZE.XS}
+                  tone={TEXT_TONE.MUTED}
+                  weight={TEXT_WEIGHT.SEMIBOLD}
+                  className="text-[11px]"
+                >
                   Beds
-                </p>
+                </Text>
               </div>
             </div>
             <div className="flex items-center justify-center gap-2 px-1">
               <HiOutlineBeaker className="h-5 w-5 text-[var(--fhl-color-primary)]" />
               <div className="text-left">
-                <p className="text-sm font-extrabold text-[var(--fhl-color-text)]">
+                <Text
+                  as="p"
+                  size={TEXT_SIZE.SM}
+                  weight={TEXT_WEIGHT.BOLD}
+                >
                   {formatOptionalNumber(listing.bathrooms)}
-                </p>
-                <p className="text-[11px] font-semibold text-[var(--fhl-color-text-muted)]">
+                </Text>
+                <Text
+                  as="p"
+                  size={TEXT_SIZE.XS}
+                  tone={TEXT_TONE.MUTED}
+                  weight={TEXT_WEIGHT.SEMIBOLD}
+                  className="text-[11px]"
+                >
                   Baths
-                </p>
+                </Text>
               </div>
             </div>
             <div className="flex items-center justify-center gap-2 px-1">
               <HiOutlineArrowsPointingOut className="h-5 w-5 text-[var(--fhl-color-primary)]" />
               <div className="text-left">
-                <p className="text-sm font-extrabold text-[var(--fhl-color-text)]">
+                <Text
+                  as="p"
+                  size={TEXT_SIZE.SM}
+                  weight={TEXT_WEIGHT.BOLD}
+                >
                   {formatOptionalNumber(listing.squareFeet)}
-                </p>
-                <p className="text-[11px] font-semibold text-[var(--fhl-color-text-muted)]">
+                </Text>
+                <Text
+                  as="p"
+                  size={TEXT_SIZE.XS}
+                  tone={TEXT_TONE.MUTED}
+                  weight={TEXT_WEIGHT.SEMIBOLD}
+                  className="text-[11px]"
+                >
                   Sq Ft
-                </p>
+                </Text>
               </div>
             </div>
           </div>
 
           <div className="mb-3 border-t border-[var(--fhl-color-border)]" />
 
-          <div className="mb-4 flex flex-wrap gap-2 text-[11px] font-semibold text-[var(--fhl-color-text)]">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--fhl-color-surface-soft)] px-3 py-1.5">
+          <div className="mb-4 flex flex-wrap gap-2">
+            <Text
+              as="span"
+              size={TEXT_SIZE.XS}
+              weight={TEXT_WEIGHT.SEMIBOLD}
+              className="inline-flex items-center gap-1.5 rounded-full bg-[var(--fhl-color-surface-soft)] px-3 py-1.5 text-[11px]"
+            >
               <HiOutlineTruck className="h-3.5 w-3.5 text-[var(--fhl-color-primary)]" />
               {hasParking
                 ? `${formatOptionalNumber(listing.parkingSpaces)} parking`
                 : "No parking"}
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--fhl-color-surface-soft)] px-3 py-1.5">
+            </Text>
+            <Text
+              as="span"
+              size={TEXT_SIZE.XS}
+              weight={TEXT_WEIGHT.SEMIBOLD}
+              className="inline-flex items-center gap-1.5 rounded-full bg-[var(--fhl-color-surface-soft)] px-3 py-1.5 text-[11px]"
+            >
               <HiOutlineSparkles className="h-3.5 w-3.5 text-[var(--fhl-color-primary)]" />
               Pets {listing.petsAllowed ? "allowed" : "not allowed"}
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--fhl-color-surface-soft)] px-3 py-1.5">
+            </Text>
+            <Text
+              as="span"
+              size={TEXT_SIZE.XS}
+              weight={TEXT_WEIGHT.SEMIBOLD}
+              className="inline-flex items-center gap-1.5 rounded-full bg-[var(--fhl-color-surface-soft)] px-3 py-1.5 text-[11px]"
+            >
               <HiOutlineNoSymbol className="h-3.5 w-3.5 text-[var(--fhl-color-primary)]" />
               Smoking {listing.allowsSmoking ? "allowed" : "not allowed"}
-            </span>
+            </Text>
           </div>
 
-          <span className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--fhl-color-primary-strong)] text-sm font-bold text-[var(--fhl-navy-text)] transition group-hover:bg-[var(--fhl-color-accent)] group-hover:text-[var(--fhl-color-accent-contrast)]">
+          <Text
+            as="span"
+            size={TEXT_SIZE.SM}
+            tone={TEXT_TONE.INHERIT}
+            weight={TEXT_WEIGHT.BOLD}
+            className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--fhl-color-primary-strong)] text-[var(--fhl-navy-text)] transition group-hover:bg-[var(--fhl-color-accent)] group-hover:text-[var(--fhl-color-accent-contrast)]"
+          >
             View details
             <HiOutlineArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-          </span>
+          </Text>
         </div>
       </a>
 
