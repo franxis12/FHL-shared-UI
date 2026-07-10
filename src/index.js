@@ -37,6 +37,7 @@ export {
 } from './components/PropertyDashboardCard'
 export { QuickEditFieldDialog } from './components/QuickEditFieldDialog'
 export { Select, SELECT_STATUS } from './components/Select'
+export { Skeleton, SKELETON_RADIUS } from './components/Skeleton'
 export { StatItem, STAT_ITEM_SIZE } from './components/StatItem'
 export { Tabs } from './components/Tabs'
 export { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from './components/Text'
