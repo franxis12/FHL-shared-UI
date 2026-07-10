@@ -3823,7 +3823,7 @@ function Pn({ brand: r = "FHL Enterprises Group", brandHref: i = "", onBrandClic
 					}) : null]
 				}), v.length > 0 ? /* @__PURE__ */ t("nav", {
 					"aria-label": "Footer navigation",
-					className: "grid gap-6 sm:grid-cols-2 xl:grid-cols-5",
+					className: "public-footer-sections-grid grid gap-6",
 					children: v.map((e, r) => /* @__PURE__ */ n("section", {
 						className: "space-y-3",
 						"aria-labelledby": `public-footer-section-${r}`,

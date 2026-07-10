@@ -125,7 +125,7 @@ export function PublicFooter({
           {resolvedSections.length > 0 ? (
             <nav
               aria-label="Footer navigation"
-              className="grid gap-6 sm:grid-cols-2 xl:grid-cols-5"
+              className="public-footer-sections-grid grid gap-6"
             >
               {resolvedSections.map((section, sectionIndex) => (
                 <section
