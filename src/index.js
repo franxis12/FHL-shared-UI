@@ -2,6 +2,7 @@ import './index.css'
 
 export { Button, BUTTON_VARIANT, BUTTON_SIZE, BUTTON_SHAPE } from './components/Button'
 export { AuthRedirectCard } from './components/AuthRedirectCard'
+export { AuthPortalPage, AUTH_PORTAL_MODE } from './components/AuthPortalPage'
 export { Checkbox, CHECKBOX_STATUS } from './components/Checkbox'
 export { DashboardBreadcrumb } from './components/DashboardBreadcrumb'
 export { Card } from './components/Card'
