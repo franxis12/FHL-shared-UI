@@ -144,6 +144,10 @@ npm run dev
 npm install github:franxis12/FHL-shared-UI#main
 npm install 'github:franxis12/FHL-shared-UI#main'
 
+npm install 'github:franxis12/FHL-shared-UI#main'
+rm -rf node_modules/.vite
+npm run dev
+
 ###### check
 
 grep -n "@franxis12/fhl-shared-ui" package.json package-lock.json

@@ -271,7 +271,7 @@ export function UnitListingCard({
             size={TEXT_SIZE.SM}
             tone={TEXT_TONE.INHERIT}
             weight={TEXT_WEIGHT.BOLD}
-            className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--fhl-color-primary-strong)] text-[var(--fhl-navy-text)] transition group-hover:bg-[var(--fhl-color-accent)] group-hover:text-[var(--fhl-color-accent-contrast)]"
+            className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--fhl-color-primary-strong)] !text-[var(--fhl-white)] transition group-hover:bg-[var(--fhl-color-accent)] group-hover:!text-[var(--fhl-color-accent-contrast)]"
           >
             View details
             <HiOutlineArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />

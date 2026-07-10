@@ -113,6 +113,19 @@ export function PublicNavbar({
     setIsGuestMobileMenuOpen(false);
   }
 
+  function handleMenuAction(event, action) {
+    action?.(event);
+
+    if (event.defaultPrevented) {
+      window.setTimeout(() => {
+        closeAllMenus();
+      }, 0);
+      return;
+    }
+
+    closeAllMenus();
+  }
+
   useEffect(() => {
     if (!isUserMenuOpen && !isGuestMobileMenuOpen) {
       return undefined;
@@ -178,8 +191,7 @@ export function PublicNavbar({
               <a
                 href={item.href}
                 onClick={(event) => {
-                  closeAllMenus();
-                  item.onClick?.(event);
+                  handleMenuAction(event, item.onClick);
                 }}
                 className={linkClassName}
                 style={linkStyle}
@@ -300,8 +312,7 @@ export function PublicNavbar({
                   <a
                     href={dashboardHref}
                     onClick={(event) => {
-                      closeAllMenus();
-                      onDashboardClick?.(event);
+                      handleMenuAction(event, onDashboardClick);
                     }}
                     className={getMenuActionClass()}
                     style={{ color: FIXED_NAV_TEXT }}
