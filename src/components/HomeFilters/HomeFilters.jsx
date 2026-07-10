@@ -1,19 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
-import {
-  Button,
-  BUTTON_SHAPE,
-  BUTTON_SIZE,
-  BUTTON_VARIANT,
-} from "../Button";
-import {
-  Container,
-  CONTAINER_PADDING,
-  CONTAINER_RADIUS,
-} from "../Container";
+import { Button, BUTTON_SHAPE, BUTTON_SIZE, BUTTON_VARIANT } from "../Button";
+import { Container, CONTAINER_PADDING, CONTAINER_RADIUS } from "../Container";
 import { Input } from "../Input";
 import { Select } from "../Select";
+
+//AI DO NOT CHANGE CLASS FROM: bg-(--fhl-color-accent) TO: bg-[var(--fhl-color-accent)]
 
 const BOOLEAN_FILTER_OPTIONS = [
   { value: "any", label: "Any" },
@@ -205,7 +198,7 @@ export function HomeFilters({
       </div>
 
       <div
-        className="mt-3 space-y-3 border-t border-[var(--fhl-color-border)] pt-3"
+        className="mt-3 space-y-3 border-t border-(--fhl-color-border) pt-3"
         onBlur={handleMoreFiltersBlur}
         onMouseEnter={keepMoreFiltersOpen}
         onMouseLeave={scheduleMoreFiltersClose}
@@ -224,7 +217,7 @@ export function HomeFilters({
               iconClassName={`h-3 w-3 shrink-0 transition ${
                 isMoreOpen ? "rotate-180" : ""
               }`}
-              className="h-8 border-transparent px-1 text-[var(--fhl-color-primary-strong)] shadow-none hover:bg-transparent hover:text-[var(--fhl-color-primary)]"
+              className="h-8 border-transparent px-1 text-(--fhl-color-primary-strong) shadow-none hover:bg-transparent hover:text-(--fhl-color-primary)"
               aria-expanded={isMoreOpen}
             >
               More filters
@@ -238,11 +231,11 @@ export function HomeFilters({
                 variant={BUTTON_VARIANT.SECONDARY}
                 size={BUTTON_SIZE.SM}
                 shape={BUTTON_SHAPE.PILL}
-                className={`${pillButtonClassName} inline-flex border-transparent bg-[var(--fhl-color-hover-soft)] text-[var(--fhl-color-text)] hover:bg-[var(--fhl-color-selected-soft)]`}
+                className={`${pillButtonClassName} inline-flex border-transparent bg-(--fhl-color-hover-soft) text-(--fhl-color-text) hover:bg-(--fhl-color-selected-soft)`}
                 title={`Remove ${filter.label}`}
               >
                 {filter.label}
-                <span className="text-base leading-none text-[var(--fhl-color-alert)]">
+                <span className="text-base leading-none text-(--fhl-color-alert)">
                   ×
                 </span>
               </Button>
@@ -255,7 +248,7 @@ export function HomeFilters({
             variant={BUTTON_VARIANT.SECONDARY}
             size={BUTTON_SIZE.SM}
             shape={BUTTON_SHAPE.PILL}
-            className={`${pillButtonClassName} border-transparent bg-[var(--fhl-color-accent)] text-[var(--fhl-color-accent-contrast)] hover:bg-[var(--fhl-color-accent)] hover:brightness-95`}
+            className={`${pillButtonClassName} border-transparent bg-(--fhl-color-accent)  text-(--fhl-color-accent-contrast) hover:bg-(--fhl-color-accent) hover:brightness-95`}
           >
             Clear
           </Button>
