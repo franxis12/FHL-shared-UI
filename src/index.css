@@ -378,10 +378,26 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.public-footer-sections-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 @media (min-width: 48rem) {
   .home-filters-primary-grid {
     grid-template-columns: minmax(0, 1fr) 11rem 11rem;
     align-items: end;
+  }
+}
+
+@media (min-width: 40rem) {
+  .public-footer-sections-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 80rem) {
+  .public-footer-sections-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 
