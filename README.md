@@ -137,6 +137,17 @@ rm -rf package-lock.json node_modules
 npm install
 npm run dev
 
+---
+
+###### install
+
+npm install github:franxis12/FHL-shared-UI#main
+npm install 'github:franxis12/FHL-shared-UI#main'
+
+###### check
+
+grep -n "@franxis12/fhl-shared-ui" package.json package-lock.json
+
 # Project Structure
 
 ```

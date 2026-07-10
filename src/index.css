@@ -374,6 +374,17 @@
   }
 }
 
+.home-filters-primary-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 48rem) {
+  .home-filters-primary-grid {
+    grid-template-columns: minmax(0, 1fr) 11rem 11rem;
+    align-items: end;
+  }
+}
+
 .home-filters-more-panel-shell {
   display: grid;
   grid-template-rows: 0fr;
@@ -394,6 +405,12 @@
 .home-filters-more-panel {
   min-height: 0;
   overflow: hidden;
+}
+
+@media (min-width: 48rem) {
+  .public-navbar-desktop-links {
+    display: flex;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

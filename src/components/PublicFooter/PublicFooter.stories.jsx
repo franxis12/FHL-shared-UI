@@ -6,7 +6,6 @@ function FooterAside() {
     <ThemeToggle
       value={THEME_TOGGLE_MODE.SYSTEM}
       tone="navy"
-      compact
       onChange={() => {}}
     />
   );

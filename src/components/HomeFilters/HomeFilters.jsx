@@ -163,7 +163,7 @@ export function HomeFilters({
       contentClassName="p-4 md:p-5"
       style={{ boxShadow: "0 10px 28px var(--fhl-color-shadow)" }}
     >
-      <div className="grid grid-cols-2 gap-2 md:items-end md:grid-cols-[minmax(0,1fr)_11rem_11rem]">
+      <div className="home-filters-primary-grid grid grid-cols-2 gap-2">
         <Input
           label="Search"
           icon={HiOutlineMagnifyingGlass}

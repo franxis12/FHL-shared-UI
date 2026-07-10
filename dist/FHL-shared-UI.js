@@ -2973,7 +2973,7 @@ function ln({ filters: e, propertyTypeOptions: r = [], onFilterChange: i, onClea
 		contentClassName: "p-4 md:p-5",
 		style: { boxShadow: "0 10px 28px var(--fhl-color-shadow)" },
 		children: [/* @__PURE__ */ n("div", {
-			className: "grid grid-cols-2 gap-2 md:items-end md:grid-cols-[minmax(0,1fr)_11rem_11rem]",
+			className: "home-filters-primary-grid grid grid-cols-2 gap-2",
 			children: [
 				/* @__PURE__ */ t(H, {
 					label: "Search",
@@ -3832,7 +3832,7 @@ function Fn({ brand: r = "FHL Enterprises Group", brandHref: i = "", onBrandClic
 							id: `public-footer-section-${r}`,
 							size: d.XS,
 							weight: f.SEMIBOLD,
-							className: "text-[var(--fhl-color-accent)]",
+							className: "text-[var(--fhl-white)]",
 							children: e.title
 						}) : null, Array.isArray(e.links) && e.links.length > 0 ? /* @__PURE__ */ t("ul", {
 							className: "space-y-2",
@@ -3870,12 +3870,12 @@ function Fn({ brand: r = "FHL Enterprises Group", brandHref: i = "", onBrandClic
 }
 //#endregion
 //#region src/components/PublicNavbar/PublicNavbar.jsx
-var In = 2600, Y = "var(--fhl-white)", X = "rgba(255, 255, 255, 0.16)", Ln = "color-mix(in oklab, var(--fhl-primary-navy) 94%, transparent)", Rn = "color-mix(in oklab, var(--fhl-primary-navy) 96%, white)", zn = "color-mix(in oklab, var(--fhl-primary-navy) 88%, white)", Bn = "0 14px 34px rgba(6, 43, 73, 0.22)", Vn = "0 18px 42px rgba(6, 43, 73, 0.28)";
+var In = 2600, Y = "var(--fhl-navy-text)", X = "var(--fhl-navy-border)", Ln = "var(--fhl-public-navbar-bg)", Rn = "var(--fhl-public-navbar-menu-bg)", zn = "color-mix(in oklab, var(--fhl-primary-navy) 88%, white)", Bn = "0 14px 34px rgba(6, 43, 73, 0.22)", Vn = "0 18px 42px rgba(6, 43, 73, 0.28)";
 function Hn(e) {
 	return [
 		"relative inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium tracking-tight outline-none transition-all duration-200",
 		"hover:-translate-y-0.5 hover:bg-white/10 hover:text-white",
-		"focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-primary-navy)]",
+		"focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-navy-surface)]",
 		e ? "bg-white/10 text-white" : "text-[rgba(255,255,255,0.72)]"
 	].join(" ");
 }
@@ -3932,7 +3932,7 @@ function Kn({ logoHref: r = "/", onLogoClick: i, navItems: o = [], isAuthenticat
 	}
 	function I({ mobileOnly: e = !1 } = {}) {
 		return /* @__PURE__ */ t("ul", {
-			className: e ? "flex flex-col gap-1 md:hidden" : "hidden items-center justify-center gap-1 px-1.5 py-1 text-sm md:flex",
+			className: e ? "flex flex-col gap-1 md:hidden" : "public-navbar-desktop-links hidden items-center justify-center gap-1 px-1.5 py-1 text-sm md:flex",
 			children: o.map((r) => {
 				let i = e ? Gn() : Hn(r.isActive), a = e ? {
 					color: Y,
@@ -3952,7 +3952,7 @@ function Kn({ logoHref: r = "/", onLogoClick: i, navItems: o = [], isAuthenticat
 		});
 	}
 	return /* @__PURE__ */ t("header", {
-		className: "sticky top-0 z-40 w-full",
+		className: "sticky inset-x-0 top-0 z-40 w-full",
 		children: /* @__PURE__ */ n("nav", {
 			className: "grid w-full grid-cols-[auto_1fr_auto] items-center gap-4 border-b px-4 py-3 backdrop-blur-sm md:px-8",
 			style: {
@@ -3965,9 +3965,11 @@ function Kn({ logoHref: r = "/", onLogoClick: i, navItems: o = [], isAuthenticat
 					href: r,
 					onClick: i,
 					"aria-label": "FHL Enterprises home",
-					className: "inline-flex items-center rounded-xl transition hover:opacity-85 focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-primary-navy)]",
+					className: "inline-flex items-center rounded-xl transition hover:opacity-85 focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-navy-surface)]",
 					children: /* @__PURE__ */ t(oe, {
-						mode: z.DARK,
+						mode: z.HORIZONTAL,
+						darkMode: z.DARK,
+						themeAware: !0,
 						className: "h-10 w-44 object-contain md:w-56"
 					})
 				}),
@@ -3986,7 +3988,7 @@ function Kn({ logoHref: r = "/", onLogoClick: i, navItems: o = [], isAuthenticat
 						children: [/* @__PURE__ */ n("button", {
 							type: "button",
 							onClick: A,
-							className: "inline-flex max-w-48 items-center gap-2 rounded-full px-1 py-1 text-left text-[var(--fhl-white)] transition hover:text-[var(--fhl-soft-gold)] focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-primary-navy)] sm:max-w-64",
+							className: "inline-flex max-w-48 items-center gap-2 rounded-full px-1 py-1 text-left text-[var(--fhl-white)] transition hover:text-[var(--fhl-soft-gold)] focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-navy-surface)] sm:max-w-64",
 							"aria-haspopup": "menu",
 							"aria-expanded": _,
 							children: [
@@ -4065,7 +4067,7 @@ function Kn({ logoHref: r = "/", onLogoClick: i, navItems: o = [], isAuthenticat
 						children: [/* @__PURE__ */ t("button", {
 							type: "button",
 							onClick: j,
-							className: "inline-flex items-center justify-center rounded-lg border p-2.5 transition hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-primary-navy)]",
+							className: "inline-flex items-center justify-center rounded-lg border p-2.5 transition hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-navy-surface)]",
 							style: {
 								borderColor: X,
 								color: Y,

@@ -8,10 +8,10 @@ import {
 import { Logo, LOGO_MODES } from "../Logo";
 
 const USER_MENU_IDLE_CLOSE_MS = 2600;
-const FIXED_NAV_TEXT = "var(--fhl-white)";
-const FIXED_NAV_BORDER = "rgba(255, 255, 255, 0.16)";
-const FIXED_NAV_LAYER = "color-mix(in oklab, var(--fhl-primary-navy) 94%, transparent)";
-const FIXED_NAV_MENU_BG = "color-mix(in oklab, var(--fhl-primary-navy) 96%, white)";
+const FIXED_NAV_TEXT = "var(--fhl-navy-text)";
+const FIXED_NAV_BORDER = "var(--fhl-navy-border)";
+const FIXED_NAV_LAYER = "var(--fhl-public-navbar-bg)";
+const FIXED_NAV_MENU_BG = "var(--fhl-public-navbar-menu-bg)";
 const FIXED_NAV_BUTTON_BG = "color-mix(in oklab, var(--fhl-primary-navy) 88%, white)";
 const FIXED_NAV_SHADOW = "0 14px 34px rgba(6, 43, 73, 0.22)";
 const FIXED_NAV_MENU_SHADOW = "0 18px 42px rgba(6, 43, 73, 0.28)";
@@ -20,7 +20,7 @@ function getPublicNavLinkClass(isActive) {
   return [
     "relative inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium tracking-tight outline-none transition-all duration-200",
     "hover:-translate-y-0.5 hover:bg-white/10 hover:text-white",
-    "focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-primary-navy)]",
+    "focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-navy-surface)]",
     isActive
       ? "bg-white/10 text-white"
       : "text-[rgba(255,255,255,0.72)]",
@@ -156,7 +156,7 @@ export function PublicNavbar({
   function renderNavLinks({ mobileOnly = false } = {}) {
     const wrapperClassName = mobileOnly
       ? "flex flex-col gap-1 md:hidden"
-      : "hidden items-center justify-center gap-1 px-1.5 py-1 text-sm md:flex";
+      : "public-navbar-desktop-links hidden items-center justify-center gap-1 px-1.5 py-1 text-sm md:flex";
 
     return (
       <ul className={wrapperClassName}>
@@ -198,7 +198,7 @@ export function PublicNavbar({
   }
 
   return (
-    <header className="sticky top-0 z-40 w-full">
+    <header className="sticky inset-x-0 top-0 z-40 w-full">
       <nav
         className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-4 border-b px-4 py-3 backdrop-blur-sm md:px-8"
         style={{
@@ -211,10 +211,12 @@ export function PublicNavbar({
           href={logoHref}
           onClick={onLogoClick}
           aria-label="FHL Enterprises home"
-          className="inline-flex items-center rounded-xl transition hover:opacity-85 focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-primary-navy)]"
+          className="inline-flex items-center rounded-xl transition hover:opacity-85 focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-navy-surface)]"
         >
           <Logo
-            mode={LOGO_MODES.DARK}
+            mode={LOGO_MODES.HORIZONTAL}
+            darkMode={LOGO_MODES.DARK}
+            themeAware
             className="h-10 w-44 object-contain md:w-56"
           />
         </a>
@@ -238,7 +240,7 @@ export function PublicNavbar({
               <button
                 type="button"
                 onClick={handleUserMenuToggle}
-                className="inline-flex max-w-48 items-center gap-2 rounded-full px-1 py-1 text-left text-[var(--fhl-white)] transition hover:text-[var(--fhl-soft-gold)] focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-primary-navy)] sm:max-w-64"
+                className="inline-flex max-w-48 items-center gap-2 rounded-full px-1 py-1 text-left text-[var(--fhl-white)] transition hover:text-[var(--fhl-soft-gold)] focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-navy-surface)] sm:max-w-64"
                 aria-haspopup="menu"
                 aria-expanded={isUserMenuOpen}
               >
@@ -340,7 +342,7 @@ export function PublicNavbar({
                   <button
                     type="button"
                     onClick={handleGuestMobileMenuToggle}
-                    className="inline-flex items-center justify-center rounded-lg border p-2.5 transition hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-primary-navy)]"
+                    className="inline-flex items-center justify-center rounded-lg border p-2.5 transition hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-navy-surface)]"
                     style={{
                       borderColor: FIXED_NAV_BORDER,
                       color: FIXED_NAV_TEXT,
