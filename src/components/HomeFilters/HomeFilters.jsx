@@ -63,7 +63,6 @@ export function HomeFilters({
         field: "zipcode",
         label: `Zip ${filters.zipcode}`,
         resetValue: "",
-        mobileOnly: true,
       });
     }
 
@@ -164,7 +163,7 @@ export function HomeFilters({
       contentClassName="p-4 md:p-5"
       style={{ boxShadow: "0 10px 28px var(--fhl-color-shadow)" }}
     >
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-[5fr_1fr_2fr_2fr]">
+      <div className="grid grid-cols-2 gap-2 md:items-end md:grid-cols-[minmax(0,1fr)_11rem_11rem]">
         <Input
           label="Search"
           icon={HiOutlineMagnifyingGlass}
@@ -172,20 +171,7 @@ export function HomeFilters({
           value={filters.searchText}
           onChange={handleChange("searchText")}
           placeholder="City, address, property, or unit"
-          className={`${fieldClassName} col-span-2 md:col-span-1`}
-          labelClassName={compactLabelClassName}
-          containerClassName={compactInputContainerClassName}
-          inputClassName={compactInputClassName}
-        />
-
-        <Input
-          label="Zip"
-          type="text"
-          value={filters.zipcode}
-          onChange={handleChange("zipcode")}
-          inputMode="numeric"
-          placeholder="33101"
-          className={`${fieldClassName} hidden md:block`}
+          className={`${fieldClassName} col-span-2 min-w-0 md:col-span-1`}
           labelClassName={compactLabelClassName}
           containerClassName={compactInputContainerClassName}
           inputClassName={compactInputClassName}
@@ -252,9 +238,7 @@ export function HomeFilters({
                 variant={BUTTON_VARIANT.SECONDARY}
                 size={BUTTON_SIZE.SM}
                 shape={BUTTON_SHAPE.PILL}
-                className={`${pillButtonClassName} border-transparent bg-[var(--fhl-color-hover-soft)] text-[var(--fhl-color-text)] hover:bg-[var(--fhl-color-selected-soft)] ${
-                  filter.mobileOnly ? "inline-flex md:hidden" : "inline-flex"
-                }`}
+                className={`${pillButtonClassName} inline-flex border-transparent bg-[var(--fhl-color-hover-soft)] text-[var(--fhl-color-text)] hover:bg-[var(--fhl-color-selected-soft)]`}
                 title={`Remove ${filter.label}`}
               >
                 {filter.label}
@@ -292,7 +276,7 @@ export function HomeFilters({
               onChange={handleChange("zipcode")}
               inputMode="numeric"
               placeholder="33101"
-              className={`${fieldClassName} md:hidden`}
+              className={fieldClassName}
               labelClassName={compactLabelClassName}
               containerClassName={compactInputContainerClassName}
               inputClassName={compactInputClassName}

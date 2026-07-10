@@ -16,7 +16,6 @@ const meta = {
     navItems: NAV_ITEMS,
     dashboardHref: '#',
     loginHref: '#',
-    registerHref: '#',
   },
 }
 

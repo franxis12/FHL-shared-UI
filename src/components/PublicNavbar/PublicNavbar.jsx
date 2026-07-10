@@ -1,16 +1,29 @@
 import { useEffect, useRef, useState } from "react";
+import { FiMenu, FiX } from "react-icons/fi";
+import {
+  Container,
+  CONTAINER_PADDING,
+  CONTAINER_RADIUS,
+} from "../Container";
 import { Logo, LOGO_MODES } from "../Logo";
 
 const USER_MENU_IDLE_CLOSE_MS = 2600;
+const FIXED_NAV_TEXT = "var(--fhl-white)";
+const FIXED_NAV_BORDER = "rgba(255, 255, 255, 0.16)";
+const FIXED_NAV_LAYER = "color-mix(in oklab, var(--fhl-primary-navy) 94%, transparent)";
+const FIXED_NAV_MENU_BG = "color-mix(in oklab, var(--fhl-primary-navy) 96%, white)";
+const FIXED_NAV_BUTTON_BG = "color-mix(in oklab, var(--fhl-primary-navy) 88%, white)";
+const FIXED_NAV_SHADOW = "0 14px 34px rgba(6, 43, 73, 0.22)";
+const FIXED_NAV_MENU_SHADOW = "0 18px 42px rgba(6, 43, 73, 0.28)";
 
 function getPublicNavLinkClass(isActive) {
   return [
     "relative inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium tracking-tight outline-none transition-all duration-200",
-    "hover:-translate-y-0.5 hover:bg-[var(--fhl-color-hover-soft)] hover:text-[var(--fhl-navy-text)]",
-    "focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-navy-surface)]",
+    "hover:-translate-y-0.5 hover:bg-white/10 hover:text-white",
+    "focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-primary-navy)]",
     isActive
-      ? "bg-[var(--fhl-color-hover-soft)] text-[var(--fhl-navy-text)]"
-      : "text-[var(--fhl-navy-muted)]",
+      ? "bg-white/10 text-white"
+      : "text-[rgba(255,255,255,0.72)]",
   ].join(" ");
 }
 
@@ -28,6 +41,17 @@ function getInitials(name, email) {
     .join("");
 }
 
+function joinClassNames(...values) {
+  return values.filter(Boolean).join(" ");
+}
+
+function getMenuActionClass({ danger = false } = {}) {
+  return joinClassNames(
+    "block w-full rounded-xl px-4 py-3 text-left text-sm font-semibold transition",
+    danger ? "hover:bg-[rgba(252,165,165,0.12)]" : "hover:bg-white/8",
+  );
+}
+
 export function PublicNavbar({
   logoHref = "/",
   onLogoClick,
@@ -38,13 +62,14 @@ export function PublicNavbar({
   avatarUrl = "",
   dashboardHref = "",
   loginHref = "",
-  registerHref = "",
   onDashboardClick,
   onSignOut,
 }) {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isGuestMobileMenuOpen, setIsGuestMobileMenuOpen] = useState(false);
   const [avatarErrorUrl, setAvatarErrorUrl] = useState("");
   const userMenuRef = useRef(null);
+  const guestMenuRef = useRef(null);
   const userMenuIdleTimerRef = useRef(null);
   const userInitials = getInitials(userDisplayName, userEmail);
   const shouldShowAvatar = Boolean(avatarUrl && avatarErrorUrl !== avatarUrl);
@@ -64,6 +89,8 @@ export function PublicNavbar({
   }
 
   function handleUserMenuToggle() {
+    setIsGuestMobileMenuOpen(false);
+
     if (isUserMenuOpen) {
       clearUserMenuIdleTimer();
       setIsUserMenuOpen(false);
@@ -74,22 +101,35 @@ export function PublicNavbar({
     scheduleUserMenuIdleClose();
   }
 
+  function handleGuestMobileMenuToggle() {
+    clearUserMenuIdleTimer();
+    setIsUserMenuOpen(false);
+    setIsGuestMobileMenuOpen((currentValue) => !currentValue);
+  }
+
+  function closeAllMenus() {
+    clearUserMenuIdleTimer();
+    setIsUserMenuOpen(false);
+    setIsGuestMobileMenuOpen(false);
+  }
+
   useEffect(() => {
-    if (!isUserMenuOpen) {
+    if (!isUserMenuOpen && !isGuestMobileMenuOpen) {
       return undefined;
     }
 
     function handlePointerDown(event) {
-      if (!userMenuRef.current?.contains(event.target)) {
-        clearUserMenuIdleTimer();
-        setIsUserMenuOpen(false);
+      const isInsideUserMenu = userMenuRef.current?.contains(event.target);
+      const isInsideGuestMenu = guestMenuRef.current?.contains(event.target);
+
+      if (!isInsideUserMenu && !isInsideGuestMenu) {
+        closeAllMenus();
       }
     }
 
     function handleKeyDown(event) {
       if (event.key === "Escape") {
-        clearUserMenuIdleTimer();
-        setIsUserMenuOpen(false);
+        closeAllMenus();
       }
     }
 
@@ -100,7 +140,7 @@ export function PublicNavbar({
       document.removeEventListener("pointerdown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isUserMenuOpen]);
+  }, [isGuestMobileMenuOpen, isUserMenuOpen]);
 
   useEffect(() => {
     return () => {
@@ -109,9 +149,52 @@ export function PublicNavbar({
   }, []);
 
   function handleSignOut() {
-    clearUserMenuIdleTimer();
-    setIsUserMenuOpen(false);
+    closeAllMenus();
     onSignOut?.();
+  }
+
+  function renderNavLinks({ mobileOnly = false } = {}) {
+    const wrapperClassName = mobileOnly
+      ? "flex flex-col gap-1 md:hidden"
+      : "hidden items-center justify-center gap-1 px-1.5 py-1 text-sm md:flex";
+
+    return (
+      <ul className={wrapperClassName}>
+        {navItems.map((item) => {
+          const linkClassName = mobileOnly
+            ? getMenuActionClass()
+            : getPublicNavLinkClass(item.isActive);
+          const linkStyle = mobileOnly
+            ? {
+                color: FIXED_NAV_TEXT,
+                backgroundColor: item.isActive
+                  ? "rgba(255, 255, 255, 0.1)"
+                  : undefined,
+              }
+            : undefined;
+
+          return (
+            <li key={`${mobileOnly ? "mobile" : "desktop"}-${item.href}`}>
+              <a
+                href={item.href}
+                onClick={(event) => {
+                  closeAllMenus();
+                  item.onClick?.(event);
+                }}
+                className={linkClassName}
+                style={linkStyle}
+                role={mobileOnly ? "menuitem" : undefined}
+              >
+                <span>{item.label}</span>
+                {item.isActive && !mobileOnly ? (
+                  <span className="absolute inset-x-4 -bottom-1 h-0.5 rounded-full bg-[var(--fhl-color-accent)]" />
+                ) : null}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    );
   }
 
   return (
@@ -119,46 +202,30 @@ export function PublicNavbar({
       <nav
         className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-4 border-b px-4 py-3 backdrop-blur-sm md:px-8"
         style={{
-          borderColor: "var(--fhl-navy-border)",
-          backgroundColor: "var(--fhl-public-navbar-bg)",
-          boxShadow: "0 14px 34px rgba(6, 43, 73, 0.22)",
+          borderColor: FIXED_NAV_BORDER,
+          backgroundColor: FIXED_NAV_LAYER,
+          boxShadow: FIXED_NAV_SHADOW,
         }}
       >
         <a
           href={logoHref}
           onClick={onLogoClick}
           aria-label="FHL Enterprises home"
-          className="inline-flex items-center rounded-xl transition hover:opacity-85 focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-navy-surface)]"
+          className="inline-flex items-center rounded-xl transition hover:opacity-85 focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-primary-navy)]"
         >
           <Logo
-            mode={LOGO_MODES.HORIZONTAL}
-            darkMode={LOGO_MODES.DARK}
-            themeAware
+            mode={LOGO_MODES.DARK}
             className="h-10 w-44 object-contain md:w-56"
           />
         </a>
 
-        <ul className="hidden items-center justify-center gap-1 px-1.5 py-1 text-sm md:flex">
-          {navItems.map((item) => (
-            <li key={item.href}>
-              <a
-                href={item.href}
-                onClick={item.onClick}
-                className={getPublicNavLinkClass(item.isActive)}
-              >
-                <span>{item.label}</span>
-                {item.isActive && (
-                  <span className="absolute inset-x-4 -bottom-1 h-0.5 rounded-full bg-[var(--fhl-color-accent)]" />
-                )}
-              </a>
-            </li>
-          ))}
-        </ul>
+        {renderNavLinks()}
 
         <div className="flex items-center justify-end gap-2">
           {isAuthenticated ? (
             <div
               ref={userMenuRef}
+              className="relative"
               onMouseEnter={clearUserMenuIdleTimer}
               onMouseLeave={scheduleUserMenuIdleClose}
               onFocus={clearUserMenuIdleTimer}
@@ -171,7 +238,7 @@ export function PublicNavbar({
               <button
                 type="button"
                 onClick={handleUserMenuToggle}
-                className="inline-flex max-w-48 items-center gap-2 rounded-full px-1 py-1 text-left text-[var(--fhl-navy-text)] transition hover:text-[var(--fhl-color-accent-hover)] focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-navy-surface)] sm:max-w-64"
+                className="inline-flex max-w-48 items-center gap-2 rounded-full px-1 py-1 text-left text-[var(--fhl-white)] transition hover:text-[var(--fhl-soft-gold)] focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-primary-navy)] sm:max-w-64"
                 aria-haspopup="menu"
                 aria-expanded={isUserMenuOpen}
               >
@@ -203,28 +270,39 @@ export function PublicNavbar({
               <div
                 className={`absolute right-0 top-full z-50 transition ${
                   isUserMenuOpen
-                    ? "pointer-events-auto translate-y-0 opacity-100"
-                    : "pointer-events-none -translate-y-1 opacity-0"
+                  ? "pointer-events-auto translate-y-0 opacity-100"
+                  : "pointer-events-none -translate-y-1 opacity-0"
                 }`}
               >
-                <div
-                  className="min-w-48 rounded-bl-xl border p-2 shadow-lg backdrop-blur-xl"
+                <Container
+                  padding={CONTAINER_PADDING.NONE}
+                  radius={CONTAINER_RADIUS.MD}
+                  className="min-w-56"
+                  contentClassName="p-2"
                   style={{
-                    borderColor: "var(--fhl-navy-border)",
-                    backgroundColor: "var(--fhl-public-navbar-menu-bg)",
-                    boxShadow: "0 14px 34px rgba(6, 43, 73, 0.22)",
+                    backgroundColor: FIXED_NAV_MENU_BG,
+                    borderColor: FIXED_NAV_BORDER,
+                    color: FIXED_NAV_TEXT,
+                    boxShadow: FIXED_NAV_MENU_SHADOW,
                   }}
                   role="menu"
                 >
+                  {navItems.length > 0 ? (
+                    <div
+                      className="mb-2 border-b pb-2 md:hidden"
+                      style={{ borderColor: FIXED_NAV_BORDER }}
+                    >
+                      {renderNavLinks({ mobileOnly: true })}
+                    </div>
+                  ) : null}
                   <a
                     href={dashboardHref}
                     onClick={(event) => {
-                      clearUserMenuIdleTimer();
-                      setIsUserMenuOpen(false);
+                      closeAllMenus();
                       onDashboardClick?.(event);
                     }}
-                    className="block rounded-lg px-3 py-2 text-left text-xs font-semibold transition hover:bg-[var(--fhl-color-hover-soft)] md:text-sm"
-                    style={{ color: "var(--fhl-navy-text)" }}
+                    className={getMenuActionClass()}
+                    style={{ color: FIXED_NAV_TEXT }}
                     role="menuitem"
                   >
                     Dashboard
@@ -232,13 +310,13 @@ export function PublicNavbar({
                   <button
                     type="button"
                     onClick={handleSignOut}
-                    className="w-full rounded-lg px-3 py-2 text-left text-xs font-semibold transition hover:bg-[var(--fhl-color-hover-soft)] md:text-sm"
-                    style={{ color: "var(--fhl-color-alert)" }}
+                    className={getMenuActionClass({ danger: true })}
+                    style={{ color: "#fca5a5" }}
                     role="menuitem"
                   >
                     Sign out
                   </button>
-                </div>
+                </Container>
               </div>
             </div>
           ) : (
@@ -248,27 +326,61 @@ export function PublicNavbar({
                   href={loginHref}
                   className="rounded-lg border px-3 py-2 text-xs font-semibold md:text-sm"
                   style={{
-                    borderColor: "var(--fhl-navy-border)",
-                    color: "var(--fhl-navy-text)",
-                    backgroundColor:
-                      "color-mix(in oklab, var(--fhl-navy-surface) 88%, white)",
+                    borderColor: FIXED_NAV_BORDER,
+                    color: FIXED_NAV_TEXT,
+                    backgroundColor: FIXED_NAV_BUTTON_BG,
                   }}
                 >
                   Login
                 </a>
               ) : null}
 
-              {registerHref ? (
-                <a
-                  href={registerHref}
-                  className="rounded-lg px-3 py-2 text-xs font-semibold md:text-sm"
-                  style={{
-                    color: "var(--fhl-color-accent-contrast)",
-                    backgroundColor: "var(--fhl-color-accent)",
-                  }}
-                >
-                  Register
-                </a>
+              {navItems.length > 0 ? (
+                <div ref={guestMenuRef} className="relative md:hidden">
+                  <button
+                    type="button"
+                    onClick={handleGuestMobileMenuToggle}
+                    className="inline-flex items-center justify-center rounded-lg border p-2.5 transition hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-[var(--fhl-color-accent-hover)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--fhl-primary-navy)]"
+                    style={{
+                      borderColor: FIXED_NAV_BORDER,
+                      color: FIXED_NAV_TEXT,
+                      backgroundColor: FIXED_NAV_BUTTON_BG,
+                    }}
+                    aria-label={isGuestMobileMenuOpen ? "Close menu" : "Open menu"}
+                    aria-expanded={isGuestMobileMenuOpen}
+                    aria-haspopup="menu"
+                  >
+                    {isGuestMobileMenuOpen ? (
+                      <FiX className="h-4 w-4" aria-hidden="true" />
+                    ) : (
+                      <FiMenu className="h-4 w-4" aria-hidden="true" />
+                    )}
+                  </button>
+
+                  <div
+                    className={`absolute right-0 top-full z-50 mt-2 transition ${
+                      isGuestMobileMenuOpen
+                        ? "pointer-events-auto translate-y-0 opacity-100"
+                        : "pointer-events-none -translate-y-1 opacity-0"
+                    }`}
+                  >
+                    <Container
+                      padding={CONTAINER_PADDING.NONE}
+                      radius={CONTAINER_RADIUS.MD}
+                      className="min-w-52"
+                      contentClassName="p-2"
+                      style={{
+                        backgroundColor: FIXED_NAV_MENU_BG,
+                        borderColor: FIXED_NAV_BORDER,
+                        color: FIXED_NAV_TEXT,
+                        boxShadow: FIXED_NAV_MENU_SHADOW,
+                      }}
+                      role="menu"
+                    >
+                      {renderNavLinks({ mobileOnly: true })}
+                    </Container>
+                  </div>
+                </div>
               ) : null}
             </>
           )}

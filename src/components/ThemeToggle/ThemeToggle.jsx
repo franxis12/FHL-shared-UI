@@ -1,3 +1,4 @@
+import { FiMonitor, FiMoon, FiSun } from "react-icons/fi";
 import { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from "../Text";
 
 export const THEME_TOGGLE_MODE = Object.freeze({
@@ -14,6 +15,18 @@ const DEFAULT_OPTIONS = [
 
 function joinClassNames(...values) {
   return values.filter(Boolean).join(" ");
+}
+
+function getOptionIcon(mode) {
+  if (mode === THEME_TOGGLE_MODE.DARK) {
+    return FiMoon;
+  }
+
+  if (mode === THEME_TOGGLE_MODE.LIGHT) {
+    return FiSun;
+  }
+
+  return FiMonitor;
 }
 
 function getWrapperStyle(tone) {
@@ -56,6 +69,7 @@ export function ThemeToggle({
     >
       {options.map((option) => {
         const isSelected = value === option.mode;
+        const OptionIcon = getOptionIcon(option.mode);
 
         return (
           <button
@@ -69,18 +83,17 @@ export function ThemeToggle({
             onClick={() => onChange?.(option.mode)}
             className={joinClassNames(
               "inline-flex items-center justify-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--fhl-color-accent-hover) focus-visible:ring-offset-2 focus-visible:ring-offset-(--fhl-color-bg) disabled:cursor-not-allowed disabled:opacity-60",
-              compact ? "h-5 w-5" : "gap-1.5 px-2.5 py-1.5",
+              compact ? "h-7 w-7" : "gap-1.5 px-2.5 py-1.5",
               isSelected
                 ? "bg-(--fhl-color-accent) text-(--fhl-color-accent-contrast)"
                 : "text-(--fhl-color-text-muted) hover:bg-(--fhl-color-hover-soft) hover:text-(--fhl-color-text)",
             )}
           >
-            <span
+            <OptionIcon
+              aria-hidden="true"
               className={joinClassNames(
-                "h-2 w-2 rounded-full",
-                isSelected
-                  ? "bg-(--fhl-color-accent-contrast)"
-                  : "bg-current opacity-70",
+                compact ? "h-3.5 w-3.5" : "h-4 w-4",
+                isSelected ? "opacity-100" : "opacity-80",
               )}
             />
             {!compact ? (
