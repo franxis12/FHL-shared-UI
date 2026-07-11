@@ -74,6 +74,14 @@ function renderBrandContent(brand) {
   );
 }
 
+function getDesktopViewportState() {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    return false;
+  }
+
+  return window.matchMedia("(min-width: 768px)").matches;
+}
+
 function DashboardConfirmDialog({
   isOpen,
   title,
@@ -361,19 +369,23 @@ export function DashboardNavbar({
   mobileDrawer = false,
   mobileOpen = false,
   onMobileClose,
-  mobileWidthClassName = "w-72 max-w-[calc(100vw-1.5rem)]",
+  mobileWidthClassName = "!w-[50vw] max-w-[50vw]",
   mobileCloseLabel = "Close menu",
   mobileCloseIcon: MobileCloseIcon = CloseIcon,
 }) {
   const [isSignOutConfirmOpen, setIsSignOutConfirmOpen] = useState(false);
-  const isMobileDrawerActive = mobileDrawer && mobileOpen;
+  const [isDesktopViewport, setIsDesktopViewport] = useState(
+    getDesktopViewportState,
+  );
+  const isMobileDrawerActive = mobileDrawer && mobileOpen && !isDesktopViewport;
   const effectiveCollapsed = isMobileDrawerActive ? false : collapsed;
   const resolvedClassName = mobileDrawer
     ? [
-        mobileOpen ? "!fixed inset-y-0 left-0 z-[70] !flex h-[100dvh]" : "hidden",
+        baseClassName,
+        isMobileDrawerActive ? "!fixed inset-y-0 left-0 z-[70] !flex h-[100dvh]" : "",
         "md:!relative md:inset-auto md:z-auto md:!flex md:h-full md:border-b-0",
         className,
-        mobileOpen ? mobileWidthClassName : "",
+        isMobileDrawerActive ? mobileWidthClassName : "",
       ]
         .filter(Boolean)
         .join(" ")
@@ -407,6 +419,39 @@ export function DashboardNavbar({
     Array.isArray(navSections) && navSections.length > 0
       ? navSections
       : [{ items: navItems }];
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return undefined;
+    }
+
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+    const handleChange = (event) => {
+      setIsDesktopViewport(event.matches);
+    };
+
+    setIsDesktopViewport(mediaQuery.matches);
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handleChange);
+
+      return () => {
+        mediaQuery.removeEventListener("change", handleChange);
+      };
+    }
+
+    mediaQuery.addListener(handleChange);
+
+    return () => {
+      mediaQuery.removeListener(handleChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isDesktopViewport && mobileOpen && onMobileClose) {
+      onMobileClose();
+    }
+  }, [isDesktopViewport, mobileOpen, onMobileClose]);
 
   useEffect(() => {
     if (!isMobileDrawerActive) {
