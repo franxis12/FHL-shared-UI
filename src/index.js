@@ -4,8 +4,16 @@ export { Button, BUTTON_VARIANT, BUTTON_SIZE, BUTTON_SHAPE } from './components/
 export { AuthRedirectCard } from './components/AuthRedirectCard'
 export { AuthPortalPage, AUTH_PORTAL_MODE } from './components/AuthPortalPage'
 export { Checkbox, CHECKBOX_STATUS } from './components/Checkbox'
+export { DashboardActivityFeed } from './components/DashboardActivityFeed'
 export { DashboardBreadcrumb } from './components/DashboardBreadcrumb'
+export { DashboardEmptyState } from './components/DashboardEmptyState'
 export { Card } from './components/Card'
+export {
+  DashboardRecordCard,
+  DASHBOARD_RECORD_CARD_TONE,
+} from './components/DashboardRecordCard'
+export { DashboardRecordList } from './components/DashboardRecordList'
+export { DashboardProgressCard } from './components/DashboardProgressCard'
 export {
   Container,
   CONTAINER_PADDING,
