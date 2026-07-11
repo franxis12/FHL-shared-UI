@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 function getBadgeKey(badge, index) {
   return badge.key ?? badge.label ?? index;
 }
@@ -15,6 +17,14 @@ function MenuIcon(props) {
   );
 }
 
+function getDesktopViewportState() {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+    return false;
+  }
+
+  return window.matchMedia("(min-width: 768px)").matches;
+}
+
 export function DashboardTopbar({
   dashboardLabel = "Dashboard",
   currentTabLabel = "Overview",
@@ -27,12 +37,42 @@ export function DashboardTopbar({
   className = "",
   style,
 }) {
+  const [isDesktopViewport, setIsDesktopViewport] = useState(
+    getDesktopViewportState,
+  );
   const resolvedDisplayName = String(displayName || "User").trim() || "User";
   const resolvedAvatarContent =
     avatarContent ?? resolvedDisplayName.charAt(0).toUpperCase();
   const resolvedClassName = `px-4 py-3 md:px-5 ${className}`.trim();
   const MobileMenuIcon = mobileMenuButton?.icon ?? MenuIcon;
   const mobileMenuLabel = mobileMenuButton?.label ?? "Open menu";
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return undefined;
+    }
+
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+    const handleChange = (event) => {
+      setIsDesktopViewport(event.matches);
+    };
+
+    setIsDesktopViewport(mediaQuery.matches);
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handleChange);
+
+      return () => {
+        mediaQuery.removeEventListener("change", handleChange);
+      };
+    }
+
+    mediaQuery.addListener(handleChange);
+
+    return () => {
+      mediaQuery.removeListener(handleChange);
+    };
+  }, []);
 
   return (
     <header
@@ -44,11 +84,11 @@ export function DashboardTopbar({
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 items-start gap-3">
-          {mobileMenuButton?.onClick ? (
+          {mobileMenuButton?.onClick && !isDesktopViewport ? (
             <button
               type="button"
               onClick={mobileMenuButton.onClick}
-              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition hover:bg-[var(--fhl-color-surface-soft)] md:hidden"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition hover:bg-[var(--fhl-color-surface-soft)]"
               style={{
                 borderColor: "var(--fhl-color-border)",
                 backgroundColor: "var(--fhl-color-surface)",
