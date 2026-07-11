@@ -4,6 +4,8 @@ import { LOGO_MODES, Logo } from "../Logo";
 import { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from "../Text";
 
 const baseClassName = "hidden min-h-0 flex-col md:!flex md:h-full md:border-b-0";
+const smoothSidebarTransition =
+  "duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]";
 
 function PhoneIcon(props) {
   return (
@@ -41,8 +43,14 @@ function getSectionKey(section, index) {
 
 function getCollapsibleLabelClassName(collapsed) {
   return collapsed
-    ? "max-w-0 -translate-x-1 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-300"
-    : "max-w-[160px] translate-x-0 overflow-hidden whitespace-nowrap opacity-100 transition-all duration-300";
+    ? `pointer-events-none max-w-0 -translate-x-1 overflow-hidden whitespace-nowrap opacity-0 transition-[max-width,opacity,transform] ${smoothSidebarTransition}`
+    : `max-w-[160px] translate-x-0 overflow-hidden whitespace-nowrap opacity-100 transition-[max-width,opacity,transform] ${smoothSidebarTransition}`;
+}
+
+function getCollapsedItemLayoutClassName(collapsed) {
+  return collapsed
+    ? "justify-center gap-0 px-2.5"
+    : "justify-start gap-2 px-3";
 }
 
 function renderBrandContent(brand) {
@@ -206,12 +214,13 @@ function DashboardSubItem({ item }) {
 
 function DashboardNavItem({ item, collapsed = false }) {
   const Icon = item.icon;
+  const itemLayoutClassName = getCollapsedItemLayoutClassName(collapsed);
   const itemClassName = item.isActive
-    ? `flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold ${
-        collapsed ? "justify-center px-2.5" : ""
+    ? `flex items-center rounded-xl py-2 text-sm font-semibold transition-[background-color,color] ${smoothSidebarTransition} ${itemLayoutClassName} ${
+        collapsed ? "text-center" : ""
       }`
-    : `flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] hover:text-[var(--fhl-navbar-text)] ${
-        collapsed ? "justify-center px-2.5" : ""
+    : `flex items-center rounded-xl py-2 text-sm font-semibold transition-[background-color,color] hover:bg-[var(--fhl-navbar-hover-bg)] hover:text-[var(--fhl-navbar-text)] ${smoothSidebarTransition} ${itemLayoutClassName} ${
+        collapsed ? "text-center" : ""
       }`;
   const itemStyle = item.isActive
     ? {
@@ -281,6 +290,7 @@ function DashboardNavItem({ item, collapsed = false }) {
 function DashboardFooterItem({ item, collapsed = false }) {
   const Icon = item.icon;
   const labelClassName = getCollapsibleLabelClassName(collapsed);
+  const itemLayoutClassName = getCollapsedItemLayoutClassName(collapsed);
   const content = (
     <>
       {Icon ? (
@@ -299,8 +309,8 @@ function DashboardFooterItem({ item, collapsed = false }) {
       <a
         href={item.href}
         onClick={item.onClick}
-        className={`flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] ${
-          collapsed ? "justify-center px-2.5" : ""
+        className={`flex items-center rounded-xl py-2 text-sm font-semibold transition-[background-color,color] hover:bg-[var(--fhl-navbar-hover-bg)] ${smoothSidebarTransition} ${itemLayoutClassName} ${
+          collapsed ? "text-center" : ""
         }`}
         style={{ color: "var(--fhl-navbar-text-muted)" }}
         title={collapsed ? item.label : undefined}
@@ -314,8 +324,8 @@ function DashboardFooterItem({ item, collapsed = false }) {
     <button
       type="button"
       onClick={item.onClick}
-      className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] ${
-        collapsed ? "justify-center px-2.5" : ""
+      className={`flex w-full items-center rounded-xl py-2 text-left text-sm font-semibold transition-[background-color,color] hover:bg-[var(--fhl-navbar-hover-bg)] ${smoothSidebarTransition} ${itemLayoutClassName} ${
+        collapsed ? "text-center" : ""
       }`}
       style={{ color: "var(--fhl-navbar-text-muted)" }}
       title={collapsed ? item.label : undefined}
@@ -348,9 +358,27 @@ export function DashboardNavbar({
   signOutConfirmationMessage = "You will need to sign in again to access this dashboard.",
   signOutConfirmationLabel = "Sign out",
   signOutCancelLabel = "Cancel",
+  mobileDrawer = false,
+  mobileOpen = false,
+  onMobileClose,
+  mobileWidthClassName = "w-72 max-w-[calc(100vw-1.5rem)]",
+  mobileCloseLabel = "Close menu",
+  mobileCloseIcon: MobileCloseIcon = CloseIcon,
 }) {
   const [isSignOutConfirmOpen, setIsSignOutConfirmOpen] = useState(false);
-  const resolvedClassName = `${baseClassName} ${className}`.trim();
+  const isMobileDrawerActive = mobileDrawer && mobileOpen;
+  const effectiveCollapsed = isMobileDrawerActive ? false : collapsed;
+  const resolvedClassName = mobileDrawer
+    ? [
+        mobileOpen ? "!fixed inset-y-0 left-0 z-[70] !flex h-[100dvh]" : "hidden",
+        "md:!relative md:inset-auto md:z-auto md:!flex md:h-full md:border-b-0",
+        className,
+        mobileOpen ? mobileWidthClassName : "",
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .trim()
+    : `${baseClassName} ${className}`.trim();
   const brandContent = renderBrandContent(brand);
   const resolvedSupportItem = useMemo(() => {
     if (supportItem === false || supportItem === null) {
@@ -380,6 +408,37 @@ export function DashboardNavbar({
       ? navSections
       : [{ items: navItems }];
 
+  useEffect(() => {
+    if (!isMobileDrawerActive) {
+      return undefined;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isMobileDrawerActive]);
+
+  useEffect(() => {
+    if (!isMobileDrawerActive || !onMobileClose) {
+      return undefined;
+    }
+
+    function handleKeyDown(event) {
+      if (event.key === "Escape") {
+        onMobileClose();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isMobileDrawerActive, onMobileClose]);
+
   function handleSignOutRequest() {
     if (!onSignOut || isSigningOut) {
       return;
@@ -404,6 +463,15 @@ export function DashboardNavbar({
 
   return (
     <>
+      {isMobileDrawerActive ? (
+        <button
+          type="button"
+          className="fixed inset-0 z-[65] bg-slate-950/45 backdrop-blur-sm md:hidden"
+          onClick={onMobileClose}
+          aria-label={mobileCloseLabel}
+        />
+      ) : null}
+
       <aside
         className={resolvedClassName}
         style={{
@@ -413,10 +481,12 @@ export function DashboardNavbar({
           ...style,
         }}
       >
-        {collapseToggle?.onToggle ? (
+        {collapseToggle?.onToggle || isMobileDrawerActive ? (
           <div
-            className={`flex h-20 border-b px-2 py-2 transition-all duration-300 ${
-              collapsed ? "justify-center" : "items-center justify-between"
+            className={`flex h-20 border-b px-2 py-2 transition-[justify-content,padding] ${smoothSidebarTransition} ${
+              effectiveCollapsed
+                ? "justify-center"
+                : "items-center justify-between"
             }`}
             style={{ borderColor: "var(--fhl-navbar-border)" }}
           >
@@ -425,39 +495,57 @@ export function DashboardNavbar({
                 href={brand.href ?? "/"}
                 onClick={brand.onClick}
                 aria-label={brand.ariaLabel ?? "Dashboard home"}
-                className={`inline-flex items-center overflow-hidden rounded-md p-1 transition-all duration-300 ease-in-out ${
-                  collapsed
-                    ? "pointer-events-none w-0 -translate-x-2 opacity-0"
-                    : "w-44 translate-x-0 opacity-100"
+                className={`inline-flex items-center overflow-hidden rounded-md p-1 transition-[max-width,opacity,transform] ${smoothSidebarTransition} ${
+                  effectiveCollapsed
+                    ? "pointer-events-none max-w-0 -translate-x-2 opacity-0"
+                    : "max-w-[11rem] translate-x-0 opacity-100"
                 }`}
               >
                 {brandContent}
               </a>
             ) : null}
 
-            <button
-              type="button"
-              onClick={collapseToggle.onToggle}
-              className="rounded-md p-1.5 transition hover:bg-[var(--fhl-navbar-hover-bg)]"
-              style={{
-                backgroundColor: "var(--fhl-navbar-surface-soft)",
-                color: "var(--fhl-navbar-text)",
-              }}
-              aria-label={
-                collapsed
-                  ? (collapseToggle.collapsedLabel ?? "Expand menu")
-                  : (collapseToggle.expandedLabel ?? "Collapse menu")
-              }
-              title={
-                collapsed
-                  ? (collapseToggle.collapsedLabel ?? "Expand menu")
-                  : (collapseToggle.expandedLabel ?? "Collapse menu")
-              }
-            >
-              {collapsed
-                ? collapseToggle.collapsedIcon
-                : collapseToggle.expandedIcon}
-            </button>
+            {isMobileDrawerActive ? (
+              <button
+                type="button"
+                onClick={onMobileClose}
+                className="rounded-md p-1.5 transition hover:bg-[var(--fhl-navbar-hover-bg)] md:hidden"
+                style={{
+                  backgroundColor: "var(--fhl-navbar-surface-soft)",
+                  color: "var(--fhl-navbar-text)",
+                }}
+                aria-label={mobileCloseLabel}
+                title={mobileCloseLabel}
+              >
+                <MobileCloseIcon className="h-4 w-4" />
+              </button>
+            ) : null}
+
+            {collapseToggle?.onToggle ? (
+              <button
+                type="button"
+                onClick={collapseToggle.onToggle}
+                className={`hidden rounded-md p-1.5 transition hover:bg-[var(--fhl-navbar-hover-bg)] md:inline-flex ${smoothSidebarTransition}`}
+                style={{
+                  backgroundColor: "var(--fhl-navbar-surface-soft)",
+                  color: "var(--fhl-navbar-text)",
+                }}
+                aria-label={
+                  effectiveCollapsed
+                    ? (collapseToggle.collapsedLabel ?? "Expand menu")
+                    : (collapseToggle.expandedLabel ?? "Collapse menu")
+                }
+                title={
+                  effectiveCollapsed
+                    ? (collapseToggle.collapsedLabel ?? "Expand menu")
+                    : (collapseToggle.expandedLabel ?? "Collapse menu")
+                }
+              >
+                {effectiveCollapsed
+                  ? collapseToggle.collapsedIcon
+                  : collapseToggle.expandedIcon}
+              </button>
+            ) : null}
           </div>
         ) : brandContent ? (
           <div className="px-3 pb-1 pt-3">
@@ -498,7 +586,7 @@ export function DashboardNavbar({
                     <DashboardNavItem
                       key={getItemKey(item, itemIndex)}
                       item={item}
-                      collapsed={collapsed}
+                      collapsed={effectiveCollapsed}
                     />
                   ))}
                 </div>
@@ -514,7 +602,7 @@ export function DashboardNavbar({
             {resolvedSupportItem ? (
               <DashboardFooterItem
                 item={resolvedSupportItem}
-                collapsed={collapsed}
+                collapsed={effectiveCollapsed}
               />
             ) : null}
 
@@ -522,7 +610,7 @@ export function DashboardNavbar({
               <DashboardFooterItem
                 key={getItemKey(item, index)}
                 item={item}
-                collapsed={collapsed}
+                collapsed={effectiveCollapsed}
               />
             ))}
 
@@ -531,12 +619,12 @@ export function DashboardNavbar({
                 type="button"
                 onClick={handleSignOutRequest}
                 disabled={isSigningOut}
-                className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm font-semibold transition hover:bg-[var(--fhl-navbar-hover-bg)] disabled:opacity-60 ${
-                  collapsed ? "justify-center px-2.5" : ""
+                className={`flex w-full items-center rounded-xl py-2 text-left text-sm font-semibold transition-[background-color,color] hover:bg-[var(--fhl-navbar-hover-bg)] disabled:opacity-60 ${smoothSidebarTransition} ${
+                  getCollapsedItemLayoutClassName(effectiveCollapsed)
                 }`}
                 style={{ color: "var(--fhl-navbar-text-muted)" }}
                 aria-label={isSigningOut ? signingOutLabel : signOutLabel}
-                title={collapsed ? signOutLabel : undefined}
+                title={effectiveCollapsed ? signOutLabel : undefined}
               >
                 {SignOutIcon ? (
                   <SignOutIcon
@@ -545,7 +633,7 @@ export function DashboardNavbar({
                     focusable="false"
                   />
                 ) : null}
-                <span className={getCollapsibleLabelClassName(collapsed)}>
+                <span className={getCollapsibleLabelClassName(effectiveCollapsed)}>
                   {isSigningOut ? signingOutLabel : signOutLabel}
                 </span>
               </button>

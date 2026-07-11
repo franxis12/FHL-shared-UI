@@ -288,3 +288,73 @@ export const Admin = {
     </StoryShell>
   ),
 };
+
+export const MobileDrawer = {
+  render: (args) => {
+    const [isOpen, setIsOpen] = useState(true);
+
+    return (
+      <StoryShell width="100%" minHeight="760px">
+        <div
+          style={{
+            position: "relative",
+            minHeight: "720px",
+            borderRadius: "24px",
+            overflow: "hidden",
+            background: "var(--fhl-color-bg)",
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => setIsOpen(true)}
+            style={{
+              position: "absolute",
+              top: "1rem",
+              left: "1rem",
+              zIndex: 1,
+              border: "1px solid var(--fhl-color-border)",
+              borderRadius: "9999px",
+              padding: "0.65rem 0.9rem",
+              background: "var(--fhl-color-surface)",
+              color: "var(--fhl-color-text)",
+              fontWeight: 600,
+            }}
+          >
+            Open menu
+          </button>
+
+          <DashboardNavbar
+            {...args}
+            className="w-full"
+            mobileDrawer
+            mobileOpen={isOpen}
+            onMobileClose={() => setIsOpen(false)}
+            brand={{
+              href: "#overview",
+              ariaLabel: "Owner dashboard home",
+              logoMode: "horizontal",
+              darkLogoMode: "dark",
+              logoThemeAware: true,
+              logoClassName: "h-auto w-full object-contain",
+            }}
+            navItems={[
+              {
+                href: "#overview",
+                label: "Overview",
+                icon: OverviewIcon,
+                isActive: true,
+              },
+              { href: "#properties", label: "Properties", icon: BuildingIcon },
+              { href: "#applications", label: "Applications", icon: FileIcon },
+              { href: "#settings", label: "Settings", icon: SettingsIcon },
+            ]}
+            footerItems={[{ href: "#home", label: "Home", icon: HomeIcon }]}
+            onSignOut={() => {}}
+            signOutIcon={ArrowExitIcon}
+            signOutLabel="Sign out"
+          />
+        </div>
+      </StoryShell>
+    );
+  },
+};
