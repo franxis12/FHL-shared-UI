@@ -30,3 +30,27 @@ export const Default = {
     </div>
   ),
 };
+
+export const MobileMenu = {
+  args: {
+    dashboardLabel: "Tenant Dashboard",
+    currentTabLabel: "Rental Profile",
+    currentTabHint: "Complete your profile and keep applications ready.",
+    displayName: "Francis Martinez",
+    topbarBadges: [
+      { label: "Completion", value: "82%" },
+      { label: "Applications", value: 3 },
+    ],
+    mobileMenuButton: {
+      label: "Open navigation",
+      onClick: () => {},
+    },
+  },
+  render: (args) => (
+    <div style={{ padding: "1rem", backgroundColor: "var(--fhl-color-bg)" }}>
+      <div style={{ maxWidth: "420px", margin: "0 auto" }}>
+        <DashboardTopbar {...args} />
+      </div>
+    </div>
+  ),
+};
