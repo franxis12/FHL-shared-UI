@@ -566,11 +566,11 @@ export function DashboardNavbar({
               </button>
             ) : null}
 
-            {collapseToggle?.onToggle ? (
+            {collapseToggle?.onToggle && isDesktopViewport ? (
               <button
                 type="button"
                 onClick={collapseToggle.onToggle}
-                className={`hidden rounded-md p-1.5 transition hover:bg-[var(--fhl-navbar-hover-bg)] md:inline-flex ${smoothSidebarTransition}`}
+                className={`inline-flex rounded-md p-1.5 transition hover:bg-[var(--fhl-navbar-hover-bg)] ${smoothSidebarTransition}`}
                 style={{
                   backgroundColor: "var(--fhl-navbar-surface-soft)",
                   color: "var(--fhl-navbar-text)",
