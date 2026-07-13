@@ -1,6 +1,7 @@
 import './index.css'
 
 export { Button, BUTTON_VARIANT, BUTTON_SIZE, BUTTON_SHAPE } from './components/Button'
+export { Badge, BADGE_SIZE, BADGE_TONE } from './components/Badge'
 export { AuthRedirectCard } from './components/AuthRedirectCard'
 export { AuthPortalPage, AUTH_PORTAL_MODE } from './components/AuthPortalPage'
 export { Checkbox, CHECKBOX_STATUS } from './components/Checkbox'
