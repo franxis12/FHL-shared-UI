@@ -82,11 +82,13 @@ All visible labels remain present; Badge does not rely on color alone.
 
 ## Compatibility and rollout
 
-All inspected applications originally installed `@franxis12/fhl-shared-ui` from GitHub `main`. Only Handyman was changed for this pilot: it now pins the published Badge commit exactly. Owner, Tenant, Admin and Web remain unchanged.
+The official FHL dependency policy is for application consumers to declare `@franxis12/fhl-shared-ui` from GitHub `main`. `package-lock.json` records the exact resolved commit, preserving reproducibility without making a commit hash the normal manifest contract. Direct commit hashes are temporary exceptions only when a documented rollback, hotfix, comparative test or known incompatibility requires one.
+
+Shared UI work is developed and validated outside `main`, integrated into `main`, and only then consumed by applications. The Handyman pilot used the feature hash temporarily to validate the remote package boundary; its manifest returns to `#main` as part of publication closure. Owner, Tenant, Admin and Web remain unchanged in this task.
 
 | Consumer | Locked Shared UI commit |
 | --- | --- |
-| handyman-FHL | `dbc424d3eb26aa96e255076da47f8d67b0b89776` |
+| handyman-FHL | `main` manifest; exact publication commit recorded by its lockfile |
 | owner-FHL | `b61fc877156b72afc7103910062b6df7109d1c7c` |
 | tenant-FHL | `c66ed3e4855960d3fa691d8896e4274d4d9dd1d8` |
 | admin-FHL | `b61fc877156b72afc7103910062b6df7109d1c7c` |
@@ -101,7 +103,7 @@ Only the Handyman package manifest and lockfile were updated. Its prior lock res
 | A. Consumer audit and API evidence | `COMPLETED` | Inspected Handyman, Owner, Tenant, Admin, Web and internal compound badge patterns. |
 | B. Shared UI component | `COMPLETED` | Added component, enums, Storybook coverage, public exports and documentation. |
 | C. Handyman pilot | `COMPLETED` | Retained `QuoteStatusBadge` as the domain adapter and delegated all presentation to the remotely installed Badge. |
-| D. Publication and reproducible install | `COMPLETED` | Published the Badge commit, pinned only Handyman, regenerated its lock from a clean install and reran all static gates. |
+| D. Publication and reproducible install | `COMPLETED` | Published Badge through `main`, restored Handyman to the canonical branch reference, regenerated its lock from a clean install and reran all static gates. |
 
 ## Validation record
 
@@ -112,16 +114,17 @@ Only the Handyman package manifest and lockfile were updated. Its prior lock res
 - Server rendering verified all tones, both sizes, optional icon, uppercase, ARIA forwarding and the absence of consumer `className`/`style` presentation seams.
 - Handyman production build passed after removing `node_modules` and installing the exact remote Badge commit. Full and focused lint reproduce the repository's documented JSX and effect baselines; the baseline-excluded focused gate passes.
 - Exact source searches show both `QuoteStatusBadge` consumers remain and the three Handyman amber compatibility selectors are orphaned after migration and removed.
-- Handyman `package.json` and `package-lock.json` now resolve exactly to `dbc424d3eb26aa96e255076da47f8d67b0b89776`; installed exports for `Badge`, `BADGE_TONE` and `BADGE_SIZE` were verified.
+- Handyman `package.json` uses the canonical `#main` reference; its regenerated lockfile records the exact published `main` commit. Installed exports for `Badge`, `BADGE_TONE` and `BADGE_SIZE` are verified after the clean install.
 - The local dashboard smoke reached the sign-in surface because no reusable authenticated browser session was available. It produced no new console errors; no credential, quote or backend mutation was used to bypass that environment limit.
 
 ## Publication record
 
 - Source baseline: `3db138851d808f267bf5e1959f793ef9959b686f`.
 - Published Badge feature commit on `origin/Dev`: `dbc424d3eb26aa96e255076da47f8d67b0b89776`.
-- Remote hash was verified directly after push.
+- Badge publication documentation commit on `origin/Dev`: `8d09ec9c3833f51900b1fefbc6cd773de3f3156f`.
+- Both commits were verified on `origin/Dev`, and the branch diff against `origin/main` contained only Badge, exports, stories, documentation and required build artifacts before normal merge integration.
 - No tag or release was created.
-- Handyman alone pins the published feature commit and reproduces the package from a clean GitHub installation.
+- Handyman alone is updated in this task and reproduces the package from `#main` through its exact lockfile resolution.
 
 ## Future candidates, not part of this phase
 
