@@ -24,10 +24,30 @@ Built with:
 
 ## Current Components
 
+- `Badge`
 - `Button`
 - `Card`
 
 More shared components will be added over time.
+
+## Badge
+
+Use `Badge` for non-interactive status or metadata labels. Business-state mapping remains in the consumer.
+
+```jsx
+import {
+  Badge,
+  BADGE_SIZE,
+  BADGE_TONE,
+} from "@franxis12/fhl-shared-ui";
+
+<Badge tone={BADGE_TONE.WARNING}>Pending review</Badge>
+<Badge tone={BADGE_TONE.SUCCESS} size={BADGE_SIZE.MD}>
+  Approved
+</Badge>
+```
+
+The public tones are `neutral`, `info`, `success`, `warning` and `error`; the public sizes are `sm` and `md`. The component is a semantic-neutral `span`, does not map domain states and is not an interactive control or live region.
 
 ---
 
