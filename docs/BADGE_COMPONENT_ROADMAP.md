@@ -1,6 +1,6 @@
 # Canonical Badge roadmap
 
-Status: `BADGE_COMPONENT_COMPLETED_WITH_PILOT_VALIDATION_PENDING`
+Status: `BADGE_COMPONENT_COMPLETED`
 
 Scope: add one non-interactive, domain-neutral `Badge` contract to Shared UI and validate it through the existing Handyman `QuoteStatusBadge` domain adapter. Owner, Tenant, Admin, Web and existing Shared UI compound components are audit-only consumers in this phase.
 
@@ -82,17 +82,17 @@ All visible labels remain present; Badge does not rely on color alone.
 
 ## Compatibility and rollout
 
-All inspected applications install `@franxis12/fhl-shared-ui` from GitHub `main`. Current lockfile commits differ across consumers; only Handyman is the pilot. Local package output may be used for non-persistent validation, but `package.json` must remain GitHub-based and the pilot lockfile must not be refreshed until the Shared UI commit is available remotely.
+All inspected applications originally installed `@franxis12/fhl-shared-ui` from GitHub `main`. Only Handyman was changed for this pilot: it now pins the published Badge commit exactly. Owner, Tenant, Admin and Web remain unchanged.
 
 | Consumer | Locked Shared UI commit |
 | --- | --- |
-| handyman-FHL | `b61fc877156b72afc7103910062b6df7109d1c7c` |
+| handyman-FHL | `dbc424d3eb26aa96e255076da47f8d67b0b89776` |
 | owner-FHL | `b61fc877156b72afc7103910062b6df7109d1c7c` |
 | tenant-FHL | `c66ed3e4855960d3fa691d8896e4274d4d9dd1d8` |
 | admin-FHL | `b61fc877156b72afc7103910062b6df7109d1c7c` |
 | web-FHL | `b61fc877156b72afc7103910062b6df7109d1c7c` |
 
-No consumer package manifest or lockfile is updated in this phase.
+Only the Handyman package manifest and lockfile were updated. Its prior lock resolved `b61fc877156b72afc7103910062b6df7109d1c7c`.
 
 ## Phases
 
@@ -100,8 +100,8 @@ No consumer package manifest or lockfile is updated in this phase.
 | --- | --- | --- |
 | A. Consumer audit and API evidence | `COMPLETED` | Inspected Handyman, Owner, Tenant, Admin, Web and internal compound badge patterns. |
 | B. Shared UI component | `COMPLETED` | Added component, enums, Storybook coverage, public exports and documentation. |
-| C. Handyman pilot | `COMPLETED_STATICALLY_VALIDATED` | Retained `QuoteStatusBadge` as the domain adapter and delegated all presentation to Shared UI. |
-| D. Validation and release handoff | `PILOT_VALIDATION_PENDING` | Local package and pilot builds pass; GitHub publication and the single Handyman lock refresh remain external handoff steps. |
+| C. Handyman pilot | `COMPLETED` | Retained `QuoteStatusBadge` as the domain adapter and delegated all presentation to the remotely installed Badge. |
+| D. Publication and reproducible install | `COMPLETED` | Published the Badge commit, pinned only Handyman, regenerated its lock from a clean install and reran all static gates. |
 
 ## Validation record
 
@@ -110,13 +110,18 @@ No consumer package manifest or lockfile is updated in this phase.
 - Runtime Storybook inspection confirmed all five tones in light and dark mode, `sm` at 11px/27px high, `md` at 12px/30px high, a decorative icon with `aria-hidden`/`focusable=false`, normal wrapping for long content and no new console errors.
 - The package has no lint, test or dedicated typecheck scripts; no new validation infrastructure was introduced for this component.
 - Server rendering verified all tones, both sizes, optional icon, uppercase, ARIA forwarding and the absence of consumer `className`/`style` presentation seams.
-- Handyman production build passed against a temporary local package install. Full and focused lint reproduce the repository's documented JSX and effect baselines; the baseline-excluded focused gate passes.
+- Handyman production build passed after removing `node_modules` and installing the exact remote Badge commit. Full and focused lint reproduce the repository's documented JSX and effect baselines; the baseline-excluded focused gate passes.
 - Exact source searches show both `QuoteStatusBadge` consumers remain and the three Handyman amber compatibility selectors are orphaned after migration and removed.
-- `package.json` and `package-lock.json` remain unchanged in Handyman. No external package version, tag or commit was published by this task.
+- Handyman `package.json` and `package-lock.json` now resolve exactly to `dbc424d3eb26aa96e255076da47f8d67b0b89776`; installed exports for `Badge`, `BADGE_TONE` and `BADGE_SIZE` were verified.
+- The local dashboard smoke reached the sign-in surface because no reusable authenticated browser session was available. It produced no new console errors; no credential, quote or backend mutation was used to bypass that environment limit.
 
-## Release handoff
+## Publication record
 
-Shared UI starts from repository commit `3db138851d808f267bf5e1959f793ef9959b686f`. Handyman's current lock installs `b61fc877156b72afc7103910062b6df7109d1c7c`, which predates Badge. After these Shared UI changes are committed and available from GitHub `main`, refresh only the Handyman dependency/lock and rerun its build plus the two-renderer smoke. Do not update other consumer lockfiles as part of this pilot.
+- Source baseline: `3db138851d808f267bf5e1959f793ef9959b686f`.
+- Published Badge feature commit on `origin/Dev`: `dbc424d3eb26aa96e255076da47f8d67b0b89776`.
+- Remote hash was verified directly after push.
+- No tag or release was created.
+- Handyman alone pins the published feature commit and reproduces the package from a clean GitHub installation.
 
 ## Future candidates, not part of this phase
 
