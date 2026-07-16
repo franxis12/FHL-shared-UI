@@ -1,11 +1,5 @@
 import { useEffect } from "react";
-import {
-  FiAlertCircle,
-  FiKey,
-  FiMail,
-  FiSearch,
-  FiUser,
-} from "react-icons/fi";
+import { FiAlertCircle, FiKey, FiMail, FiSearch, FiUser } from "react-icons/fi";
 import { Input, INPUT_STATUS } from "./Input";
 
 function StoryShell({ children, theme = "light" }) {
@@ -37,7 +31,7 @@ function StoryShell({ children, theme = "light" }) {
         padding: "1.5rem",
       }}
     >
-      <div className="w-full max-w-[380px] space-y-4">{children}</div>
+      <div className="w-full max-w-95 space-y-4">{children}</div>
     </div>
   );
 }
