@@ -14,7 +14,10 @@ export {
   DASHBOARD_RECORD_CARD_TONE,
 } from './components/DashboardRecordCard'
 export { DashboardRecordList } from './components/DashboardRecordList'
-export { DashboardProgressCard } from './components/DashboardProgressCard'
+export {
+  DashboardProgressCard,
+  DASHBOARD_PROGRESS_CARD_LAYOUT,
+} from './components/DashboardProgressCard'
 export {
   Container,
   CONTAINER_PADDING,
