@@ -361,20 +361,17 @@ import { Logo, LOGO_MODES } from "@franxis12/fhl-shared-ui";
 
 ## DashboardProgressCard
 
-Use `DashboardProgressCard` for dashboard progress summaries. Its default
-checklist layout remains appropriate for completion percentages. Use the steps
-layout when progress is sequential and the current step owns the next action.
+Use `DashboardProgressCard` for sequential, interactive dashboard progress.
+It renders one horizontal step flow; there is no checklist layout.
 
 Exports:
 - `DashboardProgressCard`
-- `DASHBOARD_PROGRESS_CARD_LAYOUT`
 
 Common props:
 - `title`
 - `description`
-- `layout`: `"checklist"` (default) or `"steps"`
 - `checklist`
-- `percent`, `summary`, `actionLabel`, `actionHref`, `onActionClick` for the default checklist layout
+- `summary`
 
 Step items can include:
 - `key`
@@ -383,20 +380,15 @@ Step items can include:
 - `href`
 - `onClick`
 
-The first incomplete step is marked current. Future steps are disabled; completed
-steps and the current step are interactive only when they receive `href` or
-`onClick`.
+The first incomplete step is marked current. Every step that receives `href` or
+`onClick` is interactive, regardless of its progress state.
 
 ```jsx
-import {
-  DashboardProgressCard,
-  DASHBOARD_PROGRESS_CARD_LAYOUT,
-} from "@franxis12/fhl-shared-ui";
+import { DashboardProgressCard } from "@franxis12/fhl-shared-ui";
 
 <DashboardProgressCard
   title="Application progress"
   description="Next step: Approved"
-  layout={DASHBOARD_PROGRESS_CARD_LAYOUT.STEPS}
   checklist={[
     { key: "submitted", label: "Submitted", done: true, href: "/applications" },
     { key: "approved", label: "Approved", done: false, href: "/applications" },
