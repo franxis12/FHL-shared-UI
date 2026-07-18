@@ -12,11 +12,6 @@ import {
 } from "../Container";
 import { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from "../Text";
 
-export const DASHBOARD_PROGRESS_CARD_LAYOUT = Object.freeze({
-  CHECKLIST: "checklist",
-  STEPS: "steps",
-});
-
 function progressStepState(checklist, index) {
   if (checklist[index]?.done) return "complete";
 
@@ -30,43 +25,24 @@ function progressStepButtonVariant(state) {
   return BUTTON_VARIANT.SECONDARY;
 }
 
-function ProgressCheckIcon({ className = "", ...props }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      className={className}
-      {...props}
-    >
-      <path
-        d="m5 13 4 4L19 7"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
+function ProgressStepNumber({ number, className = "" }) {
+  return <span className={className}>{number}</span>;
 }
 
 function DashboardProgressSteps({ checklist }) {
   return (
-    <div className="overflow-x-auto pb-1">
+    <div className="overflow-x-auto pb-1 pt-4">
       <ol
-        className="flex min-w-[44rem] items-start pt-1"
+        className="flex min-w-[44rem] items-start"
         aria-label="Progress steps"
       >
         {checklist.map((item, index) => {
           const state = progressStepState(checklist, index);
           const connectorIsReached = index > 0 && state !== "upcoming";
           const isActionable = Boolean(item.href || item.onClick);
-          const isDisabled = state === "upcoming" || !isActionable;
-          const StepIcon =
-            state === "complete"
-              ? ProgressCheckIcon
-              : function ProgressStepNumber() {
-                  return <span>{index + 1}</span>;
-                };
+          const StepIcon = (props) => (
+            <ProgressStepNumber {...props} number={index + 1} />
+          );
 
           return (
             <li
@@ -84,11 +60,17 @@ function DashboardProgressSteps({ checklist }) {
                 />
               ) : null}
 
-              <div className="relative z-10">
+              <div
+                className={`relative z-10 rounded-full ${
+                  state === "current"
+                    ? "ring-4 ring-[var(--fhl-color-selected-soft)]"
+                    : ""
+                }`}
+              >
                 <Button
-                  href={isDisabled ? undefined : item.href}
-                  onClick={isDisabled ? undefined : item.onClick}
-                  disabled={isDisabled}
+                  href={isActionable ? item.href : undefined}
+                  onClick={isActionable ? item.onClick : undefined}
+                  disabled={!isActionable}
                   variant={progressStepButtonVariant(state)}
                   size={BUTTON_SIZE.SM}
                   shape={BUTTON_SHAPE.CIRCLE}
@@ -101,7 +83,7 @@ function DashboardProgressSteps({ checklist }) {
               <div className="mt-2 w-full px-2">
                 <Text
                   as="p"
-                  size={TEXT_SIZE.XS}
+                  size={TEXT_SIZE.SM}
                   tone={
                     state === "current"
                       ? TEXT_TONE.ACCENT
@@ -130,123 +112,25 @@ function DashboardProgressSteps({ checklist }) {
 export function DashboardProgressCard({
   title = "Progress",
   description = "",
-  percent = 0,
   summary = "",
   checklist = [],
-  actionLabel = "",
-  actionHref,
-  onActionClick,
-  layout = DASHBOARD_PROGRESS_CARD_LAYOUT.CHECKLIST,
 }) {
-  if (layout === DASHBOARD_PROGRESS_CARD_LAYOUT.STEPS) {
-    return (
-      <Container
-        title={title}
-        description={description}
-        padding={CONTAINER_PADDING.SM}
-        radius={CONTAINER_RADIUS.XL}
-        surface={CONTAINER_SURFACE.DEFAULT}
-      >
-        <DashboardProgressSteps checklist={checklist} />
-      </Container>
-    );
-  }
-
-  const boundedPercent = Math.max(0, Math.min(Number(percent) || 0, 100));
-
   return (
     <Container
       title={title}
       description={description}
-      headerAction={
-        actionLabel ? (
-          <Button
-            href={actionHref}
-            onClick={onActionClick}
-            variant={BUTTON_VARIANT.OUTLINE}
-            size={BUTTON_SIZE.SM}
-            shape={BUTTON_SHAPE.PILL}
-          >
-            {actionLabel}
-          </Button>
+      footer={
+        summary ? (
+          <Text as="p" size={TEXT_SIZE.SM} tone={TEXT_TONE.MUTED}>
+            {summary}
+          </Text>
         ) : null
       }
-      padding={CONTAINER_PADDING.MD}
+      padding={CONTAINER_PADDING.SM}
       radius={CONTAINER_RADIUS.XL}
       surface={CONTAINER_SURFACE.DEFAULT}
     >
-      <div>
-        <div className="flex items-center justify-between gap-3">
-          <Text as="p" size={TEXT_SIZE.SM} weight={TEXT_WEIGHT.SEMIBOLD}>
-            Progress
-          </Text>
-          <Text
-            as="p"
-            size={TEXT_SIZE.SM}
-            weight={TEXT_WEIGHT.BOLD}
-            tone={TEXT_TONE.PRIMARY}
-          >
-            {boundedPercent}%
-          </Text>
-        </div>
-
-        <div className="mt-2 h-3 overflow-hidden rounded-full bg-[var(--fhl-color-surface-soft)]">
-          <div
-            className="h-full rounded-full bg-[var(--fhl-color-accent)] transition-[width] duration-200"
-            style={{ width: `${boundedPercent}%` }}
-          />
-        </div>
-
-        {summary ? (
-          <Text
-            as="p"
-            size={TEXT_SIZE.XS}
-            tone={TEXT_TONE.MUTED}
-            className="mt-2"
-          >
-            {summary}
-          </Text>
-        ) : null}
-      </div>
-
-      <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        {checklist.map((item, index) => (
-          <div
-            key={item.key ?? item.label ?? index}
-            className="flex items-center gap-3 rounded-2xl bg-[var(--fhl-color-surface-soft)] px-4 py-3"
-          >
-            <div
-              className={[
-                "grid h-9 w-9 shrink-0 place-items-center rounded-full border",
-                item.done
-                  ? "border-[var(--fhl-color-success-border)] bg-[var(--fhl-color-success-soft)] text-[var(--fhl-color-success)]"
-                  : "border-[var(--fhl-color-border)] bg-[var(--fhl-color-surface)] text-[var(--fhl-color-primary)]",
-              ].join(" ")}
-            >
-              {item.done ? (
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  className="h-5 w-5"
-                >
-                  <path
-                    d="m5 13 4 4L19 7"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              ) : (
-                <span className="h-2.5 w-2.5 rounded-full bg-current" />
-              )}
-            </div>
-            <Text as="p" size={TEXT_SIZE.SM} weight={TEXT_WEIGHT.SEMIBOLD}>
-              {item.label}
-            </Text>
-          </div>
-        ))}
-      </div>
+      <DashboardProgressSteps checklist={checklist} />
     </Container>
   );
 }
