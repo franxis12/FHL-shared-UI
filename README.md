@@ -155,6 +155,8 @@ npm run build-storybook
 
 Use this sequence whenever Shared UI changes.
 
+`main` is the only development and publication branch for this repository. Create Shared UI changes, commits, and pushes directly on `main`; do not recreate a long-lived `Dev` branch.
+
 ### 1. Version and validate Shared UI
 
 Update the semantic version in both `package.json` and `package-lock.json`:
@@ -164,7 +166,7 @@ npm version patch --no-git-tag-version
 npm run build
 ```
 
-Commit the library change, push `Dev`, and merge it into `main`. Consumers must not be updated before the library commit exists in `main`.
+Commit the validated library change directly on `main` and push `main` to GitHub. Consumers must not be updated before that commit exists in `origin/main`.
 
 ### 2. Obtain the immutable `main` SHA
 
@@ -192,7 +194,7 @@ Use the GitHub website when the project is not cloned locally and terminal comma
 4. Open the newest commit at the top of the list.
 5. Use GitHub's copy button to copy the full 40-character commit SHA.
 
-The SHA must come from the newest commit in `main`, after the Shared UI change has been merged. Do not copy the SHA from `Dev`, an open pull request, or another branch.
+The SHA must come from the newest published commit in `main`. Do not copy the SHA from an open pull request or another branch.
 
 As a direct browser-only alternative, open the [GitHub API response for the latest `main` commit](https://api.github.com/repos/franxis12/FHL-shared-UI/commits/main) and copy the complete value of the first `sha` field. No local repository or Git command is required.
 
