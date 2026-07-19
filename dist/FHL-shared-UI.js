@@ -3142,7 +3142,7 @@ function mn({ brand: r, navItems: i = [], navSections: o = [], footerItems: s = 
 					})
 				}) : null,
 				/* @__PURE__ */ t("div", {
-					className: "min-h-0 flex-1 overflow-hidden p-2",
+					className: "min-h-0 flex-1 overflow-y-auto overscroll-contain p-2",
 					children: /* @__PURE__ */ t("nav", {
 						className: "space-y-3",
 						children: ne.map((e, r) => {

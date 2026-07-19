@@ -605,7 +605,7 @@ export function DashboardNavbar({
           </div>
         ) : null}
 
-        <div className="min-h-0 flex-1 overflow-hidden p-2">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2">
           <nav className="space-y-3">
             {resolvedNavSections.map((section, sectionIndex) => {
               const sectionItems = Array.isArray(section.items)
