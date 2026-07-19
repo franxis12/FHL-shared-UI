@@ -74,26 +74,28 @@ The compiled CSS is already included in the package.
 
 # Installation
 
-Install directly from GitHub:
+Install an immutable commit that already exists in `main`:
 
 ```bash
-npm install git+https://github.com/franxis12/FHL-shared-UI.git#main
+npm install @franxis12/fhl-shared-ui@git+https://github.com/franxis12/FHL-shared-UI.git#<full-main-sha>
 ```
 
-Or install from another branch:
+Current baseline:
 
 ```bash
-npm install git+https://github.com/franxis12/FHL-shared-UI.git#branch-name
+npm install @franxis12/fhl-shared-ui@git+https://github.com/franxis12/FHL-shared-UI.git#e639e302b973be20b68bd8a92db4a4dade4b7cf4
 ```
 
 For a brand-new React project:
 
 ```bash
 npm install react react-dom
-npm install git+https://github.com/franxis12/FHL-shared-UI.git#main
+npm install @franxis12/fhl-shared-ui@git+https://github.com/franxis12/FHL-shared-UI.git#<full-main-sha>
 ```
 
 The package includes a `prepare` script, so it is automatically built when installed directly from GitHub.
+
+Do not install from `#main`, another branch name, or a GitHub branch tarball. Those references can move while a consumer or Vercel still has an older `node_modules` cache. Every FHL consumer must declare the same `git+https` URL, full commit SHA, and Shared UI version.
 
 ---
 
@@ -102,15 +104,15 @@ The package includes a `prepare` script, so it is automatically built when insta
 Import the components:
 
 ```jsx
-import { Button, Card } from "FHL-shared-UI";
-import "FHL-shared-UI/FHL-shared-UI.css";
+import { Button, Card } from "@franxis12/fhl-shared-ui";
+import "@franxis12/fhl-shared-ui/FHL-shared-UI.css";
 ```
 
 Example:
 
 ```jsx
-import { Button, Card } from "FHL-shared-UI";
-import "FHL-shared-UI/FHL-shared-UI.css";
+import { Button, Card } from "@franxis12/fhl-shared-ui";
+import "@franxis12/fhl-shared-ui/FHL-shared-UI.css";
 
 export default function App() {
   return (
@@ -149,28 +151,95 @@ Build the Storybook static site:
 npm run build-storybook
 ```
 
-## .
+## Publishing and updating consumers
 
-Consume projects
-rm -rf node_modules/@franxis12/fhl-shared-ui
-rm -rf package-lock.json node_modules
-npm install
-npm run dev
+Use this sequence whenever Shared UI changes.
 
----
+### 1. Version and validate Shared UI
 
-###### install
+Update the semantic version in both `package.json` and `package-lock.json`:
 
-npm install github:franxis12/FHL-shared-UI#main
-npm install 'github:franxis12/FHL-shared-UI#main'
+```bash
+npm version patch --no-git-tag-version
+npm run build
+```
 
-npm install 'github:franxis12/FHL-shared-UI#main'
-rm -rf node_modules/.vite
-npm run dev
+Commit the library change, push `Dev`, and merge it into `main`. Consumers must not be updated before the library commit exists in `main`.
 
-###### check
+### 2. Obtain the immutable `main` SHA
 
-grep -n "@franxis12/fhl-shared-ui" package.json package-lock.json
+There are two supported methods. A local clone is not required.
+
+#### Option A: the repository is available locally
+
+Run these commands from the directory that contains `FHL-shared-UI`:
+
+```bash
+cd FHL-shared-UI
+git fetch origin
+git rev-parse origin/main
+```
+
+Use the complete 40-character SHA returned by `git rev-parse`. Do not use the abbreviated SHA in a dependency declaration.
+
+#### Option B: the repository is only available on GitHub
+
+Use the GitHub website when the project is not cloned locally and terminal commands cannot be run:
+
+1. Open [FHL-shared-UI on GitHub](https://github.com/franxis12/FHL-shared-UI).
+2. Confirm that the selected branch is `main`.
+3. Open the [commit history for `main`](https://github.com/franxis12/FHL-shared-UI/commits/main).
+4. Open the newest commit at the top of the list.
+5. Use GitHub's copy button to copy the full 40-character commit SHA.
+
+The SHA must come from the newest commit in `main`, after the Shared UI change has been merged. Do not copy the SHA from `Dev`, an open pull request, or another branch.
+
+As a direct browser-only alternative, open the [GitHub API response for the latest `main` commit](https://api.github.com/repos/franxis12/FHL-shared-UI/commits/main) and copy the complete value of the first `sha` field. No local repository or Git command is required.
+
+Example:
+
+```text
+e639e302b973be20b68bd8a92db4a4dade4b7cf4
+```
+
+After obtaining the SHA with either option, use that exact value in the consumer installation command below.
+
+### 3. Update every consumer with npm
+
+Run the following command from each consumer, replacing the placeholder with the new SHA:
+
+```bash
+npm install @franxis12/fhl-shared-ui@git+https://github.com/franxis12/FHL-shared-UI.git#<full-main-sha>
+```
+
+Required consumers:
+
+- `web-FHL`
+- `auth-FHL`
+- `tenant-FHL`
+- `owner-FHL`
+- `admin-FHL`
+- `handyman-FHL`
+- `store-FHL`
+
+`npm install` must update both `package.json` and `package-lock.json`. Do not edit only one file, copy a lock from another repository, or manually delete the lock.
+
+### 4. Verify the exact dependency
+
+In every consumer, confirm that:
+
+- `package.json` contains the `git+https` URL and full SHA;
+- `package-lock.json` resolves the same SHA;
+- the locked and installed package versions match the new Shared UI version.
+
+Then run:
+
+```bash
+npm ci
+npm run build
+```
+
+Use `npm ci` in CI and Vercel so deployment validation starts from the committed lock instead of a locally reused dependency tree. If Vercel reports a missing Shared UI export after a dependency update, redeploy once without the previous build cache and confirm the committed SHA before changing application code.
 
 # Project Structure
 
@@ -190,29 +259,15 @@ The `dist/` folder is generated automatically during the build process and is th
 
 # Versioning
 
-This library is intended to be versioned using Git tags.
+The version in `package.json` communicates compatibility; the full `main` commit SHA makes the installed source immutable.
 
-Example:
+- Patch: backward-compatible fixes and additions.
+- Minor: backward-compatible feature releases.
+- Major: breaking component or package-contract changes.
 
-```
-v1.0.0
-v1.1.0
-v1.2.0
-```
+Current starting point: version `0.1.0` at commit `e639e302b973be20b68bd8a92db4a4dade4b7cf4`.
 
-Consumer projects can install a specific version:
-
-```bash
-npm install git+https://github.com/franxis12/FHL-shared-UI.git#v1.0.0
-```
-
-or follow the latest changes from the main branch:
-
-```bash
-npm install git+https://github.com/franxis12/FHL-shared-UI.git#main
-```
-
-## ...
+Never reuse a version for different Shared UI content. Never point production consumers at a moving branch.
 
 # License
 
