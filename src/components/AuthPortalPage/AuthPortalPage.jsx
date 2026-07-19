@@ -10,6 +10,7 @@ import { PublicNavbar } from "../PublicNavbar";
 import { Text, TEXT_SIZE, TEXT_TONE, TEXT_WEIGHT } from "../Text";
 
 export const AUTH_PORTAL_MODE = Object.freeze({
+  ACCOUNT_CREATED: "account-created",
   CHANGE_PASSWORD: "change-password",
   FORGOT_PASSWORD: "forgot-password",
   LOGIN: "login",
@@ -40,6 +41,10 @@ function resolveNoticeTone(tone) {
 function resolveTitle(mode, title) {
   if (title) {
     return title;
+  }
+
+  if (mode === AUTH_PORTAL_MODE.ACCOUNT_CREATED) {
+    return "Account Created";
   }
 
   if (mode === AUTH_PORTAL_MODE.REGISTER) {
@@ -156,6 +161,7 @@ export function AuthPortalPage({
   mainClassName = "",
 }) {
   const resolvedTitle = resolveTitle(mode, title);
+  const isAccountCreated = mode === AUTH_PORTAL_MODE.ACCOUNT_CREATED;
   const modeAction = resolveModeAction(mode);
   const submitIcon = resolveSubmitIcon(mode);
   const pageStyle = {
@@ -410,33 +416,48 @@ export function AuthPortalPage({
             </Notice>
           ) : null}
 
-          <form className="auth-portal-page__form" onSubmit={onSubmit}>
-            {renderFormFields()}
+          {isAccountCreated ? (
+            <div className="auth-portal-page__form">
+              <Button
+                type="button"
+                variant={BUTTON_VARIANT.PRIMARY}
+                disabled={disabled}
+                icon={FiLogIn}
+                fullWidth
+                onClick={() => onModeChange?.(AUTH_PORTAL_MODE.LOGIN)}
+              >
+                {submitLabel || "Back to sign in"}
+              </Button>
+            </div>
+          ) : (
+            <form className="auth-portal-page__form" onSubmit={onSubmit}>
+              {renderFormFields()}
 
-            <Button
-              type="submit"
-              variant={BUTTON_VARIANT.PRIMARY}
-              disabled={disabled}
-              icon={submitIcon}
-              fullWidth
-            >
-              {submitLabel || "Continue"}
-            </Button>
+              <Button
+                type="submit"
+                variant={BUTTON_VARIANT.PRIMARY}
+                disabled={disabled}
+                icon={submitIcon}
+                fullWidth
+              >
+                {submitLabel || "Continue"}
+              </Button>
 
-            <button
-              type="button"
-              className={joinClassNames(
-                "auth-portal-page__text-action",
-                modeAction.tone === "accent"
-                  ? "auth-portal-page__text-action--accent"
-                  : "auth-portal-page__text-action--muted",
-              )}
-              onClick={() => onModeChange?.(modeAction.nextMode)}
-              disabled={disabled}
-            >
-              {modeAction.label}
-            </button>
-          </form>
+              <button
+                type="button"
+                className={joinClassNames(
+                  "auth-portal-page__text-action",
+                  modeAction.tone === "accent"
+                    ? "auth-portal-page__text-action--accent"
+                    : "auth-portal-page__text-action--muted",
+                )}
+                onClick={() => onModeChange?.(modeAction.nextMode)}
+                disabled={disabled}
+              >
+                {modeAction.label}
+              </button>
+            </form>
+          )}
         </Container>
       </main>
 

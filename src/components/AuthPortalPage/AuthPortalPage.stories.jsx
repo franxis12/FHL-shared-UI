@@ -161,6 +161,23 @@ export const Register = {
   ),
 };
 
+export const AccountCreated = {
+  args: {
+    mode: AUTH_PORTAL_MODE.ACCOUNT_CREATED,
+    submitLabel: "Back to sign in",
+    notice: {
+      tone: "success",
+      message:
+        "Check your inbox and verify your email address before signing in.",
+    },
+  },
+  render: (args) => (
+    <StoryShell>
+      <AuthPortalStory {...args} />
+    </StoryShell>
+  ),
+};
+
 export const DarkMode = {
   render: (args) => (
     <StoryShell theme="dark">
